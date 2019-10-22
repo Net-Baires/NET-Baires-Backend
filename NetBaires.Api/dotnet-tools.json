@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "dotnetsay": {
+      "version": "2.1.4",
+      "commands": [
+        "dotnetsay"
+      ]
+    },
+    "t-rex": {
+      "version": "1.0.103",
+      "commands": [
+        "t-rex"
+      ]
+    },
+    "dotnet-ef": {
+      "version": "3.0.0",
+      "commands": [
+        "dotnet-ef"
+      ]
+    }
+  }
+}
