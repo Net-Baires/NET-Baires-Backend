@@ -2,6 +2,7 @@
 {
     public class AssistanceOptions
     {
-        public string Secret { get; set; }
+        public string ReportAssistanceSecret { get; set; }
+        public string AskAssistanceSecret { get; set; }
     }
 }

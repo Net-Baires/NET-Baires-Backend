@@ -38,7 +38,7 @@ namespace NetBaires.Data
                 .WithMany(s => s.Badges)
                 .HasForeignKey(sc => sc.UserId);
 
-            modelBuilder.Entity<EventMember>().HasKey(sc => new { sc.UserId, sc.EventId });
+            modelBuilder.Entity<EventMember>().HasKey(sc => new { sc.MemberId, sc.EventId });
 
             modelBuilder.Entity<EventMember>()
                 .HasOne<Event>(sc => sc.Event)
@@ -47,9 +47,9 @@ namespace NetBaires.Data
 
 
             modelBuilder.Entity<EventMember>()
-                .HasOne<Member>(sc => sc.User)
+                .HasOne<Member>(sc => sc.Member)
                 .WithMany(s => s.Events)
-                .HasForeignKey(sc => sc.UserId);
+                .HasForeignKey(sc => sc.MemberId);
 
             modelBuilder.Entity<SponsorEvent>().HasKey(sc => new { sc.SponsorId, sc.EventId });
 
@@ -63,8 +63,6 @@ namespace NetBaires.Data
                 .HasOne<Event>(sc => sc.Event)
                 .WithMany(s => s.Sponsors)
                 .HasForeignKey(sc => sc.EventId);
-
-
 
         }
 

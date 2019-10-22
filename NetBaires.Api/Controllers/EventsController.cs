@@ -47,7 +47,7 @@ namespace NetBaires.Api.Controllers
 
         public async Task<IActionResult> Get()
         {
-            var eventToReturn = _context.Events.OrderByDescending(x=> x.Id).AsNoTracking();
+            var eventToReturn = _context.Events.OrderByDescending(x => x.Id).AsNoTracking();
 
             if (eventToReturn != null)
                 return Ok(eventToReturn);
@@ -76,7 +76,7 @@ namespace NetBaires.Api.Controllers
 
             var currentEmail = _currentUser.User.Email;
             var idUser = _currentUser.User.Id;
-            var token = TokenService.Generate(_assistanceOptions.Secret, new List<Claim>
+            var token = TokenService.Generate(_assistanceOptions.ReportAssistanceSecret, new List<Claim>
             {
 
                 new Claim(ClaimTypes.Name, idUser.ToString()),
@@ -91,7 +91,7 @@ namespace NetBaires.Api.Controllers
                 Token = token,
                 Title = eventToReturn.Title,
                 Date = eventToReturn.Date,
-                ImageUrl =  eventToReturn.ImageUrl
+                ImageUrl = eventToReturn.ImageUrl
 
             });
         }
@@ -101,25 +101,61 @@ namespace NetBaires.Api.Controllers
         public async Task<IActionResult> PutReportAssistance(string token)
         {
 
-            var response = TokenService.Validate(_assistanceOptions.Secret, token);
+            var response = TokenService.Validate(_assistanceOptions.ReportAssistanceSecret, token);
             if (!response.Valid)
                 return BadRequest("El token indicado no es valido");
 
-            var email = response.Claims.Where(x => x.Type == ClaimTypes.Email);
             var memberId = int.Parse(response.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value.ToString());
             var eventId = int.Parse(response.Claims.FirstOrDefault(x => x.Type == "EventId").Value.ToString());
 
-            if (_context.EventMembers.Any(x => x.EventId == eventId && x.UserId == memberId))
+            if (_context.EventMembers.Any(x => x.EventId == eventId && x.MemberId == memberId))
                 return Conflict("El usuario que intenta registrar ya se encuentra registrado en el evento");
 
-            await _context.EventMembers.AddAsync(new EventMember
-            {
-                EventId = eventId,
-                UserId = memberId
-            });
+            await _context.EventMembers.AddAsync(EventMember.Attend(memberId, eventId));
             await _context.SaveChangesAsync();
             return Ok();
 
+        }
+        [HttpGet("{id}/Assistance/General")]
+        [SwaggerOperation(Summary = "Retorna toda la información requerida para que los miembros de la comunidad puedan reportar su asistencia en conjunto, el token de registración tiene un tiempo de 5 minutos.")]
+        public async Task<IActionResult> CheckAssistanceGeneral(int id)
+        {
+            var eventToReturn = await _context.Events.FirstOrDefaultAsync(x => x.Id == id);
+            if (eventToReturn == null)
+                return NotFound();
+
+            var token = TokenService.Generate(_assistanceOptions.AskAssistanceSecret, new List<Claim>
+            {
+                new Claim("EventId", eventToReturn.Id.ToString())
+            }, DateTime.Now.AddDays(3));
+
+            return Ok(new EventAssistanceViewModel
+            {
+                Id = eventToReturn.Id,
+                Description = eventToReturn.Description,
+                Token = token,
+                Title = eventToReturn.Title,
+                Date = eventToReturn.Date,
+                ImageUrl = eventToReturn.ImageUrl
+            });
+        }
+        [HttpPut("Assistance/General")]
+        [SwaggerOperation(Summary = "Informa que asistió al evento mediante un token otorgado por los organizadores")]
+        public async Task<IActionResult> PutCheckAssistanceGeneral(string token)
+        {
+            var response = TokenService.Validate(_assistanceOptions.AskAssistanceSecret, token);
+            if (!response.Valid)
+                return BadRequest("El token indicado no es valido");
+
+
+            var eventId = int.Parse(response.Claims.FirstOrDefault(x => x.Type == "EventId").Value.ToString());
+            var memberId = _currentUser.User.Id;
+            if (_context.EventMembers.Any(x => x.EventId == eventId && x.MemberId == memberId))
+                return Conflict("Ya se encuentra registrado al evento.");
+
+            await _context.EventMembers.AddAsync(EventMember.Attend(memberId, eventId));
+            await _context.SaveChangesAsync();
+            return Ok();
         }
         [HttpGet("live")]
         [AllowAnonymous]
@@ -129,7 +165,7 @@ namespace NetBaires.Api.Controllers
         {
             IQueryable<Event> eventToReturn = null;
             if (_currentUser.IsLoggued)
-                eventToReturn = _context.Events.Where(x => x.Live && !x.Attendees.Any(s => s.UserId == _currentUser.User.Id)).AsNoTracking();
+                eventToReturn = _context.Events.Where(x => x.Live && !x.Attendees.Any(s => s.MemberId == _currentUser.User.Id)).AsNoTracking();
             else
                 eventToReturn = _context.Events.Where(x => x.Live).AsNoTracking();
             if (eventToReturn != null)

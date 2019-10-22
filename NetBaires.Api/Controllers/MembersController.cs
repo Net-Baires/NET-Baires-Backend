@@ -88,6 +88,22 @@ namespace NetBaires.Api.Controllers
 
             return Ok(member);
         }
+        [HttpPut("{id}/Events/{eventId}/Assistance/")]
+        [AuthorizeRoles(UserRole.Admin)]
+        public async Task<IActionResult> Put(int id, int eventId, bool assistance)
+        {
+            var eventMember = await _context.EventMembers.FirstOrDefaultAsync(x => x.MemberId == id
+                                                                            &&
+                                                                            x.EventId == eventId);
+            if (eventMember == null)
+                _context.EventMembers.Add(EventMember.Inform(id, eventId, assistance));
+            else
+                eventMember.Inform(assistance);
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
         [HttpDelete("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
         public async Task<IActionResult> Delete(int id)
