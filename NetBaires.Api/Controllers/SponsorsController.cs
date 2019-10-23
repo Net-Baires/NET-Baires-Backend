@@ -29,6 +29,7 @@ namespace NetBaires.Api.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
         public async Task<IActionResult> Get()
         {
             var sponsors = _context.Sponsors.AsNoTracking();
@@ -39,6 +40,7 @@ namespace NetBaires.Api.Controllers
 
         [HttpGet("{id}")]
         [AllowAnonymous]
+        [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
         public async Task<IActionResult> GetById(int id)
         {
             var sponsors = await _context.Sponsors.FirstOrDefaultAsync(x => x.Id == id);
@@ -50,6 +52,7 @@ namespace NetBaires.Api.Controllers
 
         [HttpPost]
         [AuthorizeRoles(UserRole.Admin)]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
         public async Task<IActionResult> Post([FromBody]Sponsor sponsor)
         {
             var email = _currentUser.User.Email;
@@ -62,6 +65,7 @@ namespace NetBaires.Api.Controllers
         }
         [HttpPut("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
         public async Task<IActionResult> Put(int id, Sponsor sponsor)
         {
             sponsor.Id = id;
@@ -74,6 +78,7 @@ namespace NetBaires.Api.Controllers
         }
         [HttpDelete("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
         public async Task<IActionResult> Delete(int id)
         {
             var sponsorToDelete = await _context.Sponsors.FirstOrDefaultAsync(x => x.Id == id);

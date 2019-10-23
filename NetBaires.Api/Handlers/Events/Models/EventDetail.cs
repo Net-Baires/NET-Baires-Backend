@@ -19,13 +19,14 @@ namespace NetBaires.Api.Handlers.Events.Models
         public bool Done { get; set; } = false;
         public bool Live { get; set; } = false;
         public DateTime Date { get; set; }
-    }
-    public class EventDetailProfile : Profile
-    {
-        public EventDetailProfile()
+        public class EventDetailProfile : Profile
         {
-            CreateMap<Event, EventDetail>().ForAllMembers(
-                opt => opt.Condition((src, dest, sourceMember) => sourceMember != null)); ;
+            public EventDetailProfile()
+            {
+                CreateMap<Event, EventDetail>().ForAllMembers(
+                    opt => opt.Condition((src, dest, sourceMember) => sourceMember != null)); ;
+            }
         }
     }
+   
 }

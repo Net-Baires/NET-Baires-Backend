@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NetBaires.Api.Models;
 using NetBaires.Api.Options;
+using NetBaires.Data;
 
 namespace NetBaires.Api.Controllers
 {
@@ -14,7 +15,6 @@ namespace NetBaires.Api.Controllers
     [Route("api/[controller]")]
     public class SlackController : ControllerBase
     {
-
 
         private readonly ILogger<SlackController> _logger;
         private readonly HttpClient _client;
@@ -31,6 +31,7 @@ namespace NetBaires.Api.Controllers
         }
 
         [HttpPost]
+        [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
         public async Task<IActionResult> Join([FromBody] JoinSlackModel model)
         {
             if (ModelState.IsValid)

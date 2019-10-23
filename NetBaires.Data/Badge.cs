@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
@@ -18,6 +19,6 @@ namespace NetBaires.Data
         public string Name { get; set; }
         public string Description { get; set; }
         public IList<BadgeMember> Users { get; set; }
-
+        public DateTime Created { get; set; }
     }
 }

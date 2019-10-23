@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -37,9 +38,8 @@ namespace NetBaires.Api.Services.BadGr
         {
             var assertionToUser = new AssertionToUser
             {
-                EntityId = badgeId,
-                Badgeclass = "xjYz8tiLR7ysVil4QN7Wyg",
-                EntityType = "BadgeClass",
+                Badgeclass = badgeId,
+                EntityType = "Assertion",
                 Recipient = new Recipient
                 {
                     Hashed = true,
@@ -51,13 +51,16 @@ namespace NetBaires.Api.Services.BadGr
             var requestMessage = new HttpRequestMessage()
             {
                 Method = new HttpMethod("POST"),
-                RequestUri = new Uri($"{_badgrOptions.EndPoint}/issuers/{_badgrOptions.Issuer}/badgeclasses"),
+                RequestUri = new Uri($"{_badgrOptions.EndPoint}/issuers/{_badgrOptions.Issuer}/assertions"),
                 Content =
-                    new StringContent(JsonConvert.SerializeObject(assertionToUser))
+                    new StringContent(JsonConvert.SerializeObject(assertionToUser), Encoding.UTF8, "application/json")
             };
             requestMessage.Headers.Add("Accept", "application/json");
             requestMessage.Headers.Add("Authorization", $"Bearer {_badgrOptions.Token}");
             var result = await _client.SendAsync(requestMessage);
+
+
+            var rea = await result.Content.ReadAsStringAsync();
             var slackResponse = await result.Content.ReadAsAsync<BadgrResponse<BadgClass>>();
             return slackResponse;
         }

@@ -15,5 +15,9 @@ namespace NetBaires.Api.Services.BadGr
 
         [JsonProperty("recipient")]
         public Recipient Recipient { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
+        [JsonProperty("description")]
+        public string Description { get; set; }
     }
 }

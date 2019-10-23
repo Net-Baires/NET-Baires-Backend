@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetBaires.Data;
 
 namespace NetBaires.Data.Migrations
 {
     [DbContext(typeof(NetBairesContext))]
-    partial class NetBairesContextModelSnapshot : ModelSnapshot
+    [Migration("20191023195902_Update_Bade_Add_Created_Date")]
+    partial class Update_Bade_Add_Created_Date
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,7 +59,7 @@ namespace NetBaires.Data.Migrations
 
             modelBuilder.Entity("NetBaires.Data.BadgeMember", b =>
                 {
-                    b.Property<int>("MemberId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.Property<int>("BadgeId")
@@ -66,7 +68,7 @@ namespace NetBaires.Data.Migrations
                     b.Property<string>("BadgeUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("MemberId", "BadgeId");
+                    b.HasKey("UserId", "BadgeId");
 
                     b.HasIndex("BadgeId");
 
@@ -243,9 +245,9 @@ namespace NetBaires.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NetBaires.Data.Member", "Member")
+                    b.HasOne("NetBaires.Data.Member", "User")
                         .WithMany("Badges")
-                        .HasForeignKey("MemberId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

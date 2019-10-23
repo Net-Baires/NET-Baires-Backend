@@ -49,7 +49,9 @@ namespace NetBaires.Api.Controllers
         [HttpGet]
         [AllowAnonymous]
         [SwaggerOperation(Summary = "Retorna todos los eventos de la comunidad")]
-
+        [ApiExplorerSettingsExtend("Anonymous")]
+        [ProducesResponseType( typeof(Event),200)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> Get()
         {
             var eventToReturn = _context.Events.OrderByDescending(x => x.Id).AsNoTracking();
@@ -60,13 +62,18 @@ namespace NetBaires.Api.Controllers
             return NotFound();
         }
         [HttpGet("ToSync")]
-        [AllowAnonymous]
         [SwaggerOperation(Summary = "Retorna todos los eventos que ya fueron sincronizados con plataformas externas, pero  no fueron procesados en nuestro sistema")]
+        [AuthorizeRoles(UserRole.Admin)]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
+        [ProducesResponseType(typeof(List<GetToAsyncResponseViewModel>), 200)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> GetToSync() =>
             await _iMediator.Send(new GetToSyncHandler.GetToSync());
 
         [HttpGet("{id}/Assistance")]
         [SwaggerOperation(Summary = "Retorna toda la información requerida por el miemebro de la comunidad para reportar su asistencia a un evento")]
+        [AuthorizeRoles(UserRole.Member)]
+        [ApiExplorerSettingsExtend(UserRole.Member)]
         public async Task<IActionResult> GetReportAssistance(int id)
         {
             var eventToReturn = await _context.Events.FirstOrDefaultAsync(x => x.Id == id);
@@ -97,6 +104,7 @@ namespace NetBaires.Api.Controllers
         [HttpPut("/Assistance/{token}")]
         [SwaggerOperation(Summary = "Valida que el token del miembro para reportar asistencia es correcto y reporta la asistencia")]
         [AuthorizeRoles(UserRole.Admin)]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
         public async Task<IActionResult> PutReportAssistance(string token)
         {
 
@@ -119,6 +127,8 @@ namespace NetBaires.Api.Controllers
         }
         [HttpGet("{id}/Assistance/General")]
         [SwaggerOperation(Summary = "Retorna toda la información requerida para que los miembros de la comunidad puedan reportar su asistencia en conjunto, el token de registración tiene un tiempo de 5 minutos.")]
+        [AuthorizeRoles(new UserRole[2] { UserRole.Organizer , UserRole.Admin})]
+        [ApiExplorerSettingsExtend(UserRole.Organizer)]
         public async Task<IActionResult> CheckAssistanceGeneral(int id)
         {
             var eventToReturn = await _context.Events.FirstOrDefaultAsync(x => x.Id == id);
@@ -142,13 +152,15 @@ namespace NetBaires.Api.Controllers
         }
         [HttpPut("Assistance/General")]
         [SwaggerOperation(Summary = "Informa que asistió al evento mediante un token otorgado por los organizadores")]
+        [AuthorizeRoles(UserRole.Member)]
+        [ApiExplorerSettingsExtend(UserRole.Member)]
         public async Task<IActionResult> PutCheckAssistanceGeneral(string token) =>
             await _iMediator.Send(new PutCheckAssistanceGeneralHandler.PutCheckAssistanceGeneral(token));
 
         [HttpGet("live")]
         [AllowAnonymous]
         [SwaggerOperation(Summary = "Retorna una lista de los eventos que se encuentra en curso.")]
-
+        [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
         public IActionResult GetLives()
         {
             IQueryable<Event> eventToReturn = null;
@@ -164,6 +176,7 @@ namespace NetBaires.Api.Controllers
 
         [HttpGet("{id:int}")]
         [AllowAnonymous]
+        [ApiExplorerSettingsExtend("Anonymous")]
         public async Task<IActionResult> GetById([FromRoute]int id)
         {
             var eventToReturn = await _context.Events.FirstOrDefaultAsync(x => x.Id == id);
@@ -175,6 +188,7 @@ namespace NetBaires.Api.Controllers
         }
         [HttpPut("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
+        [ApiExplorerSettings(GroupName = "Admin")]
         public async Task<IActionResult> Put(int id, UpdateEventHandler.UpdateEvent eEvent)
         {
             eEvent.Id = id;
@@ -185,12 +199,14 @@ namespace NetBaires.Api.Controllers
         [HttpPut("sync")]
         [SwaggerOperation(Summary = "Sincroniza los Eventos con las plataformas externas y recupera su información")]
         [AuthorizeRoles(UserRole.Admin)]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
         public async Task<IActionResult> Sync() =>
             await _iMediator.Send(new SyncWithExternalEventsHandler.SyncWithExternalEvents());
 
         [HttpPut("{id}/sync")]
         [SwaggerOperation(Summary = "Sincroniza un evento en particular con la plataforma externa")]
         [AuthorizeRoles(UserRole.Admin)]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
         public async Task<IActionResult> Sync(int id) =>
             await _iMediator.Send(new SyncEventHandler.SyncEvent(id));
 

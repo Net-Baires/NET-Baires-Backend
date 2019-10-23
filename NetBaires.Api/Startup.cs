@@ -49,7 +49,12 @@ namespace NetBaires.Api
             }); ;
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "NET-Baires API", Version = "v1" });
+                c.SwaggerDoc(UserRole.Member.ToString(), new OpenApiInfo { Title = "NET-Baires Api - Miembro", Version = UserRole.Member.ToString() });
+
+                c.SwaggerDoc(UserRole.Admin.ToString(), new OpenApiInfo { Title = "NET-Baires Api - Admin", Version = UserRole.Admin.ToString() });
+                c.SwaggerDoc(UserRole.Organizer.ToString(), new OpenApiInfo { Title = "NET-Baires Api - Organizador", Version = UserRole.Organizer.ToString()  });
+                c.SwaggerDoc(UserAnonymous.Anonymous.ToString(), new OpenApiInfo { Title = "NET-Baires Api - Anonymous", Version = UserAnonymous.Anonymous.ToString() });
+
                 c.AddSecurityDefinition("Bearer",
                     new OpenApiSecurityScheme
                     {
@@ -125,7 +130,10 @@ namespace NetBaires.Api
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint($"/swagger/{UserAnonymous.Anonymous.ToString()}/swagger.json", "NET-Baires Api - Anonymous");
+                c.SwaggerEndpoint($"/swagger/{UserRole.Admin}/swagger.json", "NET-Baires Api - Admin");
+                c.SwaggerEndpoint($"/swagger/{UserRole.Member}/swagger.json", "NET-Baires Api - Miembro");
+                c.SwaggerEndpoint($"/swagger/{UserRole.Organizer}/swagger.json", "NET-Baires Api - Organizador");
             });
             app.UseHttpsRedirection();
 
