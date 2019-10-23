@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace NetBaires.Api.Services.Meetup
+namespace NetBaires.Api.Services.Meetup.Models
 {
     public partial class Group
     {

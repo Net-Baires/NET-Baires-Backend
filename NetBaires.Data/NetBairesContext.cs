@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace NetBaires.Data
@@ -63,6 +64,19 @@ namespace NetBaires.Data
                 .HasOne<Event>(sc => sc.Event)
                 .WithMany(s => s.Sponsors)
                 .HasForeignKey(sc => sc.EventId);
+
+            modelBuilder
+                .Entity<Event>()
+                .Property(e => e.Platform)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (EventPlatform)Enum.Parse(typeof(EventPlatform), v));
+            EnumToNumberConverter<EventMemberStatus, int>
+                converter = new EnumToNumberConverter<EventMemberStatus, int>();
+
+            modelBuilder.Entity<EventMember>()
+                .Property(e => e.Status)
+                .HasConversion(converter);
 
         }
 

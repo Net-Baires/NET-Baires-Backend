@@ -8,6 +8,28 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\EventBrite\Models\Answer.cs" />
+    <Compile Remove="Services\EventBrite\Models\Attendee.cs" />
+    <Compile Remove="Services\EventBrite\Models\AttendeesResponse.cs" />
+    <Compile Remove="Services\EventBrite\Models\Barcode.cs" />
+    <Compile Remove="Services\EventBrite\Models\BasePrice.cs" />
+    <Compile Remove="Services\EventBrite\Models\Costs.cs" />
+    <Compile Remove="Services\EventBrite\Models\CropMask.cs" />
+    <Compile Remove="Services\EventBrite\Models\Description.cs" />
+    <Compile Remove="Services\EventBrite\Models\End.cs" />
+    <Compile Remove="Services\EventBrite\Models\Event.cs" />
+    <Compile Remove="Services\EventBrite\Models\EventsResponse.cs" />
+    <Compile Remove="Services\EventBrite\Models\Logo.cs" />
+    <Compile Remove="Services\EventBrite\Models\Original.cs" />
+    <Compile Remove="Services\EventBrite\Models\Pagination.cs" />
+    <Compile Remove="Services\EventBrite\Models\Profile.cs" />
+    <Compile Remove="Services\EventBrite\Models\TopLeft.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="MediatR" Version="7.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.8.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0" />
@@ -19,6 +41,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.0-preview1.19506.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.5" />
     <PackageReference Include="Polly" Version="7.1.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />

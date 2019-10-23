@@ -8,7 +8,9 @@ namespace NetBaires.Data
         Registered = 0,
         DidNotAttend = 1,
         Attended = 2,
-        NotifyAbsence = 3
+        NotifyAbsence = 3,
+        DoNotKnow = 4
+
 
     }
     public class EventMember
@@ -52,6 +54,29 @@ namespace NetBaires.Data
 
         public EventMember()
         {
+            
+        }
+        public EventMember(Member member, Event eventToAdd, bool attended)
+        {
+            if (member.Id == 0)
+                Member = member;
+            else
+                MemberId = member.Id;
+            EventId = eventToAdd.Id;
+            if (attended)
+                Status = EventMemberStatus.Registered | EventMemberStatus.Attended;
+            else
+                Status = EventMemberStatus.Registered | EventMemberStatus.DidNotAttend;
+
+        }
+        public EventMember(Member member, Event eventToAdd)
+        {
+            if (member.Id == 0)
+                Member = member;
+            else
+                MemberId = member.Id;
+            EventId = eventToAdd.Id;
+            Status = EventMemberStatus.Registered | EventMemberStatus.DoNotKnow;
 
         }
     }

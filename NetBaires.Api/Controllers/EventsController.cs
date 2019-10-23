@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NetBaires.Api.Auth;
+using NetBaires.Api.Handlers.Events;
 using NetBaires.Api.Models;
 using NetBaires.Api.Options;
 using NetBaires.Api.Services.Meetup;
@@ -25,6 +27,7 @@ namespace NetBaires.Api.Controllers
         private readonly IMeetupServices _meetupServices;
         private readonly NetBairesContext _context;
         private readonly ICurrentUser _currentUser;
+        private readonly IMediator _iMediator;
         private readonly AssistanceOptions _assistanceOptions;
         private readonly ILogger<EventsController> _logger;
 
@@ -32,11 +35,13 @@ namespace NetBaires.Api.Controllers
             NetBairesContext context,
             ICurrentUser currentUser,
             IOptions<AssistanceOptions> assistanceOptions,
+            IMediator iMediator,
             ILogger<EventsController> logger)
         {
             _meetupServices = meetupServices;
             _context = context;
             _currentUser = currentUser;
+            _iMediator = iMediator;
             _assistanceOptions = assistanceOptions.Value;
             _logger = logger;
         }
@@ -59,13 +64,19 @@ namespace NetBaires.Api.Controllers
         [SwaggerOperation(Summary = "Retorna todos los eventos que ya fueron sincronizados con plataformas externas, pero  no fueron procesados en nuestro sistema")]
         public IActionResult GetToSync()
         {
-            var eventToReturn = _context.Events.OrderByDescending(x => x.Id).Where(x => !x.Done).AsNoTracking();
+            var eventToReturn = _context.Events.OrderByDescending(x => x.Id).Where(x => !x.Done)?
+                .Select(x => new GetToAsyncResponseViewModel(x,
+                    x.Attendees.Count(s => s.Status == EventMemberStatus.Attended),
+                    x.Attendees.Count(s => s.Status == EventMemberStatus.DidNotAttend)))?.ToList();
 
-            if (eventToReturn != null)
-                return Ok(eventToReturn);
+            if (eventToReturn == null)
+                return NotFound();
 
-            return NotFound();
+            return Ok(eventToReturn);
+
         }
+
+
         [HttpGet("{id}/Assistance")]
         [SwaggerOperation(Summary = "Retorna toda la información requerida por el miemebro de la comunidad para reportar su asistencia a un evento")]
         public async Task<IActionResult> GetReportAssistance(int id)
@@ -143,24 +154,9 @@ namespace NetBaires.Api.Controllers
         }
         [HttpPut("Assistance/General")]
         [SwaggerOperation(Summary = "Informa que asistió al evento mediante un token otorgado por los organizadores")]
-        public async Task<IActionResult> PutCheckAssistanceGeneral(string token)
-        {
-            var response = TokenService.Validate(_assistanceOptions.AskAssistanceSecret, token);
-            if (!response.Valid)
-                return BadRequest("El token indicado no es valido");
+        public async Task<IActionResult> PutCheckAssistanceGeneral(string token) =>
+            await _iMediator.Send(new PutCheckAssistanceGeneralHandler.PutCheckAssistanceGeneral(token));
 
-
-            var eventId = int.Parse(response.Claims.FirstOrDefault(x => x.Type == "EventId").Value.ToString());
-            var memberId = _currentUser.User.Id;
-
-            var eventToAdd = _context.EventMembers.FirstOrDefault(x => x.EventId == eventId && x.MemberId == memberId);
-            if (eventToAdd == null)
-                new EventMember(memberId, eventId);
-            eventToAdd.Attend();
-            await _context.EventMembers.AddAsync(eventToAdd);
-            await _context.SaveChangesAsync();
-            return Ok();
-        }
         [HttpGet("live")]
         [AllowAnonymous]
         [SwaggerOperation(Summary = "Retorna una lista de los eventos que se encuentra en curso.")]
@@ -202,33 +198,18 @@ namespace NetBaires.Api.Controllers
             return Ok(eEvent);
         }
 
-        [HttpGet("sync")]
-        [SwaggerOperation(Summary = "Sincroniza los Eventos con las plataformas")]
+        [HttpPut("sync")]
+        [SwaggerOperation(Summary = "Sincroniza los Eventos con las plataformas externas y recupera su información")]
         [AuthorizeRoles(UserRole.Admin)]
-        public async Task<IActionResult> Sync()
-        {
-            var eventsToAdd = await _meetupServices.GetAllEvents();
-            var mines = _context.Events.Select(x => x.EventId).ToList();
+        public async Task<IActionResult> Sync() =>
+            await _iMediator.Send(new SyncWithExternalEventsHandler.SyncWithExternalEvents());
 
-            foreach (var eventToAdd in eventsToAdd)
-            {
-                if (!mines.Any(x => x == eventToAdd.Id.ToString()))
-                {
-                    _context.Events.Add(new Event()
-                    {
-                        Description = eventToAdd.Description,
-                        Title = eventToAdd.Name,
-                        Url = eventToAdd.Link.AbsoluteUri,
-                        EventId = eventToAdd.Id.ToString(),
-                        Date = eventToAdd.LocalDate.Date,
-                        ImageUrl = eventToAdd?.FeaturedPhoto?.HighresLink?.AbsoluteUri
-                    });
+        [HttpPut("{id}/sync")]
+        [SwaggerOperation(Summary = "Sincroniza un evento en particular con la plataforma externa")]
+        [AuthorizeRoles(UserRole.Admin)]
+        public async Task<IActionResult> Sync(int id) =>
+            await _iMediator.Send(new SyncEventHandler.SyncEvent(id));
 
-                }
-            }
 
-            await _context.SaveChangesAsync();
-            return Ok();
-        }
     }
 }

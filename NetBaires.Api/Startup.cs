@@ -1,4 +1,5 @@
 using System.Text;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,13 +8,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NetBaires.Api.Auth;
+using NetBaires.Api.Controllers;
 using NetBaires.Api.Options;
 using NetBaires.Api.Services.BadGr;
+using NetBaires.Api.Services.EventBrite;
 using NetBaires.Api.Services.Meetup;
+using NetBaires.Api.Services.Sync;
 using NetBaires.Data;
+using Newtonsoft.Json.Serialization;
 
 namespace NetBaires.Api
 {
@@ -29,7 +35,17 @@ namespace NetBaires.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(options =>
+            {
+                options.Filters.Add<ExceptionActionFilter>();
+
+            }).AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+                options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+            }); ;
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "NET-Baires API", Version = "v1" });
@@ -41,12 +57,14 @@ namespace NetBaires.Api
                     });
                 c.EnableAnnotations();
             });
+            services.AddMediatR(typeof(Startup));
             services.Configure<MeetupEndPointOptions>(Configuration.GetSection("MeetupEndPoint"));
             services.Configure<TwitterApiOptions>(Configuration.GetSection("TwitterApi"));
+            services.Configure<EventBriteApiOptions>(Configuration.GetSection("EventBriteApi"));
             services.Configure<SlackEndPointOptions>(Configuration.GetSection("SlackEndPoint"));
             services.Configure<AssistanceOptions>(Configuration.GetSection("Assistance"));
             services.Configure<BadgrOptions>(Configuration.GetSection("Badgr"));
-            
+
             services.AddHttpClient("");
             services.AddDbContext<NetBairesContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("NetBairesContext")));
@@ -83,12 +101,14 @@ namespace NetBaires.Api
             services.AddScoped<ICurrentUser, CurrentUser>();
             services.AddScoped<IBadGrServices, BadGrServices>();
             services.AddScoped<IMeetupServices, MeetupServices>();
+            services.AddScoped<IEventBriteServices, EventBriteServices>();
+            services.AddScoped<ISyncServices, SyncServices>();
+
+
             
-
-
             services.AddApplicationInsightsTelemetry();
         }
-        
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
