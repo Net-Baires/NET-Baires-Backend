@@ -96,9 +96,14 @@ namespace NetBaires.Api.Controllers
                                                                             &&
                                                                             x.EventId == eventId);
             if (eventMember == null)
-                _context.EventMembers.Add(EventMember.Inform(id, eventId, assistance));
+            {
+                eventMember = new EventMember(id, eventId);
+                await _context.EventMembers.AddAsync(eventMember);
+            }
+            if (assistance)
+                eventMember.Attend();
             else
-                eventMember.Inform(assistance);
+                eventMember.NoAttend();
 
             await _context.SaveChangesAsync();
 

@@ -108,10 +108,12 @@ namespace NetBaires.Api.Controllers
             var memberId = int.Parse(response.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value.ToString());
             var eventId = int.Parse(response.Claims.FirstOrDefault(x => x.Type == "EventId").Value.ToString());
 
-            if (_context.EventMembers.Any(x => x.EventId == eventId && x.MemberId == memberId))
-                return Conflict("El usuario que intenta registrar ya se encuentra registrado en el evento");
 
-            await _context.EventMembers.AddAsync(EventMember.Attend(memberId, eventId));
+            var eventToAdd = _context.EventMembers.FirstOrDefault(x => x.EventId == eventId && x.MemberId == memberId);
+            if (eventToAdd == null)
+                new EventMember(memberId, eventId);
+            eventToAdd.Attend();
+            await _context.EventMembers.AddAsync(eventToAdd);
             await _context.SaveChangesAsync();
             return Ok();
 
@@ -150,10 +152,12 @@ namespace NetBaires.Api.Controllers
 
             var eventId = int.Parse(response.Claims.FirstOrDefault(x => x.Type == "EventId").Value.ToString());
             var memberId = _currentUser.User.Id;
-            if (_context.EventMembers.Any(x => x.EventId == eventId && x.MemberId == memberId))
-                return Conflict("Ya se encuentra registrado al evento.");
 
-            await _context.EventMembers.AddAsync(EventMember.Attend(memberId, eventId));
+            var eventToAdd = _context.EventMembers.FirstOrDefault(x => x.EventId == eventId && x.MemberId == memberId);
+            if (eventToAdd == null)
+                new EventMember(memberId, eventId);
+            eventToAdd.Attend();
+            await _context.EventMembers.AddAsync(eventToAdd);
             await _context.SaveChangesAsync();
             return Ok();
         }
