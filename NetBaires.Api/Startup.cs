@@ -1,4 +1,5 @@
 using System.Text;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -57,6 +58,7 @@ namespace NetBaires.Api
                     });
                 c.EnableAnnotations();
             });
+            services.AddAutoMapper(typeof(Startup));
             services.AddMediatR(typeof(Startup));
             services.Configure<MeetupEndPointOptions>(Configuration.GetSection("MeetupEndPoint"));
             services.Configure<TwitterApiOptions>(Configuration.GetSection("TwitterApi"));

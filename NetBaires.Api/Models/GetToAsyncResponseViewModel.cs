@@ -10,11 +10,16 @@ namespace NetBaires.Api.Models
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public EventPlatform Platform { get; set; }
         public string Title { get; set; }
+        public bool Live { get; set; }
         public string ImageUrl { get; set; }
         public DateTime Date { get; set; }
         public int AttendedCount { get; set; }
         public int DidNotAttendCount { get; set; }
 
+        public GetToAsyncResponseViewModel()
+        {
+            
+        }
         public GetToAsyncResponseViewModel(Event @event, int attendedCount, int didNotAttendCount)
         {
             AttendedCount = attendedCount;
@@ -24,6 +29,7 @@ namespace NetBaires.Api.Models
             Title = @event.Title;
             Date = @event.Date;
             ImageUrl = @event.ImageUrl;
+            Live = @event.Live;
         }
     }
 }

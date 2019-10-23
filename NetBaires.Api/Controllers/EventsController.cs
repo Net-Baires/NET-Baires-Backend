@@ -62,20 +62,8 @@ namespace NetBaires.Api.Controllers
         [HttpGet("ToSync")]
         [AllowAnonymous]
         [SwaggerOperation(Summary = "Retorna todos los eventos que ya fueron sincronizados con plataformas externas, pero  no fueron procesados en nuestro sistema")]
-        public IActionResult GetToSync()
-        {
-            var eventToReturn = _context.Events.OrderByDescending(x => x.Id).Where(x => !x.Done)?
-                .Select(x => new GetToAsyncResponseViewModel(x,
-                    x.Attendees.Count(s => s.Status == EventMemberStatus.Attended),
-                    x.Attendees.Count(s => s.Status == EventMemberStatus.DidNotAttend)))?.ToList();
-
-            if (eventToReturn == null)
-                return NotFound();
-
-            return Ok(eventToReturn);
-
-        }
-
+        public async Task<IActionResult> GetToSync() =>
+            await _iMediator.Send(new GetToSyncHandler.GetToSync());
 
         [HttpGet("{id}/Assistance")]
         [SwaggerOperation(Summary = "Retorna toda la información requerida por el miemebro de la comunidad para reportar su asistencia a un evento")]
@@ -187,15 +175,11 @@ namespace NetBaires.Api.Controllers
         }
         [HttpPut("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
-        public async Task<IActionResult> Put(int id, Event eEvent)
+        public async Task<IActionResult> Put(int id, UpdateEventHandler.UpdateEvent eEvent)
         {
             eEvent.Id = id;
+            return await _iMediator.Send(eEvent);
 
-            _context.Entry(eEvent).State = EntityState.Modified;
-
-            await _context.SaveChangesAsync();
-
-            return Ok(eEvent);
         }
 
         [HttpPut("sync")]
