@@ -173,6 +173,12 @@ namespace NetBaires.Api.Controllers
 
             return NotFound();
         }
+        
+        [HttpGet("{id:int}/live")]
+        [AllowAnonymous]
+        [ApiExplorerSettingsExtend("Anonymous")]
+        public async Task<IActionResult> GetLive([FromRoute]int id) =>
+            await _iMediator.Send(new GetLiveHandler.GetLive(id));
 
         [HttpGet("{id:int}")]
         [AllowAnonymous]

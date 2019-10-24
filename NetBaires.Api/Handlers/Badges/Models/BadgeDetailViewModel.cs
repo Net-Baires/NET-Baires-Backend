@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using NetBaires.Api.Handlers.Events.Models;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Handlers.Badges.Models
 {
+
     public class BadgeDetailViewModel
     {
         public int Id { get; set; }

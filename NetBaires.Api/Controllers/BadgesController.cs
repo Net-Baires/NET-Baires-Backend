@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Handlers.Badges;
 using NetBaires.Api.Handlers.Badges.Models;
-using NetBaires.Api.Models;
 using NetBaires.Api.Services.BadGr;
 using NetBaires.Data;
 using Swashbuckle.AspNetCore.Annotations;
@@ -101,48 +100,31 @@ namespace NetBaires.Api.Controllers
 
             var badge = await _context.Badges.FirstOrDefaultAsync(x => x.Id == badgeId);
             var member = await _context.Members.FirstOrDefaultAsync(x => x.Id == memberId);
-            var response = await _badGrServices.CreateAssertion(badge.BadgeId, member.Email);
+            //var response = await _badGrServices.CreateAssertion(badge.BadgeId, member.Email);
 
-            if (response.Status.Success)
+            _context.BadgeMembers.Add(new BadgeMember
             {
-                _context.BadgeMembers.Add(new BadgeMember
-                {
-                    BadgeId = badge.Id,
-                    MemberId = member.Id,
-                    BadgeUrl = response.Result.First().OpenBadgeId.AbsoluteUri
-                });
-                await _context.SaveChangesAsync();
-            }
+                BadgeId = badge.Id,
+                MemberId = member.Id,
+                BadgeUrl = ""
+            });
 
             return Ok(member);
         }
         [HttpDelete("{badgeId}/Member/{memberId}")]
-        [SwaggerOperation(Summary = "Premia a un miembro con un Badge")]
+        [SwaggerOperation(Summary = "Eliminar un Badge de un Miembro")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
         public async Task<IActionResult> RemoveMembersInBadge([FromRoute]int badgeId, [FromRoute]int memberId)
         {
-            var membersAlreadyHasTheBadge =
-                _context.BadgeMembers.Any(x => x.BadgeId == badgeId && x.MemberId == memberId);
-            if (membersAlreadyHasTheBadge)
+            var badge = await _context.BadgeMembers.FirstOrDefaultAsync(x => x.BadgeId == badgeId && x.MemberId == memberId);
+            if (badge == null)
                 return BadRequest("El miembro que esta intentando asignar ya tiene ese Badge");
 
-            var badge = await _context.Badges.FirstOrDefaultAsync(x => x.Id == badgeId);
-            var member = await _context.Members.FirstOrDefaultAsync(x => x.Id == memberId);
-            var response = await _badGrServices.CreateAssertion(badge.BadgeId, member.Email);
+            _context.Remove(badge);
+            await _context.SaveChangesAsync();
 
-            if (response.Status.Success)
-            {
-                _context.BadgeMembers.Add(new BadgeMember
-                {
-                    BadgeId = badge.Id,
-                    MemberId = member.Id,
-                    BadgeUrl = response.Result.First().OpenBadgeId.AbsoluteUri
-                });
-                await _context.SaveChangesAsync();
-            }
-
-            return Ok(member);
+            return Ok();
         }
         [HttpGet("sync")]
         [SwaggerOperation(Summary = "Sincroniza los Badge con las plataformas")]
@@ -172,10 +154,34 @@ namespace NetBaires.Api.Controllers
 
                 }
             }
-
             await _context.SaveChangesAsync();
             return Ok();
         }
 
+        [HttpPost]
+        [SwaggerOperation(Summary = "Crea un nuevo Badge en la plataforma")]
+        [AuthorizeRoles(UserRole.Admin)]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
+        [ProducesResponseType(typeof(NewBadgeHandler.NewBadgeResponse), 200)]
+        public async Task<IActionResult> Post([FromForm]NewBadgeHandler.NewBadge badge) =>
+            await _mediator.Send(badge);
+
+        [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "Actualiza un Badge en la plataforma")]
+        [AuthorizeRoles(UserRole.Admin)]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
+        [ProducesResponseType(typeof(UpdateBadgeHandler.UpdateBadge), 200)]
+        public async Task<IActionResult> Post([FromRoute]int id, UpdateBadgeHandler.UpdateBadge badge)
+        {
+            badge.Id = id;
+
+            return await _mediator.Send(badge);
+        }
+        [HttpDelete("{id}")]
+        [AuthorizeRoles(UserRole.Admin)]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> DeleteBadge([FromRoute]int id) =>
+            await _mediator.Send(new DeleteBadgeHandler.DeleteBadge(id));
     }
 }

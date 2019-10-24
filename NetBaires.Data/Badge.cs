@@ -7,7 +7,6 @@ namespace NetBaires.Data
 {
     public class Badge
     {
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [JsonIgnore]
         public int Id { get; set; }

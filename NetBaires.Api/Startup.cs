@@ -71,7 +71,7 @@ namespace NetBaires.Api
             services.Configure<SlackEndPointOptions>(Configuration.GetSection("SlackEndPoint"));
             services.Configure<AssistanceOptions>(Configuration.GetSection("Assistance"));
             services.Configure<BadgrOptions>(Configuration.GetSection("Badgr"));
-
+            services.Configure<ConnectionStringsOptions>(Configuration.GetSection("ConnectionStrings"));
             services.AddHttpClient("");
             services.AddDbContext<NetBairesContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("NetBairesContext")));
