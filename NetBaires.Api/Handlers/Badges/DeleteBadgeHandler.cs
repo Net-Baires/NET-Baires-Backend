@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using NetBaires.Api.Auth;
-using NetBaires.Api.Options;
+using NetBaires.Api.Services;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Handlers.Badges
@@ -17,18 +12,14 @@ namespace NetBaires.Api.Handlers.Badges
     public class DeleteBadgeHandler : IRequestHandler<DeleteBadgeHandler.DeleteBadge, IActionResult>
     {
         private readonly NetBairesContext _context;
-        private readonly IMapper _mapper;
-        private readonly ILogger<GetToAssignHandler> _logger;
+        private readonly IBadgesServices badgesServices;
 
-        public DeleteBadgeHandler(ICurrentUser currentUser,
-            NetBairesContext context,
-            IMapper mapper,
-            IOptions<AssistanceOptions> assistanceOptions,
-            ILogger<GetToAssignHandler> logger)
+        public DeleteBadgeHandler(NetBairesContext context,
+            IBadgesServices badgesServices,
+            ILogger<DeleteBadgeHandler> logger)
         {
             _context = context;
-            _mapper = mapper;
-            _logger = logger;
+            this.badgesServices = badgesServices;
         }
 
 
@@ -37,8 +28,12 @@ namespace NetBaires.Api.Handlers.Badges
             var badge = await _context.Badges.FirstOrDefaultAsync(x => x.Id == request.Id);
             if (badge == null)
                 return new StatusCodeResult(404);
-            _context.Remove(badge);
-            await _context.SaveChangesAsync();
+
+            if (badgesServices.Remove(badge.ImageName))
+            {
+                _context.Remove(badge);
+                await _context.SaveChangesAsync();
+            }
             return new ObjectResult(request) { StatusCode = 200 };
 
         }
@@ -50,8 +45,8 @@ namespace NetBaires.Api.Handlers.Badges
                 Id = id;
             }
 
-            public int Id { get;  }
+            public int Id { get; }
         }
-       
+
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -25,6 +26,7 @@ namespace NetBaires.Api.Controllers
         private readonly IMediator _mediator;
         private readonly IBadGrServices _badGrServices;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly ILogger<BadgesController> _logger;
 
         public BadgesController(IHttpClientFactory httpClientFactory,
@@ -32,12 +34,15 @@ namespace NetBaires.Api.Controllers
             IMediator mediator,
             IBadGrServices badGrServices,
             IMapper mapper,
+            IHttpContextAccessor httpContextAccessor,
             ILogger<BadgesController> logger)
         {
             _context = context;
             _mediator = mediator;
+
             _badGrServices = badGrServices;
             _mapper = mapper;
+            this.httpContextAccessor = httpContextAccessor;
             _logger = logger;
             httpClientFactory.CreateClient();
         }
@@ -61,6 +66,19 @@ namespace NetBaires.Api.Controllers
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
         [ProducesResponseType(typeof(List<Badge>), 200)]
         public async Task<IActionResult> Get(int badgeId)
+        {
+            var badge = await _context.Badges.FirstOrDefaultAsync(x => x.Id == badgeId);
+            if (badge == null)
+                return NotFound();
+
+            return Ok(_mapper.Map(badge, new BadgeDetailViewModel()));
+        }
+        [HttpGet("{badgeId}/image")]
+        [SwaggerOperation(Summary = "Retorna la imagen del Badge")]
+        [AllowAnonymous]
+        [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
+        [ProducesResponseType(typeof(List<Badge>), 200)]
+        public async Task<IActionResult> GetImage(int badgeId)
         {
             var badge = await _context.Badges.FirstOrDefaultAsync(x => x.Id == badgeId);
             if (badge == null)
@@ -126,48 +144,18 @@ namespace NetBaires.Api.Controllers
 
             return Ok();
         }
-        [HttpGet("sync")]
-        [SwaggerOperation(Summary = "Sincroniza los Badge con las plataformas")]
-        [AuthorizeRoles(UserRole.Admin)]
-        [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> Sync()
-        {
-            var badgets = await _badGrServices.GetAllBadget();
-            var mine = _context.Badges.Select(x => x.BadgeId).ToList();
-
-            foreach (var badget in badgets.Result)
-            {
-                if (!mine.Any(x => x == badget.EntityId))
-                {
-
-                    _context.Badges.Add(new Badge
-                    {
-                        BadgeId = badget.EntityId,
-                        BadgeImageUrl = badget.Image.AbsoluteUri,
-                        BadgeUrl = badget.OpenBadgeId.AbsoluteUri,
-                        Image = badget.Image.AbsoluteUri,
-                        IssuerUrl = badget.IssuerOpenBadgeId.AbsoluteUri,
-                        Name = badget.Name,
-                        Description = badget.Description,
-                        Created = badget.CreatedAt.Date
-                    });
-
-                }
-            }
-            await _context.SaveChangesAsync();
-            return Ok();
-        }
+      
 
         [HttpPost]
-        [SwaggerOperation(Summary = "Crea un nuevo Badge en la plataforma")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
         [ProducesResponseType(typeof(NewBadgeHandler.NewBadgeResponse), 200)]
-        public async Task<IActionResult> Post([FromForm]NewBadgeHandler.NewBadge badge) =>
-            await _mediator.Send(badge);
+        public async Task<IActionResult> Post([FromForm]NewBadgeHandler.NewBadge badge)
+        {
+            return await _mediator.Send(badge);
+        }
 
         [HttpPut("{id}")]
-        [SwaggerOperation(Summary = "Actualiza un Badge en la plataforma")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
         [ProducesResponseType(typeof(UpdateBadgeHandler.UpdateBadge), 200)]

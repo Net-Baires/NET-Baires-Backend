@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using NetBaires.Api.Auth;
-using NetBaires.Api.Options;
+using NetBaires.Api.Services;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Handlers.Badges
@@ -18,17 +16,17 @@ namespace NetBaires.Api.Handlers.Badges
     {
         private readonly NetBairesContext _context;
         private readonly IMapper _mapper;
+        private readonly IBadgesServices badgesServices;
         private readonly ILogger<GetToAssignHandler> _logger;
 
-        public UpdateBadgeHandler(ICurrentUser currentUser,
-            NetBairesContext context,
+        public UpdateBadgeHandler(NetBairesContext context,
             IMapper mapper,
-            IOptions<AssistanceOptions> assistanceOptions,
-            ILogger<GetToAssignHandler> logger)
+            IBadgesServices badgesServices,
+            ILogger<UpdateBadgeHandler> logger)
         {
             _context = context;
             _mapper = mapper;
-            _logger = logger;
+            this.badgesServices = badgesServices;
         }
 
 
@@ -36,25 +34,31 @@ namespace NetBaires.Api.Handlers.Badges
         {
             var badge = await _context.Badges.FirstOrDefaultAsync(x => x.Id == request.Id);
             if (badge == null)
-                return new StatusCodeResult(404)
-                    ;
+                return new StatusCodeResult(404);
             _mapper.Map(request, badge);
 
+
+            if (request.ImageFile != null)
+            {
+                var response = badgesServices.Replace(request.ImageFile.OpenReadStream(), badge.ImageName);
+                badge.ImageName = response.FileDetail.Name;
+            }
+
             await _context.SaveChangesAsync();
-
-            return new ObjectResult(request) { StatusCode = 200 };
+                       
+            return new ObjectResult(_mapper.Map(badge, new UpdateBadgeResponse())) { StatusCode = 200 };
 
         }
 
-        private List<GetToAssignHandler.BadgeAssignResponse> ReduceBadge(Badge item, List<GetToAssignHandler.BadgeAssignResponse> accum, bool assigned)
+
+        public class UpdateBadge : UpdateBadgeCommon, IRequest<IActionResult>
         {
-            var returnValue = _mapper.Map(item, new GetToAssignHandler.BadgeAssignResponse());
-            returnValue.Assigned = assigned;
-            accum.Add(returnValue);
-            return accum;
+            public IFormFile ImageFile { get; set; }
         }
-
-        public class UpdateBadge : IRequest<IActionResult>
+        public class UpdateBadgeResponse : UpdateBadgeCommon
+        {
+        }
+        public class UpdateBadgeCommon
         {
             public int Id { get; set; }
             public string BadgeUrl { get; set; }
@@ -70,7 +74,8 @@ namespace NetBaires.Api.Handlers.Badges
             public UpdateBadgeProfile()
             {
                 CreateMap<UpdateBadge, Badge>().ForAllMembers(
-                    opt => opt.Condition((src, dest, sourceMember) => sourceMember != null)); ; ;
+                    opt => opt.Condition((src, dest, sourceMember) => sourceMember != null));
+                CreateMap<Badge, UpdateBadgeResponse>();
             }
         }
     }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -8,9 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using NetBaires.Api.Auth;
-using NetBaires.Api.Options;
+using NetBaires.Api.Services;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Handlers.Badges
@@ -18,40 +15,40 @@ namespace NetBaires.Api.Handlers.Badges
     public class NewBadgeHandler : IRequestHandler<NewBadgeHandler.NewBadge, IActionResult>
     {
         private readonly NetBairesContext _context;
+        private readonly IBadgesServices badgesServices;
+        private readonly IFilesServices filesServices;
         private readonly IMapper _mapper;
-        private readonly ConnectionStringsOptions _connectionStringsOptions;
-        private readonly ILogger<GetToAssignHandler> _logger;
+        private readonly ILogger<NewBadgeHandler> logger;
 
-        public NewBadgeHandler(ICurrentUser currentUser,
-            NetBairesContext context,
+        public NewBadgeHandler(NetBairesContext context,
+               IBadgesServices badgesServices,
             IMapper mapper,
-            IOptions<ConnectionStringsOptions> connectionStringsOptions,
-            ILogger<GetToAssignHandler> logger)
+            ILogger<NewBadgeHandler> logger)
         {
             _context = context;
+            this.badgesServices = badgesServices;
             _mapper = mapper;
-            _connectionStringsOptions = connectionStringsOptions.Value;
-            _logger = logger;
+            this.logger = logger;
         }
 
 
         public async Task<IActionResult> Handle(NewBadgeHandler.NewBadge request, CancellationToken cancellationToken)
         {
-
             var newBadge = _mapper.Map(request, new Badge());
-
-            await _context.SaveChangesAsync();
-            var newBadgeResponse = _mapper.Map(newBadge, new NewBadgeResponse());
-            if (request.ImageFile.Length > 0)
+            if (request.ImageFile != null)
             {
-                using (var fileStream = new FileStream(request.ImageFile.FileName, FileMode.Create))
-                {
-                    request.ImageFile.CopyTo(fileStream);
-                    string storageConnectionString = Environment.GetEnvironmentVariable("CONNECT_STR");
-                }
+                var badgeCreateResponse = badgesServices.Create(request.ImageFile.OpenReadStream());
+                if (badgeCreateResponse == null)
+                    return new StatusCodeResult(400);
+                newBadge.ImageName = badgeCreateResponse.FileDetail.Name;
+
+                await _context.Badges.AddAsync(newBadge);
             }
 
-            return new ObjectResult(newBadgeResponse) { StatusCode = 200 };
+            await _context.SaveChangesAsync();
+
+
+            return new ObjectResult(_mapper.Map(newBadge, new NewBadgeResponse())) { StatusCode = 200 };
 
         }
 

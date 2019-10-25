@@ -15,6 +15,7 @@ using Microsoft.OpenApi.Models;
 using NetBaires.Api.Auth;
 using NetBaires.Api.Controllers;
 using NetBaires.Api.Options;
+using NetBaires.Api.Services;
 using NetBaires.Api.Services.BadGr;
 using NetBaires.Api.Services.EventBrite;
 using NetBaires.Api.Services.Meetup;
@@ -71,6 +72,8 @@ namespace NetBaires.Api
             services.Configure<SlackEndPointOptions>(Configuration.GetSection("SlackEndPoint"));
             services.Configure<AssistanceOptions>(Configuration.GetSection("Assistance"));
             services.Configure<BadgrOptions>(Configuration.GetSection("Badgr"));
+            services.Configure<CommonOptions>(Configuration.GetSection("Common"));
+            services.Configure<BadgesOptions>(Configuration.GetSection("Badges"));
             services.Configure<ConnectionStringsOptions>(Configuration.GetSection("ConnectionStrings"));
             services.AddHttpClient("");
             services.AddDbContext<NetBairesContext>(options =>
@@ -110,9 +113,13 @@ namespace NetBaires.Api
             services.AddScoped<IMeetupServices, MeetupServices>();
             services.AddScoped<IEventBriteServices, EventBriteServices>();
             services.AddScoped<ISyncServices, SyncServices>();
-
-
+            services.AddScoped<IFilesServices, FilesServices>();
+            services.AddScoped<IBadgesServices, BadgesServices>();
             
+
+
+
+
             services.AddApplicationInsightsTelemetry();
         }
 

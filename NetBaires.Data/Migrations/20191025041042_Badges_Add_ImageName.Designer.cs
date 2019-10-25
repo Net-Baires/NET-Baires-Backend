@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetBaires.Data;
 
 namespace NetBaires.Data.Migrations
 {
     [DbContext(typeof(NetBairesContext))]
-    partial class NetBairesContextModelSnapshot : ModelSnapshot
+    [Migration("20191025041042_Badges_Add_ImageName")]
+    partial class Badges_Add_ImageName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,13 +28,28 @@ namespace NetBaires.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("BadgeId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BadgeImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BadgeUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ImageName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IssuerUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
