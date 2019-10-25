@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -17,6 +19,17 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace NetBaires.Api.Controllers
 {
+    public static class StreamExtensions
+    {
+        public static byte[] ToByteArray(this Stream stream)
+        {
+            stream.Position = 0;
+            byte[] buffer = new byte[stream.Length];
+            for (int totalBytesCopied = 0; totalBytesCopied < stream.Length;)
+                totalBytesCopied += stream.Read(buffer, totalBytesCopied, Convert.ToInt32(stream.Length) - totalBytesCopied);
+            return buffer;
+        }
+    }
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
@@ -53,12 +66,8 @@ namespace NetBaires.Api.Controllers
         [AllowAnonymous]
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
         [ProducesResponseType(typeof(List<Badge>), 200)]
-        public IActionResult Get()
-        {
-            var badges = _context.Badges.AsNoTracking();
-
-            return Ok(badges);
-        }
+        public async Task<IActionResult> GetAsync() =>
+        await _mediator.Send(new GetBadesHandler.GetBades());
 
         [HttpGet("{badgeId}")]
         [SwaggerOperation(Summary = "Retorna todos los badges disponibles de NET-Baires")]
@@ -80,11 +89,8 @@ namespace NetBaires.Api.Controllers
         [ProducesResponseType(typeof(List<Badge>), 200)]
         public async Task<IActionResult> GetImage(int badgeId)
         {
-            var badge = await _context.Badges.FirstOrDefaultAsync(x => x.Id == badgeId);
-            if (badge == null)
-                return NotFound();
-
-            return Ok(_mapper.Map(badge, new BadgeDetailViewModel()));
+            var response = await _mediator.Send(new GetImageHandler.GetIamge(badgeId));
+            return File(response.ToByteArray(), "image/png");
         }
 
         [HttpGet("ToAssign")]
@@ -144,7 +150,7 @@ namespace NetBaires.Api.Controllers
 
             return Ok();
         }
-      
+
 
         [HttpPost]
         [AuthorizeRoles(UserRole.Admin)]

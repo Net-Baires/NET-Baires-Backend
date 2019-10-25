@@ -40,6 +40,7 @@ namespace NetBaires.Api
             services.AddControllers(options =>
             {
                 options.Filters.Add<ExceptionActionFilter>();
+                options.RespectBrowserAcceptHeader = true; // false by default
 
             }).AddNewtonsoftJson(options =>
             {
@@ -53,7 +54,7 @@ namespace NetBaires.Api
                 c.SwaggerDoc(UserRole.Member.ToString(), new OpenApiInfo { Title = "NET-Baires Api - Miembro", Version = UserRole.Member.ToString() });
 
                 c.SwaggerDoc(UserRole.Admin.ToString(), new OpenApiInfo { Title = "NET-Baires Api - Admin", Version = UserRole.Admin.ToString() });
-                c.SwaggerDoc(UserRole.Organizer.ToString(), new OpenApiInfo { Title = "NET-Baires Api - Organizador", Version = UserRole.Organizer.ToString()  });
+                c.SwaggerDoc(UserRole.Organizer.ToString(), new OpenApiInfo { Title = "NET-Baires Api - Organizador", Version = UserRole.Organizer.ToString() });
                 c.SwaggerDoc(UserAnonymous.Anonymous.ToString(), new OpenApiInfo { Title = "NET-Baires Api - Anonymous", Version = UserAnonymous.Anonymous.ToString() });
 
                 c.AddSecurityDefinition("Bearer",
@@ -115,7 +116,7 @@ namespace NetBaires.Api
             services.AddScoped<ISyncServices, SyncServices>();
             services.AddScoped<IFilesServices, FilesServices>();
             services.AddScoped<IBadgesServices, BadgesServices>();
-            
+
 
 
 

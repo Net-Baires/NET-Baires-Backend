@@ -29,7 +29,7 @@ namespace NetBaires.Api.Handlers.Badges
             if (badge == null)
                 return new StatusCodeResult(404);
 
-            if (badgesServices.Remove(badge.ImageName))
+            if (await badgesServices.RemoveAsync(badge.ImageName))
             {
                 _context.Remove(badge);
                 await _context.SaveChangesAsync();

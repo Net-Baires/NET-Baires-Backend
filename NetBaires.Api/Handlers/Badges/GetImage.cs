@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -16,7 +17,7 @@ using NetBaires.Data;
 namespace NetBaires.Api.Handlers.Badges
 {
 
-    public class GetImageHandler : IRequestHandler<GetImageHandler.GetIamge, HttpResponseMessage>
+    public class GetImageHandler : IRequestHandler<GetImageHandler.GetIamge, Stream>
     {
         private readonly NetBairesContext _context;
         private readonly IBadgesServices badgesServices;
@@ -37,14 +38,14 @@ namespace NetBaires.Api.Handlers.Badges
         }
 
 
-        public async Task<HttpResponseMessage> Handle(GetIamge request, CancellationToken cancellationToken)
+        public async Task<Stream> Handle(GetIamge request, CancellationToken cancellationToken)
         {
             var badge = await _context.Badges.FirstOrDefaultAsync(x => x.Id == request.BadgeId);
 
-            if (badge == null)
-                return new HttpResponseMessage(HttpStatusCode.NotFound);
+            // if (badge == null)
+            //     return new HttpResponseMessage(HttpStatusCode.NotFound);
 
-            var file = badgesServices.Get(badge.ImageName);
+            var file = await badgesServices.GetAsync(badge.ImageName);
             var result = new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Content = new StreamContent(file)
@@ -57,12 +58,12 @@ namespace NetBaires.Api.Handlers.Badges
             result.Content.Headers.ContentType =
                 new MediaTypeHeaderValue("application/octet-stream");
 
-            return result;
+            return file;
 
         }
 
 
-        public class GetIamge : IRequest<HttpResponseMessage>
+        public class GetIamge : IRequest<Stream>
         {
             public GetIamge(int badgeId)
             {

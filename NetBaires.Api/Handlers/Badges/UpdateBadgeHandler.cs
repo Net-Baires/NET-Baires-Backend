@@ -40,12 +40,12 @@ namespace NetBaires.Api.Handlers.Badges
 
             if (request.ImageFile != null)
             {
-                var response = badgesServices.Replace(request.ImageFile.OpenReadStream(), badge.ImageName);
+                var response = await badgesServices.ReplaceAsync(request.ImageFile, badge.ImageName);
                 badge.ImageName = response.FileDetail.Name;
             }
 
             await _context.SaveChangesAsync();
-                       
+
             return new ObjectResult(_mapper.Map(badge, new UpdateBadgeResponse())) { StatusCode = 200 };
 
         }

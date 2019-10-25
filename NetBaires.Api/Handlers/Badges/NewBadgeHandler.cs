@@ -16,7 +16,6 @@ namespace NetBaires.Api.Handlers.Badges
     {
         private readonly NetBairesContext _context;
         private readonly IBadgesServices badgesServices;
-        private readonly IFilesServices filesServices;
         private readonly IMapper _mapper;
         private readonly ILogger<NewBadgeHandler> logger;
 
@@ -27,7 +26,7 @@ namespace NetBaires.Api.Handlers.Badges
         {
             _context = context;
             this.badgesServices = badgesServices;
-            _mapper = mapper;
+            this._mapper = mapper;
             this.logger = logger;
         }
 
@@ -37,7 +36,7 @@ namespace NetBaires.Api.Handlers.Badges
             var newBadge = _mapper.Map(request, new Badge());
             if (request.ImageFile != null)
             {
-                var badgeCreateResponse = badgesServices.Create(request.ImageFile.OpenReadStream());
+                var badgeCreateResponse = await badgesServices.CreateAsync(request.ImageFile);
                 if (badgeCreateResponse == null)
                     return new StatusCodeResult(400);
                 newBadge.ImageName = badgeCreateResponse.FileDetail.Name;
