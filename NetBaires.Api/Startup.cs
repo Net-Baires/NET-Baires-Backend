@@ -78,7 +78,7 @@ namespace NetBaires.Api
             services.Configure<ConnectionStringsOptions>(Configuration.GetSection("ConnectionStrings"));
             services.AddHttpClient("");
             services.AddDbContext<NetBairesContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("NetBairesContext")));
+                options.UseSqlServer(Configuration.GetConnectionString("NetBairesContext"), b => b.MigrationsAssembly("NetBaires.Data")));
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);

@@ -67,7 +67,7 @@ namespace NetBaires.Api.Controllers
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
         [ProducesResponseType(typeof(List<Badge>), 200)]
         public async Task<IActionResult> GetAsync() =>
-        await _mediator.Send(new GetBadesHandler.GetBades());
+        await _mediator.Send(new GetBadgesHandler.GetBages());
 
         [HttpGet("{badgeId}")]
         [SwaggerOperation(Summary = "Retorna todos los badges disponibles de NET-Baires")]
@@ -76,11 +76,8 @@ namespace NetBaires.Api.Controllers
         [ProducesResponseType(typeof(List<Badge>), 200)]
         public async Task<IActionResult> Get(int badgeId)
         {
-            var badge = await _context.Badges.FirstOrDefaultAsync(x => x.Id == badgeId);
-            if (badge == null)
-                return NotFound();
-
-            return Ok(_mapper.Map(badge, new BadgeDetailViewModel()));
+            var command = new GetBadeHandler.GetBadge(badgeId);
+            return await _mediator.Send(command);
         }
         [HttpGet("{badgeId}/image")]
         [SwaggerOperation(Summary = "Retorna la imagen del Badge")]
@@ -164,8 +161,8 @@ namespace NetBaires.Api.Controllers
         [HttpPut("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        [ProducesResponseType(typeof(UpdateBadgeHandler.UpdateBadge), 200)]
-        public async Task<IActionResult> Post([FromRoute]int id, UpdateBadgeHandler.UpdateBadge badge)
+        [ProducesResponseType(typeof(UpdateBadgeHandler.UpdateBadgeResponse), 200)]
+        public async Task<IActionResult> Put([FromRoute]int id, [FromForm]UpdateBadgeHandler.UpdateBadge badge)
         {
             badge.Id = id;
 

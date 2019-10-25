@@ -6,6 +6,8 @@ using NetBaires.Data;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using NetBaires.Api.Auth;
+using MediatR;
+using NetBaires.Api.Handlers.Badges;
 
 namespace NetBaires.Api.Controllers
 {
@@ -17,65 +19,49 @@ namespace NetBaires.Api.Controllers
         private readonly ILogger<SlackController> _logger;
         private readonly NetBairesContext _context;
         private readonly ICurrentUser _currentUser;
+        private readonly IMediator mediator;
 
         public SponsorsController(NetBairesContext context,
             ICurrentUser currentUser,
+            IMediator mediator,
             ILogger<SlackController> logger)
         {
             _logger = logger;
             _context = context;
             _currentUser = currentUser;
+            this.mediator = mediator;
         }
 
         [HttpGet]
         [AllowAnonymous]
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
-        public async Task<IActionResult> Get()
-        {
-            var sponsors = _context.Sponsors.AsNoTracking();
-            if (sponsors.Any())
-                return Ok(sponsors);
-            return NoContent();
-        }
+        public async Task<IActionResult> Get() =>
+        await mediator.Send(new GetSponsorsHandler.GetSponsors());
 
         [HttpGet("{id}")]
         [AllowAnonymous]
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
         public async Task<IActionResult> GetById(int id)
         {
-            var sponsors = await _context.Sponsors.FirstOrDefaultAsync(x => x.Id == id);
-            if (sponsors == null)
-                return NotFound();
-
-            return Ok(sponsors);
+            var command = new GetSponsorHandler.GetSponsor(id);
+            return await mediator.Send(command);
         }
 
         [HttpPost]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> Post([FromBody]Sponsor sponsor)
-        {
-            var email = _currentUser.User.Email;
-            if (_context.Sponsors.Any(x => x.Name.ToUpper() == sponsor.Name.ToUpper()))
-                return BadRequest("El nombre de sponsor que esta queriando utilizar, ya se encuentra registrado");
+        public async Task<IActionResult> Post([FromForm]NewSponsorHandler.NewSponsor sponsor) =>
+             await mediator.Send(sponsor);
 
-            await _context.Sponsors.AddAsync(sponsor);
-            await _context.SaveChangesAsync();
-            return Ok(sponsor);
-        }
         [HttpPut("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> Put(int id, Sponsor sponsor)
+        public async Task<IActionResult> Put(int id, [FromForm]UpdateSponsorHandler.UpdateSponsor sponsor)
         {
             sponsor.Id = id;
-
-            _context.Entry(sponsor).State = EntityState.Modified;
-
-            await _context.SaveChangesAsync();
-
-            return Ok(sponsor);
+            return await mediator.Send(sponsor);
         }
+
         [HttpDelete("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]

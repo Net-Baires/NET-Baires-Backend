@@ -35,7 +35,7 @@ namespace NetBaires.Api.Services
             await cloudBlockBlob.UploadFromStreamAsync(file);
 
 
-            return new FileDetail(fileName);
+            return new FileDetail(fileName, cloudBlockBlob.Uri);
         }
         public async Task<bool> DeleteAsync(string fileName, Container container)
         {
