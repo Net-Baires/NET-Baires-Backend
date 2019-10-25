@@ -14,7 +14,7 @@ namespace NetBaires.Api.Auth
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public bool IsLoggued => _httpContextAccessor.HttpContext.User != null;
+        public bool IsLoggued => _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
         public CurrentUserDto User
         {
             get

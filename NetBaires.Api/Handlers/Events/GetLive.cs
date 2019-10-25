@@ -36,7 +36,8 @@ namespace NetBaires.Api.Handlers.Events
         public async Task<IActionResult> Handle(GetLive request, CancellationToken cancellationToken)
         {
             var eventResponse = await _context.Events.FirstOrDefaultAsync(x => x.Id == request.Id);
-         
+            if (!eventResponse.Live)
+                return new StatusCodeResult(404);
 
             return new ObjectResult(eventResponse) { StatusCode = 200 };
         }
@@ -49,8 +50,8 @@ namespace NetBaires.Api.Handlers.Events
                 Id = id;
             }
 
-            public int Id { get;  }
-           
+            public int Id { get; }
+
         }
         public class GetLiveProfile : Profile
         {

@@ -7,6 +7,8 @@ namespace NetBaires.Api.Services
         [EnumMember(Value = "badges")]
         Badges,
         [EnumMember(Value = "sponsors")]
-        Sponsors
+        Sponsors,
+        [EnumMember(Value = "members")]
+        Members
     }
 }
