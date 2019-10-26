@@ -12,7 +12,7 @@ using NetBaires.Data;
 namespace NetBaires.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class SlackController : ControllerBase
     {
 
@@ -82,4 +82,3 @@ namespace NetBaires.Api.Controllers
         }
     }
 }
-    

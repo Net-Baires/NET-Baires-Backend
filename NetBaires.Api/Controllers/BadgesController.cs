@@ -32,7 +32,7 @@ namespace NetBaires.Api.Controllers
     }
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class BadgesController : ControllerBase
     {
         private readonly NetBairesContext _context;

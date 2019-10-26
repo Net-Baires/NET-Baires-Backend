@@ -19,7 +19,7 @@ namespace NetBaires.Api.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class BadgeGroupController : ControllerBase
     {
         private readonly NetBairesContext _context;
@@ -81,7 +81,7 @@ namespace NetBaires.Api.Controllers
 
             return Ok(_mapper.Map(badge, new BadgeDetailViewModel()));
         }
-        
+
         [HttpPost]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]

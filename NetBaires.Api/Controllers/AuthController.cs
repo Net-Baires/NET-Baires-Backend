@@ -13,7 +13,7 @@ namespace NetBaires.Api.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class AuthController : ControllerBase
     {
         private IUserService _userService;

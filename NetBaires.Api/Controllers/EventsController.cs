@@ -21,7 +21,7 @@ namespace NetBaires.Api.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class EventsController : ControllerBase
     {
         private readonly IMeetupServices _meetupServices;
@@ -50,7 +50,7 @@ namespace NetBaires.Api.Controllers
         [AllowAnonymous]
         [SwaggerOperation(Summary = "Retorna todos los eventos de la comunidad")]
         [ApiExplorerSettingsExtend("Anonymous")]
-        [ProducesResponseType( typeof(Event),200)]
+        [ProducesResponseType(typeof(Event), 200)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> Get()
         {
@@ -118,7 +118,7 @@ namespace NetBaires.Api.Controllers
 
             var eventToAdd = _context.EventMembers.FirstOrDefault(x => x.EventId == eventId && x.MemberId == memberId);
             if (eventToAdd == null)
-                new EventMember(memberId, eventId);
+                eventToAdd = new EventMember(memberId, eventId);
             eventToAdd.Attend();
             await _context.EventMembers.AddAsync(eventToAdd);
             await _context.SaveChangesAsync();
@@ -127,7 +127,7 @@ namespace NetBaires.Api.Controllers
         }
         [HttpGet("{id}/Assistance/General")]
         [SwaggerOperation(Summary = "Retorna toda la información requerida para que los miembros de la comunidad puedan reportar su asistencia en conjunto, el token de registración tiene un tiempo de 5 minutos.")]
-        [AuthorizeRoles(new UserRole[2] { UserRole.Organizer , UserRole.Admin})]
+        [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
         [ApiExplorerSettingsExtend(UserRole.Organizer)]
         public async Task<IActionResult> CheckAssistanceGeneral(int id)
         {
@@ -173,7 +173,7 @@ namespace NetBaires.Api.Controllers
 
             return NotFound();
         }
-        
+
         [HttpGet("{id:int}/live")]
         [AllowAnonymous]
         [ApiExplorerSettingsExtend("Anonymous")]
@@ -192,6 +192,54 @@ namespace NetBaires.Api.Controllers
 
             return NotFound();
         }
+
+        [HttpGet("{id:int}/attendees")]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
+        [SwaggerOperation(Summary = "Retorna todos los miembros que se encuentran registrados a un evento particular")]
+        [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
+        public async Task<IActionResult> GetAttendees([FromRoute]int id)
+        {
+            var command = new GetAttendeesHandler.GetAttendees(id);
+            return await _iMediator.Send(command);
+        }
+
+        [HttpPost("{id:int}/attendees/{idAttende}")]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
+        [SwaggerOperation(Summary = "Informo que un usuario se registro en un evento")]
+        [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
+        public async Task<IActionResult> AddAttendees([FromRoute]int id, [FromRoute]int idAttende)
+        {
+            var command = new AddAttendeeHandler.AddAttendee(id, idAttende);
+            return await _iMediator.Send(command);
+        }
+
+        [HttpPut("{id:int}/attendees/{idAttende}/Attended")]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
+        [SwaggerOperation(Summary = "Informo que un usuario asistio a un evento. Este se registra con el estado Attended")]
+        [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
+        public async Task<IActionResult> UpdateAttendeAttended([FromRoute]int id, [FromRoute]int idAttende) =>
+            await CallUpdateAttendee(id, idAttende, EventMemberStatus.Attended);
+
+        [HttpPut("{id:int}/attendees/{idAttende}/NotAttend")]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
+        [SwaggerOperation(Summary = "Informo que un usuario no asistio a un evento. Este se registra con el estado DitNotAttend")]
+        [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
+        public async Task<IActionResult> UpdateAttendeNotAttend([FromRoute]int id, [FromRoute]int idAttende) =>
+                    await CallUpdateAttendee(id, idAttende, EventMemberStatus.DidNotAttend);
+
+
+        [HttpPut("{id:int}/attendees/{idAttende}/NotifyAbsence")]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
+        [SwaggerOperation(Summary = "Informo que un usuario no asistio a un evento pero notifico la ausencia. Este se registra con el estado NotifyAbsence")]
+        [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
+        public async Task<IActionResult> UpdateAttendeNotifyAbsence([FromRoute]int id, [FromRoute]int idAttende) =>
+                    await CallUpdateAttendee(id, idAttende, EventMemberStatus.NotifyAbsence);
+
+
+
+        private async Task<IActionResult> CallUpdateAttendee(int idEvent, int idMember, EventMemberStatus status) =>
+                await _iMediator.Send(new UpdateAttendeeHandler.UpdateAttendee(idEvent, idMember, status));
+
         [HttpPut("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettings(GroupName = "Admin")]

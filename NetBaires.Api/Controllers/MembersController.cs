@@ -16,7 +16,7 @@ namespace NetBaires.Api.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class MembersController : ControllerBase
     {
         private readonly ILogger<SlackController> _logger;

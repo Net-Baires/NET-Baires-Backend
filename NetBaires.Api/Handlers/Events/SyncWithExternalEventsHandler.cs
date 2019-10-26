@@ -33,7 +33,7 @@ namespace NetBaires.Api.Handlers.Events
 
             _logger.LogInformation($"End Sync Event {request.EventId} with external Platform");
 
-            return new StatusCodeResult(200);
+            return new StatusCodeResult(204);
         }
 
 

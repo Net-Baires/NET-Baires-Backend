@@ -28,6 +28,7 @@ namespace NetBaires.Data
         public bool Blocked { get; set; }
         public bool Organized { get; set; } = false;
         public bool Colaborator { get; set; } = false;
+
         public UserRole Role { get; set; }
         public IList<BadgeMember> Badges { get; set; }
         public List<EventMember> Events { get; set; }

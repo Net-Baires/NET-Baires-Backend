@@ -10,8 +10,6 @@ namespace NetBaires.Data
         Attended = 2,
         NotifyAbsence = 3,
         DoNotKnow = 4
-
-
     }
     public class EventMember
     {
@@ -54,7 +52,7 @@ namespace NetBaires.Data
 
         public EventMember()
         {
-            
+
         }
         public EventMember(Member member, Event eventToAdd, bool attended)
         {
