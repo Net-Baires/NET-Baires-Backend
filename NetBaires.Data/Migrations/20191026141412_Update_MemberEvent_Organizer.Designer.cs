@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetBaires.Data;
 
 namespace NetBaires.Data.Migrations
 {
     [DbContext(typeof(NetBairesContext))]
-    partial class NetBairesContextModelSnapshot : ModelSnapshot
+    [Migration("20191026141412_Update_MemberEvent_Organizer")]
+    partial class Update_MemberEvent_Organizer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,26 +111,17 @@ namespace NetBaires.Data.Migrations
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("Attended")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("DidNotAttend")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("DoNotKnow")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("NotifiedAbsence")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("Organizer")
                         .HasColumnType("bit");
 
                     b.Property<bool>("Speaker")
                         .HasColumnType("bit");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("MemberId", "EventId");
 

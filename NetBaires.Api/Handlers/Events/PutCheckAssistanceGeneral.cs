@@ -16,12 +16,12 @@ namespace NetBaires.Api.Handlers.Events
     {
         private readonly ICurrentUser _currentUser;
         private readonly NetBairesContext _context;
-        private readonly AssistanceOptions _assistanceOptions;
+        private readonly AttendanceOptions _assistanceOptions;
         private readonly ILogger<PutCheckAssistanceGeneralHandler> _logger;
 
         public PutCheckAssistanceGeneralHandler(ICurrentUser currentUser,
             NetBairesContext context,
-            IOptions<AssistanceOptions> assistanceOptions,
+            IOptions<AttendanceOptions> assistanceOptions,
             ILogger<PutCheckAssistanceGeneralHandler> logger)
         {
             _currentUser = currentUser;
@@ -33,7 +33,7 @@ namespace NetBaires.Api.Handlers.Events
 
         public async Task<IActionResult> Handle(PutCheckAssistanceGeneral request, CancellationToken cancellationToken)
         {
-            var response = TokenService.Validate(_assistanceOptions.AskAssistanceSecret, request.Token);
+            var response = TokenService.Validate(_assistanceOptions.AskAttendanceSecret, request.Token);
             if (!response.Valid)
                 return new StatusCodeResult(400);
 

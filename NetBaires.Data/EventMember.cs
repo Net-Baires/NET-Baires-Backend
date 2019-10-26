@@ -1,33 +1,41 @@
 ﻿using System;
+using System.Runtime.Serialization;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace NetBaires.Data
 {
-    [Flags]
-    public enum EventMemberStatus
-    {
-        Registered = 0,
-        DidNotAttend = 1,
-        Attended = 2,
-        NotifyAbsence = 3,
-        DoNotKnow = 4
-    }
+
     public class EventMember
     {
         public void Attend()
         {
-            Status &= ~EventMemberStatus.DidNotAttend;
-            Status = Status & EventMemberStatus.DidNotAttend;
+            Attended = true;
+            DidNotAttend = false;
+            NotifiedAbsence = false;
+            AttendedTime = DateTime.UtcNow;
         }
 
         public void NoAttend()
         {
-            Status &= ~EventMemberStatus.Attended;
-            Status = Status & EventMemberStatus.DidNotAttend;
+            Attended = false;
+            DidNotAttend = true;
+            NotifiedAbsence = false;
         }
         public void NotifyAbsence()
         {
-            Status &= ~EventMemberStatus.Attended;
-            Status = Status & EventMemberStatus.NotifyAbsence;
+            Attended = false;
+            DidNotAttend = true;
+            NotifiedAbsence = true;
+        }
+
+        public void SetDoNotKnow()
+        {
+            Attended = false;
+            DidNotAttend = false;
+            DoNotKnow = true;
+            NotifiedAbsence = false;
         }
 
 
@@ -36,18 +44,18 @@ namespace NetBaires.Data
         public int MemberId { get; set; }
         public Member Member { get; set; }
         public DateTime Date { get; set; } = DateTime.Now.ToUniversalTime();
-        public EventMemberStatus Status { get; set; }
-        public EventMember(int memberId, int eventId, EventMemberStatus status)
-        {
-            MemberId = memberId;
-            EventId = eventId;
-            Status = status;
-        }
+        public DateTime AttendedTime { get; set; }
+        public bool Organizer { get; set; } = false;
+        public bool Speaker { get; set; } = false;
+        public bool DidNotAttend { get; set; } = false;
+        public bool Attended { get; set; } = false;
+        public bool NotifiedAbsence { get; set; } = false;
+        public bool DoNotKnow { get; set; } = false;
         public EventMember(int memberId, int eventId)
         {
             MemberId = memberId;
             EventId = eventId;
-            Status = EventMemberStatus.Registered | EventMemberStatus.DidNotAttend;
+            DidNotAttend = true;
         }
 
         public EventMember()
@@ -62,9 +70,9 @@ namespace NetBaires.Data
                 MemberId = member.Id;
             EventId = eventToAdd.Id;
             if (attended)
-                Status = EventMemberStatus.Registered | EventMemberStatus.Attended;
+                Attend();
             else
-                Status = EventMemberStatus.Registered | EventMemberStatus.DidNotAttend;
+                NoAttend();
 
         }
         public EventMember(Member member, Event eventToAdd)
@@ -74,7 +82,6 @@ namespace NetBaires.Data
             else
                 MemberId = member.Id;
             EventId = eventToAdd.Id;
-            Status = EventMemberStatus.Registered | EventMemberStatus.DoNotKnow;
 
         }
     }

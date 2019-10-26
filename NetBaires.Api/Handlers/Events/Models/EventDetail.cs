@@ -28,5 +28,11 @@ namespace NetBaires.Api.Handlers.Events.Models
             }
         }
     }
-   
+    public class SponsorEventResponse
+    {
+        public int SponsorId { get; set; }
+        public string Detail { get; set; }
+
+    }
+
 }

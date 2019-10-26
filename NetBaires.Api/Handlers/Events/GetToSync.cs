@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NetBaires.Api.Auth;
@@ -24,7 +25,7 @@ namespace NetBaires.Api.Handlers.Events
         public GetToSyncHandler(ICurrentUser currentUser,
             NetBairesContext context,
             IMapper mapper,
-            IOptions<AssistanceOptions> assistanceOptions,
+            IOptions<AttendanceOptions> assistanceOptions,
             ILogger<GetToSyncHandler> logger)
         {
             _context = context;
@@ -37,11 +38,12 @@ namespace NetBaires.Api.Handlers.Events
         {
             var eventToReturn = _context.Events.OrderByDescending(x => x.Id).Where(x => !x.Done)?
                 .Select(x => new GetToAsyncResponseViewModel(x,
-                    x.Attendees.Count(s => s.Status == EventMemberStatus.Attended),
-                    x.Attendees.Count(s => s.Status == EventMemberStatus.DidNotAttend)))?.ToList();
+                    x.Attendees.Count(s => s.Attended),
+                    x.Attendees.Count(s => s.DidNotAttend),
+                    x.Attendees.Count()))?.ToList();
 
-            if (eventToReturn == null)
-                return new StatusCodeResult(404);
+            if (!eventToReturn.Any())
+                return new StatusCodeResult(204);
 
             return new ObjectResult(eventToReturn) { StatusCode = 200 };
 
@@ -50,7 +52,7 @@ namespace NetBaires.Api.Handlers.Events
 
         public class GetToSync : IRequest<IActionResult>
         {
-         
+
         }
 
     }

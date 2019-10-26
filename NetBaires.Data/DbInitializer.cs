@@ -14,7 +14,15 @@ namespace NetBaires.Data
                 context.Members.AddAsync(new Member
                 {
                     Email = "german.kuber@outlook.com",
-                    Role = UserRole.Admin
+                    Role = UserRole.Admin,
+                    MeetupId = 182823912,
+                    FirstName = "Germán",
+                    LastName = "Küber",
+                    Github = "germankuber",
+                    Instagram = "germankuber",
+                    Twitter = "germankuber",
+                    Username = "GermanKuber",
+                    Organized = true
                 });
             }
 

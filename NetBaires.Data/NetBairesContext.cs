@@ -71,12 +71,7 @@ namespace NetBaires.Data
                 .HasConversion(
                     v => v.ToString(),
                     v => (EventPlatform)Enum.Parse(typeof(EventPlatform), v));
-            EnumToNumberConverter<EventMemberStatus, int>
-                converter = new EnumToNumberConverter<EventMemberStatus, int>();
 
-            modelBuilder.Entity<EventMember>()
-                .Property(e => e.Status)
-                .HasConversion(converter);
 
         }
 

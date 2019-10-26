@@ -24,7 +24,7 @@ namespace NetBaires.Api.Handlers.Events
         public GetLiveHandler(ICurrentUser currentUser,
             IMapper mapper,
             NetBairesContext context,
-            IOptions<AssistanceOptions> assistanceOptions,
+            IOptions<AttendanceOptions> assistanceOptions,
             ILogger<UpdateEventHandler> logger)
         {
             _mapper = mapper;

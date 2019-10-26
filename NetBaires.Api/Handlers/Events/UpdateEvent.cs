@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -24,7 +25,7 @@ namespace NetBaires.Api.Handlers.Events
         public UpdateEventHandler(ICurrentUser currentUser,
             IMapper mapper,
             NetBairesContext context,
-            IOptions<AssistanceOptions> assistanceOptions,
+            IOptions<AttendanceOptions> assistanceOptions,
             ILogger<UpdateEventHandler> logger)
         {
             _mapper = mapper;
@@ -35,11 +36,17 @@ namespace NetBaires.Api.Handlers.Events
 
         public async Task<IActionResult> Handle(UpdateEvent request, CancellationToken cancellationToken)
         {
-            var eventToUpdate = await _context.Events.FirstOrDefaultAsync(x => x.Id == request.Id);
+            var eventToUpdate = await _context.Events.Include(x => x.Sponsors).FirstOrDefaultAsync(x => x.Id == request.Id);
             if (eventToUpdate == null)
                 return new StatusCodeResult(402);
 
             _mapper.Map(request, eventToUpdate);
+
+
+
+
+
+
 
 
             _context.Entry(eventToUpdate).State = EntityState.Modified;
@@ -60,13 +67,17 @@ namespace NetBaires.Api.Handlers.Events
             public string Url { get; set; }
             public bool? Done { get; set; } = false;
             public bool? Live { get; set; } = false;
+            public List<SponsorEventResponse> Sponsors { get; set; }
         }
         public class UpdateEventProfile : Profile
         {
             public UpdateEventProfile()
             {
-                CreateMap<UpdateEvent, Event>().ForAllMembers(
-                    opt => opt.Condition((src, dest, sourceMember) => sourceMember != null)); ;
+                CreateMap<SponsorEventResponse, SponsorEvent>();
+                CreateMap<UpdateEvent, Event>()
+                //   .ForMember(dest => dest.Sponsors, opt => opt.Ignore())
+                .ForAllMembers(
+                    opt => opt.Condition((src, dest, sourceMember) => sourceMember != null));
             }
         }
 

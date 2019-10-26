@@ -28,7 +28,6 @@ namespace NetBaires.Api.Handlers.Badges
             NetBairesContext context,
             IBadgesServices badgesServices,
             IMapper mapper,
-            IOptions<AssistanceOptions> assistanceOptions,
             ILogger<GetToAssignHandler> logger)
         {
             _context = context;

@@ -36,7 +36,6 @@ namespace NetBaires.Api.Services.Sync
 
             if (eventToSync.Platform == EventPlatform.Meetup)
                 await ProcessAttendeesFromMeetup(eventToSync);
-            await _context.SaveChangesAsync();
 
 
             if (eventToSync.Platform == EventPlatform.EventBrite)
@@ -74,35 +73,42 @@ namespace NetBaires.Api.Services.Sync
         private async Task ProcessAttendeesFromMeetup(Event eventToSync)
         {
             var meetupAttendees = await _meetupServices.GetAttendees(int.Parse(eventToSync.EventId));
-            foreach (var attendees in meetupAttendees)
+            var meetupAttendeesIds = meetupAttendees.Select(s => s.Member.Id);
+            var attendeesToEach = await _context.EventMembers.Where(x => meetupAttendeesIds.Contains(x.Member.MeetupId)).ToListAsync();
+            foreach (var attende in meetupAttendees)
             {
-                var currentMember = eventToSync.Attendees.FirstOrDefault(x => x.Member.MeetupId == attendees.Member.Id);
+                var currentMember = attendeesToEach.FirstOrDefault(x => x.Member.MeetupId == attende.Member.Id);
                 if (currentMember == null)
                 {
-                    var newMember = new Member
+                    if (attende.Member.Id != 0)
                     {
-                        MeetupId = attendees.Member.Id,
-                        FirstName = attendees.Member.Name,
-                        Picture = attendees.Member.Photo?.HighresLink?.AbsolutePath == null ? "" :
-                        attendees.Member.Photo?.HighresLink?.AbsolutePath,
-                        Biography = attendees.Member.Bio
-                    };
-                    if ((attendees.Status != null
-                         &&
-                         attendees.Status == "attended"))
-                        currentMember = new EventMember(newMember, eventToSync, true);
-                    else
-                        currentMember = new EventMember(newMember, eventToSync);
-                    await _context.EventMembers.AddAsync(currentMember);
+                        var newMember = new Member
+                        {
+                            MeetupId = attende.Member.Id,
+                            FirstName = attende.Member.Name,
+                            Picture = attende.Member.Photo?.HighresLink?.AbsolutePath == null ? "" :
+                            attende.Member.Photo?.HighresLink?.AbsoluteUri,
+                            Biography = attende.Member.Bio
+                        };
+                        if ((attende.Status != null
+                             &&
+                             attende.Status == "attended"))
+                            currentMember = new EventMember(newMember, eventToSync, true);
+                        else
+                            currentMember = new EventMember(newMember, eventToSync);
+                        await _context.EventMembers.AddAsync(currentMember);
+                    }
                 }
                 else
                 {
-                    if ((attendees.Status != null
+                    if ((attende.Status != null
                          &&
-                         attendees.Status == "attended"))
+                         attende.Status == "attended"))
                         currentMember.Attend();
                 }
+
             }
+            await _context.SaveChangesAsync();
         }
     }
 }

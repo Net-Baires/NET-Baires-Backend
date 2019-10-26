@@ -1,17 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NetBaires.Api.Auth;
 using NetBaires.Api.Handlers.Events.Models;
 using NetBaires.Api.Options;
 using NetBaires.Data;
+using Newtonsoft.Json.Converters;
 
 namespace NetBaires.Api.Handlers.Events
 {
@@ -25,7 +28,6 @@ namespace NetBaires.Api.Handlers.Events
         public GetAttendeesHandler(ICurrentUser currentUser,
             IMapper mapper,
             NetBairesContext context,
-            IOptions<AssistanceOptions> assistanceOptions,
             ILogger<UpdateEventHandler> logger)
         {
             _mapper = mapper;
@@ -64,16 +66,26 @@ namespace NetBaires.Api.Handlers.Events
             public string FirstName { get; set; }
             public string LastName { get; set; }
             public string Picture { get; set; }
-            public EventMemberStatus Status { get; set; }
+            public bool DidNotAttend { get; set; }
+            public bool Attended { get; set; }
+            public bool NotifiedAbsence { get; set; }
+            public bool DoNotKnow { get; set; }
+            public bool Organizer { get; set; }
+            public bool Speaker { get; set; }
         }
         public class GetAttendeesProfile : Profile
         {
             public GetAttendeesProfile()
             {
                 CreateMap<EventMember, GetAttendeesResponse>()
-                .ForMember(dest => dest, opt => opt.MapFrom(src => src.Member));
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Member.Email))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Member.Id))
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Member.FirstName))
+                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Member.LastName))
+                .ForMember(dest => dest.Picture, opt => opt.MapFrom(src => src.Member.Picture));
 
             }
+
         }
 
     }

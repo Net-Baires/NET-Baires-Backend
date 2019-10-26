@@ -26,7 +26,6 @@ namespace NetBaires.Api.Handlers.Badges
         public GetToAssignHandler(ICurrentUser currentUser,
             NetBairesContext context,
             IMapper mapper,
-            IOptions<AssistanceOptions> assistanceOptions,
             ILogger<GetToAssignHandler> logger)
         {
             _context = context;
@@ -48,7 +47,7 @@ namespace NetBaires.Api.Handlers.Badges
                  (accum, item) => ReduceBadge(item, accum, false));
 
 
-            return new ObjectResult(response.OrderByDescending(x=> x.Id)) { StatusCode = 200 };
+            return new ObjectResult(response.OrderByDescending(x => x.Id)) { StatusCode = 200 };
 
         }
 

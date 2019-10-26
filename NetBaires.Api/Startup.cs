@@ -40,7 +40,8 @@ namespace NetBaires.Api
             services.AddControllers(options =>
             {
                 options.Filters.Add<ExceptionActionFilter>();
-                options.RespectBrowserAcceptHeader = true; // false by default
+                options.RespectBrowserAcceptHeader = true;
+
 
             }).AddNewtonsoftJson(options =>
             {
@@ -71,7 +72,7 @@ namespace NetBaires.Api
             services.Configure<TwitterApiOptions>(Configuration.GetSection("TwitterApi"));
             services.Configure<EventBriteApiOptions>(Configuration.GetSection("EventBriteApi"));
             services.Configure<SlackEndPointOptions>(Configuration.GetSection("SlackEndPoint"));
-            services.Configure<AssistanceOptions>(Configuration.GetSection("Assistance"));
+            services.Configure<AttendanceOptions>(Configuration.GetSection("Attendance"));
             services.Configure<BadgrOptions>(Configuration.GetSection("Badgr"));
             services.Configure<CommonOptions>(Configuration.GetSection("Common"));
             services.Configure<BadgesOptions>(Configuration.GetSection("Badges"));

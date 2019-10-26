@@ -1,9 +1,9 @@
 ﻿namespace NetBaires.Api.Options
 {
-    public class AssistanceOptions
+    public class AttendanceOptions
     {
-        public string ReportAssistanceSecret { get; set; }
-        public string AskAssistanceSecret { get; set; }
+        public string ReportAttendanceSecret { get; set; }
+        public string AskAttendanceSecret { get; set; }
     }
 
     public class CommonOptions

@@ -24,7 +24,7 @@ namespace NetBaires.Api.Handlers.Organizers
         public GetOrganizersHandler(ICurrentUser currentUser,
             IMapper mapper,
             NetBairesContext context,
-            IOptions<AssistanceOptions> assistanceOptions,
+            IOptions<AttendanceOptions> assistanceOptions,
             ILogger<UpdateEventHandler> logger)
         {
             _mapper = mapper;
@@ -36,7 +36,7 @@ namespace NetBaires.Api.Handlers.Organizers
         public async Task<IActionResult> Handle(GetOrganizers request, CancellationToken cancellationToken)
         {
             var eventResponse = await _context.Members.Where(x => x.Organized).ToListAsync();
-         
+
 
             return new ObjectResult(eventResponse) { StatusCode = 200 };
         }
@@ -44,8 +44,8 @@ namespace NetBaires.Api.Handlers.Organizers
 
         public class GetOrganizers : IRequest<IActionResult>
         {
-           
-           
+
+
         }
         public class GetOrganizersProfile : Profile
         {

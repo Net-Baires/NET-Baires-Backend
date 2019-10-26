@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿
+
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -7,9 +8,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using NetBaires.Api.Auth;
-using NetBaires.Api.Options;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Handlers.Events
@@ -21,10 +19,8 @@ namespace NetBaires.Api.Handlers.Events
         private readonly NetBairesContext _context;
         private readonly ILogger<UpdateEventHandler> _logger;
 
-        public UpdateAttendeeHandler(ICurrentUser currentUser,
-            IMapper mapper,
+        public UpdateAttendeeHandler(IMapper mapper,
             NetBairesContext context,
-            IOptions<AssistanceOptions> assistanceOptions,
             ILogger<UpdateEventHandler> logger)
         {
             _mapper = mapper;
@@ -35,28 +31,13 @@ namespace NetBaires.Api.Handlers.Events
 
         public async Task<IActionResult> Handle(UpdateAttendee request, CancellationToken cancellationToken)
         {
-            var attendee = await _context.Members
-                                        .FirstOrDefaultAsync(x => x.Events.Any(s => s.EventId == request.IdEvent && s.MemberId == request.IdMember));
+            var attendee = await _context.EventMembers
+                                        .FirstOrDefaultAsync(x => x.EventId == request.EventId && x.MemberId == request.MemberId);
             if (attendee == null)
                 return new StatusCodeResult(404);
 
-            var newAttend = new EventMember(request.IdMember, request.IdEvent);
 
-
-            switch (request.Status)
-            {
-                case EventMemberStatus.Attended:
-                    newAttend.Attend();
-                    break;
-                case EventMemberStatus.DidNotAttend:
-                    newAttend.NoAttend();
-                    break;
-                case EventMemberStatus.NotifyAbsence:
-                    newAttend.NotifyAbsence();
-                    break;
-                default:
-                    break;
-            }
+            _mapper.Map(request, attendee);
             await _context.SaveChangesAsync();
             return new StatusCodeResult(204);
         }
@@ -64,30 +45,26 @@ namespace NetBaires.Api.Handlers.Events
 
         public class UpdateAttendee : IRequest<IActionResult>
         {
-            public UpdateAttendee(int idEvent, int idMember, EventMemberStatus status)
-            {
-                Status = status;
-                IdEvent = idEvent;
-                IdMember = idMember;
-            }
-            public EventMemberStatus Status { get; set; }
-            public int IdEvent { get; }
-            public int IdMember { get; }
-
+            public string Status { get; set; }
+            public bool Organizer { get; set; }
+            public bool Speaker { get; set; }
+            [JsonIgnore]
+            public int EventId { get; internal set; }
+            [JsonIgnore]
+            public int MemberId { get; internal set; }
+            public bool Attended { get; set; }
+            public bool NotifiedAbsence { get; set; }
+            public bool DoNotKnow { get; set; }
         }
         public class UpdateAttendeeResponse
         {
-            public int Id { get; set; }
-            public string Email { get; set; }
-            public string FirstName { get; set; }
-            public string LastName { get; set; }
-            public string Picture { get; set; }
+
         }
         public class UpdateAttendeeProfile : Profile
         {
             public UpdateAttendeeProfile()
             {
-                CreateMap<Member, UpdateAttendeeResponse>();
+                CreateMap<UpdateAttendee, EventMember>();
             }
         }
 
