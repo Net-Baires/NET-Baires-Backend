@@ -130,7 +130,7 @@ namespace NetBaires.Api.Controllers
                 BadgeUrl = ""
             });
 
-            return Ok(member);
+            return NoContent();
         }
         [HttpDelete("{badgeId}/Member/{memberId}")]
         [SwaggerOperation(Summary = "Eliminar un Badge de un Miembro")]
@@ -145,7 +145,7 @@ namespace NetBaires.Api.Controllers
             _context.Remove(badge);
             await _context.SaveChangesAsync();
 
-            return Ok();
+            return NoContent();
         }
 
 
