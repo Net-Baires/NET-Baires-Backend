@@ -74,10 +74,10 @@ namespace NetBaires.Api.Services.Sync
         {
             var meetupAttendees = await _meetupServices.GetAttendees(int.Parse(eventToSync.EventId));
             var meetupAttendeesIds = meetupAttendees.Select(s => s.Member.Id);
-            var attendeesToEach = await _context.Attendances.Where(x => meetupAttendeesIds.Contains(x.Member.MeetupId)).ToListAsync();
+            var attendeesToEach = await _context.Attendances.Include(x => x.Member).Where(x => meetupAttendeesIds.Contains(x.Member.MeetupId)).ToListAsync();
             foreach (var attende in meetupAttendees)
             {
-                var currentMember = attendeesToEach.FirstOrDefault(x => x.Member.MeetupId == attende.Member.Id);
+                var currentMember = attendeesToEach?.FirstOrDefault(x => x.Member.MeetupId == attende.Member.Id);
                 if (currentMember == null)
                 {
                     if (attende.Member.Id != 0)

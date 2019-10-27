@@ -145,11 +145,11 @@ namespace NetBaires.Api.Controllers
                 ImageUrl = eventToReturn.ImageUrl
             });
         }
-        [HttpPut("Assistance/General")]
+        [HttpPut("Attendances/General/{token}")]
         [SwaggerOperation(Summary = "Informa que asistió al evento mediante un token otorgado por los organizadores")]
         [AuthorizeRoles(UserRole.Member)]
         [ApiExplorerSettingsExtend(UserRole.Member)]
-        public async Task<IActionResult> PutCheckAssistanceGeneral(string token) =>
+        public async Task<IActionResult> PutCheckAssistanceGeneral([FromRoute]string token) =>
             await _iMediator.Send(new PutCheckAssistanceGeneralHandler.PutCheckAssistanceGeneral(token));
 
         [HttpGet("live")]
