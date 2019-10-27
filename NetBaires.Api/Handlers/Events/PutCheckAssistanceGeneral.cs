@@ -41,11 +41,11 @@ namespace NetBaires.Api.Handlers.Events
             var eventId = int.Parse(response.Claims.FirstOrDefault(x => x.Type == "EventId").Value.ToString());
             var memberId = _currentUser.User.Id;
 
-            var eventToAdd = _context.EventMembers.FirstOrDefault(x => x.EventId == eventId && x.MemberId == memberId);
+            var eventToAdd = _context.Attendances.FirstOrDefault(x => x.EventId == eventId && x.MemberId == memberId);
             if (eventToAdd == null)
-                eventToAdd = new EventMember(memberId, eventId);
+                eventToAdd = new Attendance(memberId, eventId);
             eventToAdd.Attend();
-            await _context.EventMembers.AddAsync(eventToAdd);
+            await _context.Attendances.AddAsync(eventToAdd);
             await _context.SaveChangesAsync();
             return new StatusCodeResult(200);
         }

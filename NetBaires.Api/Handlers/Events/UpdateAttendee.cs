@@ -31,7 +31,7 @@ namespace NetBaires.Api.Handlers.Events
 
         public async Task<IActionResult> Handle(UpdateAttendee request, CancellationToken cancellationToken)
         {
-            var attendee = await _context.EventMembers
+            var attendee = await _context.Attendances
                                         .FirstOrDefaultAsync(x => x.EventId == request.EventId && x.MemberId == request.MemberId);
             if (attendee == null)
                 return new StatusCodeResult(404);
@@ -64,7 +64,7 @@ namespace NetBaires.Api.Handlers.Events
         {
             public UpdateAttendeeProfile()
             {
-                CreateMap<UpdateAttendee, EventMember>();
+                CreateMap<UpdateAttendee, Attendance>();
             }
         }
 

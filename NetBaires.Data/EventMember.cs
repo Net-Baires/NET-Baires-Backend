@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Runtime.Serialization;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace NetBaires.Data
 {
 
-    public class EventMember
+    public class Attendance
     {
         public void Attend()
         {
@@ -51,18 +47,18 @@ namespace NetBaires.Data
         public bool Attended { get; set; } = false;
         public bool NotifiedAbsence { get; set; } = false;
         public bool DoNotKnow { get; set; } = false;
-        public EventMember(int memberId, int eventId)
+        public Attendance(int memberId, int eventId)
         {
             MemberId = memberId;
             EventId = eventId;
             DidNotAttend = true;
         }
 
-        public EventMember()
+        public Attendance()
         {
 
         }
-        public EventMember(Member member, Event eventToAdd, bool attended)
+        public Attendance(Member member, Event eventToAdd, bool attended)
         {
             if (member.Id == 0)
                 Member = member;
@@ -75,7 +71,7 @@ namespace NetBaires.Data
                 NoAttend();
 
         }
-        public EventMember(Member member, Event eventToAdd)
+        public Attendance(Member member, Event eventToAdd)
         {
             if (member.Id == 0)
                 Member = member;

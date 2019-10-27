@@ -17,7 +17,7 @@ namespace NetBaires.Data
         public DbSet<Badge> Badges { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<BadgeMember> BadgeMembers { get; set; }
-        public DbSet<EventMember> EventMembers { get; set; }
+        public DbSet<Attendance> Attendances { get; set; }
         public DbSet<SponsorEvent> SponsorEvents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -39,15 +39,15 @@ namespace NetBaires.Data
                 .WithMany(s => s.Badges)
                 .HasForeignKey(sc => sc.MemberId);
 
-            modelBuilder.Entity<EventMember>().HasKey(sc => new { sc.MemberId, sc.EventId });
+            modelBuilder.Entity<Attendance>().HasKey(sc => new { sc.MemberId, sc.EventId });
 
-            modelBuilder.Entity<EventMember>()
+            modelBuilder.Entity<Attendance>()
                 .HasOne<Event>(sc => sc.Event)
                 .WithMany(s => s.Attendees)
                 .HasForeignKey(sc => sc.EventId);
 
 
-            modelBuilder.Entity<EventMember>()
+            modelBuilder.Entity<Attendance>()
                 .HasOne<Member>(sc => sc.Member)
                 .WithMany(s => s.Events)
                 .HasForeignKey(sc => sc.MemberId);

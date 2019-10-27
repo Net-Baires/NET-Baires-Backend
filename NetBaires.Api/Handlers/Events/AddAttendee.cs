@@ -39,8 +39,8 @@ namespace NetBaires.Api.Handlers.Events
             if (attendees != null)
                 return new StatusCodeResult(400);
 
-            var newAttend = new EventMember(request.IdMember, request.IdEvent);
-            await _context.EventMembers.AddAsync(newAttend);
+            var newAttend = new Attendance(request.IdMember, request.IdEvent);
+            await _context.Attendances.AddAsync(newAttend);
             await _context.SaveChangesAsync();
             return new ObjectResult(_mapper.Map(attendees, new List<AddAttendeeResponse>())) { StatusCode = 200 };
         }

@@ -58,10 +58,10 @@ namespace NetBaires.Api.Services.Sync
                         Email = attendees.profile.Email,
                     };
                     if ((attendees.CheckIn))
-                        currentMember = new EventMember(newMember, eventToSync, true);
+                        currentMember = new Attendance(newMember, eventToSync, true);
                     else
-                        currentMember = new EventMember(newMember, eventToSync, false);
-                    await _context.EventMembers.AddAsync(currentMember);
+                        currentMember = new Attendance(newMember, eventToSync, false);
+                    await _context.Attendances.AddAsync(currentMember);
                 }
                 else
                 {
@@ -74,7 +74,7 @@ namespace NetBaires.Api.Services.Sync
         {
             var meetupAttendees = await _meetupServices.GetAttendees(int.Parse(eventToSync.EventId));
             var meetupAttendeesIds = meetupAttendees.Select(s => s.Member.Id);
-            var attendeesToEach = await _context.EventMembers.Where(x => meetupAttendeesIds.Contains(x.Member.MeetupId)).ToListAsync();
+            var attendeesToEach = await _context.Attendances.Where(x => meetupAttendeesIds.Contains(x.Member.MeetupId)).ToListAsync();
             foreach (var attende in meetupAttendees)
             {
                 var currentMember = attendeesToEach.FirstOrDefault(x => x.Member.MeetupId == attende.Member.Id);
@@ -93,10 +93,10 @@ namespace NetBaires.Api.Services.Sync
                         if ((attende.Status != null
                              &&
                              attende.Status == "attended"))
-                            currentMember = new EventMember(newMember, eventToSync, true);
+                            currentMember = new Attendance(newMember, eventToSync, true);
                         else
-                            currentMember = new EventMember(newMember, eventToSync);
-                        await _context.EventMembers.AddAsync(currentMember);
+                            currentMember = new Attendance(newMember, eventToSync);
+                        await _context.Attendances.AddAsync(currentMember);
                     }
                 }
                 else

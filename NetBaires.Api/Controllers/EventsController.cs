@@ -66,7 +66,6 @@ namespace NetBaires.Api.Controllers
 
         [HttpGet("{id}/Attendances")]
         [SwaggerOperation(Summary = "Retorna toda la información requerida por el miemebro de la comunidad para reportar su asistencia a un evento")]
-        [AuthorizeRoles(UserRole.Member)]
         [ApiExplorerSettingsExtend(UserRole.Member)]
         public async Task<IActionResult> GetReportAttendance(int id)
         {
@@ -110,15 +109,15 @@ namespace NetBaires.Api.Controllers
             var eventId = int.Parse(response.Claims.FirstOrDefault(x => x.Type == "EventId").Value.ToString());
 
 
-            var eventToAdd = _context.EventMembers.FirstOrDefault(x => x.EventId == eventId && x.MemberId == memberId);
+            var eventToAdd = _context.Attendances.FirstOrDefault(x => x.EventId == eventId && x.MemberId == memberId);
             if (eventToAdd == null)
             {
-                eventToAdd = new EventMember(memberId, eventId);
-                await _context.EventMembers.AddAsync(eventToAdd);
+                eventToAdd = new Attendance(memberId, eventId);
+                await _context.Attendances.AddAsync(eventToAdd);
             }
             eventToAdd.Attend();
             await _context.SaveChangesAsync();
-            return Ok();
+            return new StatusCodeResult(204);
 
         }
         [HttpGet("{id}/Attendances/General")]

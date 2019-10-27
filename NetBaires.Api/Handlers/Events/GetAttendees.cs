@@ -38,7 +38,7 @@ namespace NetBaires.Api.Handlers.Events
 
         public async Task<IActionResult> Handle(GetAttendees request, CancellationToken cancellationToken)
         {
-            var attendees = await _context.EventMembers
+            var attendees = await _context.Attendances
                                         .Include(x => x.Member)
                                         .Where(x => x.EventId == request.Id)
                                         .ToListAsync();
@@ -77,7 +77,7 @@ namespace NetBaires.Api.Handlers.Events
         {
             public GetAttendeesProfile()
             {
-                CreateMap<EventMember, GetAttendeesResponse>()
+                CreateMap<Attendance, GetAttendeesResponse>()
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Member.Email))
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Member.Id))
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Member.FirstName))

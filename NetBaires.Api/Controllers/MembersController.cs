@@ -104,7 +104,9 @@ namespace NetBaires.Api.Controllers
         public async Task<IActionResult> Put(int id, Member member)
         {
             member.Id = id;
-
+            if (member.Organized)
+                member.Role = UserRole.Organizer;
+            else member.Role = UserRole.Member;
             _context.Entry(member).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
@@ -116,13 +118,13 @@ namespace NetBaires.Api.Controllers
         [ApiExplorerSettingsExtend(UserRole.Admin)]
         public async Task<IActionResult> Put(int id, int eventId, bool assistance)
         {
-            var eventMember = await _context.EventMembers.FirstOrDefaultAsync(x => x.MemberId == id
+            var eventMember = await _context.Attendances.FirstOrDefaultAsync(x => x.MemberId == id
                                                                             &&
                                                                             x.EventId == eventId);
             if (eventMember == null)
             {
-                eventMember = new EventMember(id, eventId);
-                await _context.EventMembers.AddAsync(eventMember);
+                eventMember = new Attendance(id, eventId);
+                await _context.Attendances.AddAsync(eventMember);
             }
             if (assistance)
                 eventMember.Attend();
