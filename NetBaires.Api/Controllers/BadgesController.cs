@@ -129,7 +129,7 @@ namespace NetBaires.Api.Controllers
                 MemberId = member.Id,
                 BadgeUrl = ""
             });
-
+            await _context.SaveChangesAsync();
             return NoContent();
         }
         [HttpDelete("{badgeId}/Member/{memberId}")]
