@@ -43,9 +43,11 @@ namespace NetBaires.Api.Handlers.Events
 
             var eventToAdd = _context.Attendances.FirstOrDefault(x => x.EventId == eventId && x.MemberId == memberId);
             if (eventToAdd == null)
+            {
                 eventToAdd = new Attendance(memberId, eventId);
+                await _context.Attendances.AddAsync(eventToAdd);
+            }
             eventToAdd.Attend();
-            await _context.Attendances.AddAsync(eventToAdd);
             await _context.SaveChangesAsync();
             return new StatusCodeResult(200);
         }
