@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using NetBaires.Api.Auth;
 using NetBaires.Api.Models;
 using NetBaires.Api.Options;
+using NetBaires.Api.Services;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Handlers.Badges
@@ -20,15 +21,18 @@ namespace NetBaires.Api.Handlers.Badges
     public class GetToAssignHandler : IRequestHandler<GetToAssignHandler.GetToAssign, IActionResult>
     {
         private readonly NetBairesContext _context;
+        private readonly IBadgesServices _badgesServices;
         private readonly IMapper _mapper;
         private readonly ILogger<GetToAssignHandler> _logger;
 
         public GetToAssignHandler(ICurrentUser currentUser,
             NetBairesContext context,
+          IBadgesServices badgesServices,
             IMapper mapper,
             ILogger<GetToAssignHandler> logger)
         {
             _context = context;
+            this._badgesServices = badgesServices;
             _mapper = mapper;
             _logger = logger;
         }
@@ -55,6 +59,8 @@ namespace NetBaires.Api.Handlers.Badges
         {
             var returnValue = _mapper.Map(item, new BadgeAssignResponse());
             returnValue.Assigned = assigned;
+            returnValue.BadgeUrl = _badgesServices.GenerateDetailUrl(item.Id);
+            returnValue.BadgeImageUrl = _badgesServices.GenerateImageUrl(item.Id);
             accum.Add(returnValue);
             return accum;
         }
