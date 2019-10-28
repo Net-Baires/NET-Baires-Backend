@@ -59,6 +59,7 @@ namespace NetBaires.Api.Services.Sync
                         FirstName = attendees.profile.FirstName,
                         LastName = attendees.profile.LastName,
                         Email = attendees.profile.Email,
+                        Role = UserRole.Member
                     };
                     if ((attendees.CheckIn))
                         currentMember = new Attendance(newMember, eventToSync, true);

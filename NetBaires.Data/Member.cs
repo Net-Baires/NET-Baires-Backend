@@ -29,7 +29,7 @@ namespace NetBaires.Data
         public bool Organized { get; set; } = false;
         public bool Colaborator { get; set; } = false;
 
-        public UserRole Role { get; set; }
+        public UserRole Role { get; set; } = UserRole.Member;
         public IList<BadgeMember> Badges { get; set; }
         public List<Attendance> Events { get; set; }
         public void SetFile(Uri uri, string fileName)
