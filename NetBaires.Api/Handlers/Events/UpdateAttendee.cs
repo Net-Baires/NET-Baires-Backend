@@ -38,6 +38,9 @@ namespace NetBaires.Api.Handlers.Events
 
 
             _mapper.Map(request, attendee);
+            if (request.Attended)
+                attendee.Attend();
+
             await _context.SaveChangesAsync();
             return new StatusCodeResult(204);
         }

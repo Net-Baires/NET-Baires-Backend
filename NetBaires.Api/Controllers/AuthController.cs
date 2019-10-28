@@ -49,7 +49,7 @@ namespace NetBaires.Api.Controllers
             if (result.IsSuccessStatusCode)
             {
                 var response = await result.Content.ReadAsAsync<MeetupSelf>();
-                var user = await _userService.AuthenticateOrCreate(response.email);
+                var user = await _userService.AuthenticateOrCreate(response.email, response.id);
                 return Ok(user);
             }
 

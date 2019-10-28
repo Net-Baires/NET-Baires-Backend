@@ -46,9 +46,12 @@ namespace NetBaires.Api.Services.Sync
         private async Task ProcessAttendeesFromEventBrite(Event eventToSync)
         {
             var meetupAttendees = await _eventBriteServices.GetAttendees(eventToSync.EventId);
+            var meetupAttendeeEmails = meetupAttendees.Select(s => s.profile.Email.ToUpper());
+
+            var attendeesToEach = await _context.Attendances.Include(x => x.Member).Where(x => meetupAttendeeEmails.Contains(x.Member.Email.ToUpper())).ToListAsync();
             foreach (var attendees in meetupAttendees)
             {
-                var currentMember = eventToSync.Attendees.FirstOrDefault(x => x.Member.Email == attendees.profile.Email);
+                var currentMember = attendeesToEach?.FirstOrDefault(x => x.Member.Email.ToUpper() == x.Member.Email.ToUpper());
                 if (currentMember == null)
                 {
                     var newMember = new Member
