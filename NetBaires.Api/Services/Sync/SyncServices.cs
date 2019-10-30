@@ -86,20 +86,22 @@ namespace NetBaires.Api.Services.Sync
                 {
                     if (attende.Member.Id != 0)
                     {
-                        var newMember = new Member
-                        {
-                            MeetupId = attende.Member.Id,
-                            FirstName = attende.Member.Name,
-                            Picture = attende.Member.Photo?.HighresLink?.AbsolutePath == null ? "" :
-                            attende.Member.Photo?.HighresLink?.AbsoluteUri,
-                            Biography = attende.Member.Bio
-                        };
+                        var member = await _context.Members.FirstOrDefaultAsync(x => x.MeetupId == attende.Member.Id);
+                        if (member == null)
+                            member = new Member
+                            {
+                                MeetupId = attende.Member.Id,
+                                FirstName = attende.Member.Name,
+                                Picture = attende.Member.Photo?.HighresLink?.AbsolutePath == null ? "" :
+                               attende.Member.Photo?.HighresLink?.AbsoluteUri,
+                                Biography = attende.Member.Bio
+                            };
                         if ((attende.Status != null
                              &&
                              attende.Status == "attended"))
-                            currentMember = new Attendance(newMember, eventToSync, true);
+                            currentMember = new Attendance(member, eventToSync, true);
                         else
-                            currentMember = new Attendance(newMember, eventToSync);
+                            currentMember = new Attendance(member, eventToSync);
                         await _context.Attendances.AddAsync(currentMember);
                     }
                 }

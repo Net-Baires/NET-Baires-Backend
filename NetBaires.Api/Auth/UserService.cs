@@ -32,7 +32,7 @@ namespace NetBaires.Api.Auth
         public async Task<AuthenticateUser> AuthenticateOrCreate(string email, int meetupId)
         {
             var userByEmail = _context.Members.Include(x => x.Events).SingleOrDefault(x => x.Email.ToUpper() == email.ToUpper());
-            var userByMeetupId = _context.Members.SingleOrDefault(x => x.MeetupId == meetupId);
+            var userByMeetupId = _context.Members.SingleOrDefault(x => x.MeetupId == meetupId && x.Email.ToUpper() != email.ToUpper());
             var id = 0;
             UserRole rol = UserRole.Member;
 
