@@ -158,11 +158,11 @@ namespace NetBaires.Api.Controllers
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
         public IActionResult GetLives()
         {
-            IQueryable<Event> eventToReturn = null;
-            if (_currentUser.IsLoggued)
-                eventToReturn = _context.Events.Where(x => x.Live && !x.Attendees.Any(s => s.MemberId == _currentUser.User.Id)).AsNoTracking();
-            else
-                eventToReturn = _context.Events.Where(x => x.Live).AsNoTracking();
+            // IQueryable<Event> eventToReturn = null;
+            // if (_currentUser.IsLoggued)
+            //     eventToReturn = _context.Events.Where(x => x.Live).AsNoTracking();
+            // else
+            var eventToReturn = _context.Events.Where(x => x.Live).AsNoTracking();
             if (eventToReturn != null)
                 return Ok(eventToReturn);
 
