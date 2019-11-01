@@ -51,7 +51,7 @@ namespace NetBaires.Api.Services.Sync
             var attendeesToEach = await _context.Attendances.Include(x => x.Member).Where(x => meetupAttendeeEmails.Contains(x.Member.Email.ToUpper())).ToListAsync();
             foreach (var attendees in meetupAttendees)
             {
-                var currentMember = attendeesToEach?.FirstOrDefault(x => x.Member.Email.ToUpper() == x.Member.Email.ToUpper());
+                var currentMember = attendeesToEach?.FirstOrDefault(x => x.Member.Email.ToUpper() == attendees.profile.Email.ToUpper());
                 if (currentMember == null)
                 {
                     var newMember = new Member
