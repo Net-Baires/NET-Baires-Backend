@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetBaires.Api", "NetBaires.Api\NetBaires.Api.csproj", "{D1AFA746-AADB-4A54-B4FF-9853E2823CA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetBaires.Data", "NetBaires.Data\NetBaires.Data.csproj", "{2B2E5FBE-F8F5-465F-A77C-187D72660F53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetBaires.Data", "NetBaires.Data\NetBaires.Data.csproj", "{2B2E5FBE-F8F5-465F-A77C-187D72660F53}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetBaires.Api.Tests.Integration", "NetBaires.Api.Tests.Integration\NetBaires.Api.Tests.Integration.csproj", "{7C2399DA-CFAB-45F1-B89B-4A291C2ED7BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{2B2E5FBE-F8F5-465F-A77C-187D72660F53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B2E5FBE-F8F5-465F-A77C-187D72660F53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B2E5FBE-F8F5-465F-A77C-187D72660F53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C2399DA-CFAB-45F1-B89B-4A291C2ED7BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C2399DA-CFAB-45F1-B89B-4A291C2ED7BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C2399DA-CFAB-45F1-B89B-4A291C2ED7BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C2399DA-CFAB-45F1-B89B-4A291C2ED7BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
