@@ -160,11 +160,9 @@ namespace NetBaires.Api.Controllers
         [HttpPut("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        [ProducesResponseType(typeof(UpdateBadgeHandler.UpdateBadgeResponse), 200)]
         public async Task<IActionResult> Put([FromRoute]int id, [FromForm]UpdateBadgeHandler.UpdateBadge badge)
         {
             badge.Id = id;
-
             return await _mediator.Send(badge);
         }
         [HttpDelete("{id}")]

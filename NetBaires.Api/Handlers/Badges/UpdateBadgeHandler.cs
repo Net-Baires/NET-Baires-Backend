@@ -38,44 +38,47 @@ namespace NetBaires.Api.Handlers.Badges
             _mapper.Map(request, badge);
 
 
-            if (request.ImageFile != null)
+            if (request.ImageFiles != null)
             {
-                var response = await badgesServices.ReplaceAsync(request.ImageFile, badge.ImageName);
-                badge.ImageName = response.FileDetail.Name;
+                foreach (var item in request.ImageFiles)
+                {
+                    if (item.Headers["BadgeType"] == BadgeImageName.Badge.ToString())
+                    {
+                        var badgeCreateResponse = await badgesServices.ReplaceAsync(item, badge.ImageName);
+                        if (badgeCreateResponse == null)
+                            return new StatusCodeResult(400);
+                        badge.ImageName = badgeCreateResponse.FileDetail.Name;
+                    }
+                    else if (item.Headers["BadgeType"] == BadgeImageName.SimpleBadge.ToString())
+                    {
+                        var badgeCreateResponse = await badgesServices.ReplaceAsync(item, badge.SimpleImageName);
+                        if (badgeCreateResponse == null)
+                            return new StatusCodeResult(400);
+                        badge.SimpleImageName = badgeCreateResponse.FileDetail.Name;
+                    }
+                }
             }
 
             await _context.SaveChangesAsync();
-
-            return new ObjectResult(_mapper.Map(badge, new UpdateBadgeResponse())) { StatusCode = 200 };
+            return new StatusCodeResult(204);
 
         }
 
 
-        public class UpdateBadge : UpdateBadgeCommon, IRequest<IActionResult>
-        {
-            public IFormFile ImageFile { get; set; }
-        }
-        public class UpdateBadgeResponse : UpdateBadgeCommon
-        {
-        }
-        public class UpdateBadgeCommon
+        public class UpdateBadge : IRequest<IActionResult>
         {
             public int Id { get; set; }
-            public string BadgeUrl { get; set; }
-            public DateTime Created { get; set; }
-            public string BadgeImageUrl { get; set; }
-            public string IssuerUrl { get; set; }
-            public string Image { get; set; }
+            public IFormFileCollection ImageFiles { get; set; }
             public string Name { get; set; }
             public string Description { get; set; }
         }
+
         public class UpdateBadgeProfile : Profile
         {
             public UpdateBadgeProfile()
             {
                 CreateMap<UpdateBadge, Badge>().ForAllMembers(
                     opt => opt.Condition((src, dest, sourceMember) => sourceMember != null));
-                CreateMap<Badge, UpdateBadgeResponse>();
             }
         }
     }
