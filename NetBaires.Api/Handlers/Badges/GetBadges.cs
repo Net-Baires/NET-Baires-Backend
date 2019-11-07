@@ -47,15 +47,16 @@ namespace NetBaires.Api.Handlers.Badges
             if (!badgesFromUser.Any())
                 return new StatusCodeResult(204);
 
-            var badgesToReturn = _mapper.Map(badgesFromUser, new List<GetBadgeResponse>());
-
-            foreach (var badge in badgesToReturn)
+            var listBadGeReturn = new List<GetBadgeResponse>();
+            foreach (var badge in badgesFromUser)
             {
-                badge.BadgeUrl = _badgesServices.GenerateDetailUrl(badge.Id);
-                badge.BadgeImageUrl = _badgesServices.GenerateImageUrl(badge.Id);
+                var badgeToReturn = _mapper.Map(badge, new GetBadgeResponse());
+                badgeToReturn.BadgeUrl = _badgesServices.GenerateDetailUrl(badge.Id);
+                badgeToReturn.BadgeImageUrl = _badgesServices.GenerateImageUrl(badge);
+                listBadGeReturn.Add(badgeToReturn);
             }
 
-            return new ObjectResult(badgesToReturn) { StatusCode = 200 };
+            return new ObjectResult(listBadGeReturn) { StatusCode = 200 };
 
         }
 

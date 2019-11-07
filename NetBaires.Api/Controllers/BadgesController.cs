@@ -152,7 +152,6 @@ namespace NetBaires.Api.Controllers
         [HttpPost]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        [ProducesResponseType(typeof(NewBadgeHandler.NewBadgeResponse), 200)]
         public async Task<IActionResult> Post([FromForm]NewBadgeHandler.NewBadge badge)
         {
             return await _mediator.Send(badge);

@@ -35,4 +35,10 @@
     <ProjectReference Include="..\NetBaires.Data\NetBaires.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Images\Blanco.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

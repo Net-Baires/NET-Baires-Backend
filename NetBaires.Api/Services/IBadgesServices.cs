@@ -12,7 +12,6 @@ namespace NetBaires.Api.Services
         Task<BadgeCreationDetail> ReplaceAsync(IFormFile newBadge, string oldBadgeName);
         Task<bool> RemoveAsync(string badgeName);
         Task<Stream> GetAsync(string badgeFileName);
-        string GenerateImageUrl(int badgeId);
         string GenerateDetailUrl(int badgeId);
         string GenerateDetailUrl(Badge badge);
         string GeneratePublicMemberUrl(Badge badge, Member member);

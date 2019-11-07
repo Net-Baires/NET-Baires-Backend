@@ -43,6 +43,7 @@ namespace NetBaires.Api.Tests.Integration
             badges.Count.Should().Be(2);
             badges.First().Name.Should().Be(firstBadgeToAdd.Name);
             badges.First().Description.Should().Be(firstBadgeToAdd.Description);
+            badges.First().BadgeImageUrl.Should().Contain(firstBadgeToAdd.ImageName);
             badges.First().Created.Should().Be(dateTimeNow);
         }
 

@@ -12,6 +12,11 @@ using NetBaires.Data;
 
 namespace NetBaires.Api.Handlers.Badges
 {
+    public enum BadgeImageName
+    {
+        Badge,
+        SimpleBadge
+    }
     public class NewBadgeHandler : IRequestHandler<NewBadgeHandler.NewBadge, IActionResult>
     {
         private readonly NetBairesContext _context;
@@ -34,56 +39,47 @@ namespace NetBaires.Api.Handlers.Badges
         public async Task<IActionResult> Handle(NewBadgeHandler.NewBadge request, CancellationToken cancellationToken)
         {
             var newBadge = _mapper.Map(request, new Badge());
-            if (request.ImageFile != null)
+            if (request.ImageFiles != null)
             {
-                var badgeCreateResponse = await badgesServices.CreateAsync(request.ImageFile);
-                if (badgeCreateResponse == null)
-                    return new StatusCodeResult(400);
-                newBadge.ImageName = badgeCreateResponse.FileDetail.Name;
-
-                await _context.Badges.AddAsync(newBadge);
+                foreach (var item in request.ImageFiles)
+                {
+                    if (item.Headers["BadgeType"] == BadgeImageName.Badge.ToString())
+                    {
+                        var badgeCreateResponse = await badgesServices.CreateAsync(item);
+                        if (badgeCreateResponse == null)
+                            return new StatusCodeResult(400);
+                        newBadge.ImageName = badgeCreateResponse.FileDetail.Name;
+                    }
+                    else if (item.Headers["BadgeType"] == BadgeImageName.SimpleBadge.ToString())
+                    {
+                        var badgeCreateResponse = await badgesServices.CreateAsync(item);
+                        if (badgeCreateResponse == null)
+                            return new StatusCodeResult(400);
+                        newBadge.SimpleImageName = badgeCreateResponse.FileDetail.Name;
+                    }
+                }
             }
-
+            await _context.Badges.AddAsync(newBadge);
             await _context.SaveChangesAsync();
 
 
-            return new ObjectResult(_mapper.Map(newBadge, new NewBadgeResponse())) { StatusCode = 200 };
+            return new StatusCodeResult(204);
 
         }
 
-        private List<GetToAssignHandler.BadgeAssignResponse> ReduceBadge(Badge item, List<GetToAssignHandler.BadgeAssignResponse> accum, bool assigned)
+      
+        public class NewBadge : IRequest<IActionResult>
         {
-            var returnValue = _mapper.Map(item, new GetToAssignHandler.BadgeAssignResponse());
-            returnValue.Assigned = assigned;
-            accum.Add(returnValue);
-            return accum;
-        }
-
-
-        public class NewBadge : NewBadgeCommon, IRequest<IActionResult>
-        {
-            public IFormFile ImageFile { get; set; }
-        }
-        public class NewBadgeResponse : NewBadgeCommon
-        {
-            public int Id { get; set; }
-        }
-        public class NewBadgeCommon
-        {
-            public string BadgeUrl { get; set; }
-            public DateTime Created { get; set; }
-            public string BadgeImageUrl { get; set; }
-            public string IssuerUrl { get; set; }
-            public string Image { get; set; }
+            public IFormFileCollection ImageFiles { get; set; }
             public string Name { get; set; }
             public string Description { get; set; }
+
         }
         public class NewBadgeProfile : Profile
         {
             public NewBadgeProfile()
             {
                 CreateMap<NewBadge, Badge>();
-                CreateMap<Badge, NewBadgeResponse>();
             }
         }
     }

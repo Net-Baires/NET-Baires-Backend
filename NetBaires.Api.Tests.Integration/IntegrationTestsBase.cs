@@ -7,6 +7,7 @@ using System.Net.Http;
 using NetBaires.Api.Auth;
 using System.Threading.Tasks;
 using NetBaires.Data;
+using NetBaires.Api.Services;
 
 namespace NetBaires.Api.Tests.Integration
 {
@@ -17,6 +18,9 @@ namespace NetBaires.Api.Tests.Integration
         private readonly CustomWebApplicationFactory<Startup>
             _factory;
         protected IUserService UserService;
+
+        protected IFilesServices FileServices;
+
         protected NetBairesContext Context;
         public IntegrationTestsBase(
             CustomWebApplicationFactory<Startup> factory)
@@ -33,6 +37,8 @@ namespace NetBaires.Api.Tests.Integration
                     var scopedServices = scope.ServiceProvider;
                     UserService = scopedServices
                         .GetRequiredService<IUserService>();
+                    FileServices = scopedServices
+                          .GetRequiredService<IFilesServices>();
                     Context = scopedServices
                         .GetRequiredService<NetBairesContext>();
                     var logger = scopedServices.GetRequiredService<ILogger<IntegrationTestsBase>>();

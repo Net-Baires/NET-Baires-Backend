@@ -46,7 +46,7 @@ namespace NetBaires.Api.Services
         }
         public string GenerateImageUrl(Badge badge)
         {
-            return $"{commonOptions.ApiUrl}{badgesOptions.ImageEndPoint.Replace("{id}", badge.Id.ToString())}";
+            return $"{commonOptions.ApiUrl}{badgesOptions.ImageEndPoint.Replace("{badgeImageName}", badge.ImageName)}";
         }
         public string GenerateDetailUrl(Badge badge)
         {

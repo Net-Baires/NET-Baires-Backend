@@ -46,7 +46,7 @@ namespace NetBaires.Api.Handlers.Badges
             if (badge == null)
                 return new StatusCodeResult(404);
             var badgeToResponse = _mapper.Map(badge, new GetBadgeResponse());
-            badgeToResponse.BadgeImageUrl = _badgesServices.GenerateImageUrl(badge.Id);
+            badgeToResponse.BadgeImageUrl = _badgesServices.GenerateImageUrl(badge);
             badgeToResponse.BadgeUrl = _badgesServices.GenerateDetailUrl(badge);
             return new ObjectResult(badgeToResponse) { StatusCode = 200 }; ;
         }

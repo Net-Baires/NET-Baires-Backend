@@ -11,9 +11,10 @@ namespace NetBaires.Data
         [JsonIgnore]
         public int Id { get; set; }
         public string ImageName { get; set; }
+        public string SimpleImageName { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public IList<BadgeMember> Users { get; set; }
-        public DateTime Created { get; set; }
+        public DateTime Created { get; set; } = DateTime.Now;
     }
 }
