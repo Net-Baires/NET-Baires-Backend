@@ -14,7 +14,7 @@ namespace NetBaires.Data
         public string SimpleImageName { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public IList<BadgeMember> Users { get; set; }
+        public IList<BadgeMember> Members { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
     }
 }

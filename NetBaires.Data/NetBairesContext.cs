@@ -30,7 +30,7 @@ namespace NetBaires.Data
 
             modelBuilder.Entity<BadgeMember>()
                 .HasOne<Badge>(sc => sc.Badge)
-                .WithMany(s => s.Users)
+                .WithMany(s => s.Members)
                 .HasForeignKey(sc => sc.BadgeId);
 
 

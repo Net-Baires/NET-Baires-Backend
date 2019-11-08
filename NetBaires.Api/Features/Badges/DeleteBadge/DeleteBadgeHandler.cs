@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,8 @@ namespace NetBaires.Api.Features.Badges.DeleteBadge
             var badge = await _context.Badges.FirstOrDefaultAsync(x => x.Id == request.Id);
             if (badge == null)
                 return new StatusCodeResult(404);
+            if (!(await _context.Badges.AnyAsync(x => x.Id == request.Id && !x.Members.Any())))
+                return new StatusCodeResult(409);
 
             if (await badgesServices.RemoveAsync(badge.ImageName))
             {
@@ -35,6 +38,6 @@ namespace NetBaires.Api.Features.Badges.DeleteBadge
                 await _context.SaveChangesAsync();
             }
             return new ObjectResult(request) { StatusCode = 200 };
-            }
+        }
     }
 }
