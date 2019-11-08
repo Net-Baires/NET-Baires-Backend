@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetBaires.Data", "NetBaires
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetBaires.Api.Tests.Integration", "NetBaires.Api.Tests.Integration\NetBaires.Api.Tests.Integration.csproj", "{7C2399DA-CFAB-45F1-B89B-4A291C2ED7BD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetBaires.Host", "NetBaires.Host\NetBaires.Host.csproj", "{CFFD57FE-50B6-471B-8D05-05F6A9550DC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetBaires.WebApi", "NetBaires.WebApi\NetBaires.WebApi.csproj", "{4DED5CF1-4342-46E5-A08D-90B09D539CBE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{7C2399DA-CFAB-45F1-B89B-4A291C2ED7BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C2399DA-CFAB-45F1-B89B-4A291C2ED7BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C2399DA-CFAB-45F1-B89B-4A291C2ED7BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFFD57FE-50B6-471B-8D05-05F6A9550DC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFFD57FE-50B6-471B-8D05-05F6A9550DC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFFD57FE-50B6-471B-8D05-05F6A9550DC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFFD57FE-50B6-471B-8D05-05F6A9550DC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DED5CF1-4342-46E5-A08D-90B09D539CBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DED5CF1-4342-46E5-A08D-90B09D539CBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DED5CF1-4342-46E5-A08D-90B09D539CBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DED5CF1-4342-46E5-A08D-90B09D539CBE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
