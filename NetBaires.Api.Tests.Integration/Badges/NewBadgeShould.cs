@@ -5,8 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
-using NetBaires.Api.Handlers.Badges;
-using NetBaires.Api.Handlers.Badges.NewBadge;
+using NetBaires.Api.Features.Badges.NewBadge;
 using Xunit;
 
 namespace NetBaires.Api.Tests.Integration.Badges

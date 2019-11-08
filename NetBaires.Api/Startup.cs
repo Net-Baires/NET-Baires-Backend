@@ -13,9 +13,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NetBaires.Api.Auth;
+using NetBaires.Api.Features.Badges.NewBadge;
 using NetBaires.Api.Filters;
-using NetBaires.Api.Handlers.Badges;
-using NetBaires.Api.Handlers.Badges.NewBadge;
 using NetBaires.Api.Options;
 using NetBaires.Api.Services;
 using NetBaires.Api.Services.BadGr;
@@ -51,7 +50,8 @@ namespace NetBaires.Api
 
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
             })
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<NewBadgeValidator>());
+            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<NewBadgeValidator>())
+            .AddFeatureFolders(); 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(UserRole.Member.ToString(), new OpenApiInfo { Title = "NET-Baires Api - Miembro", Version = UserRole.Member.ToString() });

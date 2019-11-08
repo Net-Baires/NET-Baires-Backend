@@ -3,9 +3,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
-using NetBaires.Api.Handlers.Badges;
-using NetBaires.Api.Handlers.Badges.NewBadge;
-using NetBaires.Api.Handlers.Badges.UpdateBadge;
+using NetBaires.Api.Features.Badges.NewBadge;
+using NetBaires.Api.Features.Badges.UpdateBadge;
 using Xunit;
 
 namespace NetBaires.Api.Tests.Integration.Badges

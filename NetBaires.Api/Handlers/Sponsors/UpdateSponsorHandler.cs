@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using NetBaires.Api.Handlers.Badges;
+using NetBaires.Api.Features.Badges.GetToAssign;
 using NetBaires.Api.Services;
 using NetBaires.Data;
 
