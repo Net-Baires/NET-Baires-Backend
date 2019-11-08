@@ -7,9 +7,14 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using NetBaires.Api.Auth;
+using NetBaires.Api.Services.EventBrite;
+using NetBaires.Api.Services.EventBrite.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace NetBaires.Api.Tests.Integration
 {
+
     public class CustomWebApplicationFactory<TStartup>
     : WebApplicationFactory<TStartup> where TStartup : class
     {
@@ -34,7 +39,7 @@ namespace NetBaires.Api.Tests.Integration
                     context.UseInMemoryDatabase("InMemoryDbForTesting");
 
                 });
-
+                services.AddTransient<IEventBriteServices, EventBriteServicesDummy>();
                 // Build the service provider.
                 var sp = services.BuildServiceProvider();
                 // Create a scope to obtain a reference to the database

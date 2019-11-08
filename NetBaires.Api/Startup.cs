@@ -117,6 +117,8 @@ namespace NetBaires.Api
             services.AddScoped<ISyncServices, SyncServices>();
             services.AddScoped<IFilesServices, FilesServices>();
             services.AddScoped<IBadgesServices, BadgesServices>();
+            services.AddScoped<IExternalsSyncServices, EventBriteSyncServices>();
+            services.AddScoped<IExternalsSyncServices, MeetupSyncServices>();
 
 
 

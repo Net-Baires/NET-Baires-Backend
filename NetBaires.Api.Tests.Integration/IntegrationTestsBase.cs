@@ -8,6 +8,7 @@ using NetBaires.Api.Auth;
 using System.Threading.Tasks;
 using NetBaires.Data;
 using NetBaires.Api.Services;
+using NetBaires.Api.Services.Sync;
 
 namespace NetBaires.Api.Tests.Integration
 {
@@ -20,6 +21,7 @@ namespace NetBaires.Api.Tests.Integration
         protected IUserService UserService;
 
         protected IFilesServices FileServices;
+        protected ISyncServices SyncServices;
 
         protected NetBairesContext Context;
         public IntegrationTestsBase(
@@ -36,11 +38,14 @@ namespace NetBaires.Api.Tests.Integration
 
                     var scopedServices = scope.ServiceProvider;
                     UserService = scopedServices
-                        .GetRequiredService<IUserService>();
+                          .GetRequiredService<IUserService>();
                     FileServices = scopedServices
                           .GetRequiredService<IFilesServices>();
+                    SyncServices = scopedServices
+                          .GetRequiredService<ISyncServices>();
                     Context = scopedServices
-                        .GetRequiredService<NetBairesContext>();
+                          .GetRequiredService<NetBairesContext>();
+
                     var logger = scopedServices.GetRequiredService<ILogger<IntegrationTestsBase>>();
 
                     try

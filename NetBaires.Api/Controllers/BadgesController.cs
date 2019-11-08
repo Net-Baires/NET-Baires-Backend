@@ -108,31 +108,15 @@ namespace NetBaires.Api.Controllers
             return Ok(users);
         }
 
-        [HttpPost("{badgeId}/Member/{memberId}")]
+        [HttpPost("{badgeId}/Members/{memberId}")]
         [SwaggerOperation(Summary = "Premia a un miembro con un Badge")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> AssignMembersInBadge([FromRoute]int badgeId, [FromRoute]int memberId)
-        {
-            var membersAlreadyHasTheBadge =
-                _context.BadgeMembers.Any(x => x.BadgeId == badgeId && x.MemberId == memberId);
-            if (membersAlreadyHasTheBadge)
-                return BadRequest("El miembro que esta intentando asignar ya tiene ese Badge");
-
-            var badge = await _context.Badges.FirstOrDefaultAsync(x => x.Id == badgeId);
-            var member = await _context.Members.FirstOrDefaultAsync(x => x.Id == memberId);
-            //var response = await _badGrServices.CreateAssertion(badge.BadgeId, member.Email);
-
-            _context.BadgeMembers.Add(new BadgeMember
-            {
-                BadgeId = badge.Id,
-                MemberId = member.Id,
-                BadgeUrl = ""
-            });
-
-            return Ok(member);
-        }
-        [HttpDelete("{badgeId}/Member/{memberId}")]
+        public async Task<IActionResult> AssignMemberToBadge([FromRoute]int badgeId, [FromRoute]int memberId)=>
+            await _mediator.Send(new AssignMemberToBadgeHandler.AssignMemberToBadge(badgeId, memberId));
+        
+        
+        [HttpDelete("{badgeId}/Members/{memberId}")]
         [SwaggerOperation(Summary = "Eliminar un Badge de un Miembro")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
