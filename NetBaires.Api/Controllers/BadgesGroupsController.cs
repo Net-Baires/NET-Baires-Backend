@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Handlers.Badges;
 using NetBaires.Api.Handlers.Badges.Models;
+using NetBaires.Api.Handlers.Badges.NewBadge;
+using NetBaires.Api.Handlers.Badges.UpdateBadge;
 using NetBaires.Api.Services.BadGr;
 using NetBaires.Data;
 using Swashbuckle.AspNetCore.Annotations;
@@ -84,7 +86,7 @@ namespace NetBaires.Api.Controllers
         [HttpPost]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> Post([FromForm]NewBadgeHandler.NewBadge badge)
+        public async Task<IActionResult> Post([FromForm]NewBadgeCommand badge)
         {
 
             foreach (var item in httpContextAccessor.HttpContext.Request.Form.Files)
@@ -97,8 +99,8 @@ namespace NetBaires.Api.Controllers
         [HttpPut("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        [ProducesResponseType(typeof(UpdateBadgeHandler.UpdateBadge), 200)]
-        public async Task<IActionResult> Put([FromRoute]int id, UpdateBadgeHandler.UpdateBadge badge)
+        [ProducesResponseType(typeof(UpdateBadgeCommand), 200)]
+        public async Task<IActionResult> Put([FromRoute]int id, UpdateBadgeCommand badge)
         {
             badge.Id = id;
 

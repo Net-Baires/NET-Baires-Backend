@@ -4,6 +4,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NetBaires.Api.Handlers.Badges;
+using NetBaires.Api.Handlers.Badges.NewBadge;
+using NetBaires.Api.Handlers.Badges.UpdateBadge;
 using Xunit;
 
 namespace NetBaires.Api.Tests.Integration.Badges
@@ -29,10 +31,10 @@ namespace NetBaires.Api.Tests.Integration.Badges
             var simpleBadgeFile = new StreamContent(file1);
             simpleBadgeFile.Headers.Add("BadgeType", BadgeImageName.SimpleBadge.ToString());
             var formData = new MultipartFormDataContent();
-            formData.Add(badgeFile, nameof(UpdateBadgeHandler.UpdateBadge.ImageFiles), $"{BadgeImageName.Badge}.jpg");
-            formData.Add(simpleBadgeFile, nameof(UpdateBadgeHandler.UpdateBadge.ImageFiles), $"{BadgeImageName.SimpleBadge}.jpg");
-            formData.Add(new StringContent(nameof(UpdateBadgeHandler.UpdateBadge.Name)), "New Name");
-            formData.Add(new StringContent(nameof(UpdateBadgeHandler.UpdateBadge.Description)), "New Description");
+            formData.Add(badgeFile, nameof(UpdateBadgeCommand.ImageFiles), $"{BadgeImageName.Badge}.jpg");
+            formData.Add(simpleBadgeFile, nameof(UpdateBadgeCommand.ImageFiles), $"{BadgeImageName.SimpleBadge}.jpg");
+            formData.Add(new StringContent(nameof(UpdateBadgeCommand.Name)), "New Name");
+            formData.Add(new StringContent(nameof(UpdateBadgeCommand.Description)), "New Description");
             var response = await HttpClient.PutAsync($"/badges/{badge.Id}", formData);
 
             var oldImageName = badge.ImageName;
@@ -59,10 +61,10 @@ namespace NetBaires.Api.Tests.Integration.Badges
             var simpleBadgeFile = new StreamContent(file1);
             simpleBadgeFile.Headers.Add("BadgeType", BadgeImageName.SimpleBadge.ToString());
             var formData = new MultipartFormDataContent();
-            formData.Add(badgeFile, nameof(NewBadgeHandler.NewBadge.ImageFiles), $"{BadgeImageName.Badge}.jpg");
-            formData.Add(simpleBadgeFile, nameof(NewBadgeHandler.NewBadge.ImageFiles), $"{BadgeImageName.SimpleBadge}.jpg");
-            formData.Add(new StringContent(nameof(NewBadgeHandler.NewBadge.Name)), "Name");
-            formData.Add(new StringContent(nameof(NewBadgeHandler.NewBadge.Description)), "Description");
+            formData.Add(badgeFile, nameof(NewBadgeCommand.ImageFiles), $"{BadgeImageName.Badge}.jpg");
+            formData.Add(simpleBadgeFile, nameof(NewBadgeCommand.ImageFiles), $"{BadgeImageName.SimpleBadge}.jpg");
+            formData.Add(new StringContent(nameof(NewBadgeCommand.Name)), "Name");
+            formData.Add(new StringContent(nameof(NewBadgeCommand.Description)), "Description");
             var response = await HttpClient.PostAsync("/badges", formData);
         }
     }

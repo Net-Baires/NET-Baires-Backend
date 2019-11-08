@@ -1,18 +1,17 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using NetBaires.Api.Handlers.Badges.NewBadge;
 using NetBaires.Api.Services;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Badges
+namespace NetBaires.Api.Handlers.Badges.UpdateBadge
 {
-    public class UpdateBadgeHandler : IRequestHandler<UpdateBadgeHandler.UpdateBadge, IActionResult>
+    public class UpdateBadgeHandler : IRequestHandler<UpdateBadgeCommand, IActionResult>
     {
         private readonly NetBairesContext _context;
         private readonly IMapper _mapper;
@@ -30,7 +29,7 @@ namespace NetBaires.Api.Handlers.Badges
         }
 
 
-        public async Task<IActionResult> Handle(UpdateBadge request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Handle(UpdateBadgeCommand request, CancellationToken cancellationToken)
         {
             var badge = await _context.Badges.FirstOrDefaultAsync(x => x.Id == request.Id);
             if (badge == null)
@@ -62,24 +61,6 @@ namespace NetBaires.Api.Handlers.Badges
             await _context.SaveChangesAsync();
             return new StatusCodeResult(204);
 
-        }
-
-
-        public class UpdateBadge : IRequest<IActionResult>
-        {
-            public int Id { get; set; }
-            public IFormFileCollection ImageFiles { get; set; }
-            public string Name { get; set; }
-            public string Description { get; set; }
-        }
-
-        public class UpdateBadgeProfile : Profile
-        {
-            public UpdateBadgeProfile()
-            {
-                CreateMap<UpdateBadge, Badge>().ForAllMembers(
-                    opt => opt.Condition((src, dest, sourceMember) => sourceMember != null));
-            }
         }
     }
 }

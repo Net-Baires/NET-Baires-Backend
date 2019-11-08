@@ -3,11 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NetBaires.Data;
-using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using NetBaires.Api.Auth;
 using MediatR;
-using NetBaires.Api.Handlers.Badges;
 using NetBaires.Api.Handlers.Sponsors;
 
 namespace NetBaires.Api.Controllers

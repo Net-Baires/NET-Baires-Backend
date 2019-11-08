@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NetBaires.Api.Auth;
-using NetBaires.Api.Handlers.Events.Models;
 using NetBaires.Api.Options;
 using NetBaires.Data;
 

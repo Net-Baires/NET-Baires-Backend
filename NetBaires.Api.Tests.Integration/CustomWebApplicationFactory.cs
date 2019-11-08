@@ -6,11 +6,7 @@ using System;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using NetBaires.Api.Auth;
 using NetBaires.Api.Services.EventBrite;
-using NetBaires.Api.Services.EventBrite.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using NetBaires.Api.Services.Meetup;
 using NetBaires.Api.Tests.Integration.Services;
 

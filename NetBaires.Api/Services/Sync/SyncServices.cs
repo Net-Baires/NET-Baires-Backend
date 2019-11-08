@@ -3,8 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using NetBaires.Api.Services.EventBrite;
-using NetBaires.Api.Services.Meetup;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Services.Sync

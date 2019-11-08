@@ -4,16 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Handlers.Badges;
-using NetBaires.Api.Handlers.Badges.Models;
-using NetBaires.Api.Services.BadGr;
+using NetBaires.Api.Handlers.Badges.NewBadge;
+using NetBaires.Api.Handlers.Badges.UpdateBadge;
 using NetBaires.Data;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -37,25 +35,16 @@ namespace NetBaires.Api.Controllers
     {
         private readonly NetBairesContext _context;
         private readonly IMediator _mediator;
-        private readonly IBadGrServices _badGrServices;
-        private readonly IMapper _mapper;
-        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly ILogger<BadgesController> _logger;
 
         public BadgesController(IHttpClientFactory httpClientFactory,
             NetBairesContext context,
             IMediator mediator,
-            IBadGrServices badGrServices,
-            IMapper mapper,
-            IHttpContextAccessor httpContextAccessor,
             ILogger<BadgesController> logger)
         {
             _context = context;
             _mediator = mediator;
 
-            _badGrServices = badGrServices;
-            _mapper = mapper;
-            this.httpContextAccessor = httpContextAccessor;
             _logger = logger;
             httpClientFactory.CreateClient();
         }
@@ -136,15 +125,13 @@ namespace NetBaires.Api.Controllers
         [HttpPost]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> Post([FromForm]NewBadgeHandler.NewBadge badge)
-        {
-            return await _mediator.Send(badge);
-        }
+        public async Task<IActionResult> Post([FromForm]NewBadgeCommand badge)=>
+            await _mediator.Send(badge);
 
         [HttpPut("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> Put([FromRoute]int id, [FromForm]UpdateBadgeHandler.UpdateBadge badge)
+        public async Task<IActionResult> Put([FromRoute]int id, [FromForm]UpdateBadgeCommand badge)
         {
             badge.Id = id;
             return await _mediator.Send(badge);

@@ -8,9 +8,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using NetBaires.Api.Auth;
-using NetBaires.Api.Options;
 using NetBaires.Api.Services;
 using NetBaires.Data;
 

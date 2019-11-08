@@ -2,20 +2,14 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Services;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Badges
+namespace NetBaires.Api.Handlers.Badges.NewBadge
 {
-    public enum BadgeImageName
-    {
-        Badge,
-        SimpleBadge
-    }
-    public class NewBadgeHandler : IRequestHandler<NewBadgeHandler.NewBadge, IActionResult>
+    public class NewBadgeHandler : IRequestHandler<NewBadgeCommand, IActionResult>
     {
         private readonly NetBairesContext _context;
         private readonly IBadgesServices badgesServices;
@@ -34,7 +28,7 @@ namespace NetBaires.Api.Handlers.Badges
         }
 
 
-        public async Task<IActionResult> Handle(NewBadge request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Handle(NewBadgeCommand request, CancellationToken cancellationToken)
         {
             var newBadge = _mapper.Map(request, new Badge());
             if (request.ImageFiles != null)
@@ -59,26 +53,7 @@ namespace NetBaires.Api.Handlers.Badges
             }
             await _context.Badges.AddAsync(newBadge);
             await _context.SaveChangesAsync();
-
-
             return new StatusCodeResult(204);
-
-        }
-
-      
-        public class NewBadge : IRequest<IActionResult>
-        {
-            public IFormFileCollection ImageFiles { get; set; }
-            public string Name { get; set; }
-            public string Description { get; set; }
-
-        }
-        public class NewBadgeProfile : Profile
-        {
-            public NewBadgeProfile()
-            {
-                CreateMap<NewBadge, Badge>();
-            }
         }
     }
 }

@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using NetBaires.Api.Handlers.Badges.UpdateBadge;
 using NetBaires.Api.Services;
 using NetBaires.Data;
 

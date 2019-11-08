@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using NetBaires.Api.Services.EventBrite;
-using NetBaires.Api.Services.EventBrite.Models;
 using NetBaires.Api.Services.Meetup;
 using NetBaires.Api.Services.Meetup.Models;
 

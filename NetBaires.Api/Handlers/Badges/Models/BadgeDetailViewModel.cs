@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using AutoMapper;
-using NetBaires.Api.Handlers.Events.Models;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Handlers.Badges.Models

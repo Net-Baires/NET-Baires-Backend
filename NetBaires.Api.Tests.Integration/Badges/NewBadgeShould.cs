@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NetBaires.Api.Handlers.Badges;
+using NetBaires.Api.Handlers.Badges.NewBadge;
 using Xunit;
 
 namespace NetBaires.Api.Tests.Integration.Badges
@@ -28,10 +29,10 @@ namespace NetBaires.Api.Tests.Integration.Badges
             simpleBadgeFile.Headers.Add("BadgeType", BadgeImageName.SimpleBadge.ToString());
             var formData = new MultipartFormDataContent();
             // Add file (file, field name, file name)
-            formData.Add(badgeFile, nameof(NewBadgeHandler.NewBadge.ImageFiles), $"{BadgeImageName.Badge}.jpg");
-            formData.Add(simpleBadgeFile, nameof(NewBadgeHandler.NewBadge.ImageFiles), $"{BadgeImageName.SimpleBadge}.jpg");
-            formData.Add(new StringContent(nameof(NewBadgeHandler.NewBadge.Name)), "Name");
-            formData.Add(new StringContent(nameof(NewBadgeHandler.NewBadge.Description)), "Description");
+            formData.Add(badgeFile, nameof(NewBadgeCommand.ImageFiles), $"{BadgeImageName.Badge}.jpg");
+            formData.Add(simpleBadgeFile, nameof(NewBadgeCommand.ImageFiles), $"{BadgeImageName.SimpleBadge}.jpg");
+            formData.Add(new StringContent(nameof(NewBadgeCommand.Name)), "Name");
+            formData.Add(new StringContent(nameof(NewBadgeCommand.Description)), "Description");
             var response = await HttpClient.PostAsync("/badges", formData);
 
 

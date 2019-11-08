@@ -1,5 +1,6 @@
 using System.Text;
 using AutoMapper;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -9,13 +10,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NetBaires.Api.Auth;
-using NetBaires.Api.Controllers;
 using NetBaires.Api.Filters;
-using NetBaires.Api.Handlers.Events;
+using NetBaires.Api.Handlers.Badges;
+using NetBaires.Api.Handlers.Badges.NewBadge;
 using NetBaires.Api.Options;
 using NetBaires.Api.Services;
 using NetBaires.Api.Services.BadGr;
@@ -44,23 +44,20 @@ namespace NetBaires.Api
             {
                 options.Filters.Add<ExceptionActionFilter>();
                 options.RespectBrowserAcceptHeader = true;
-
-
             }).AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
                 options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
 
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
-            }); ;
+            })
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<NewBadgeValidator>());
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(UserRole.Member.ToString(), new OpenApiInfo { Title = "NET-Baires Api - Miembro", Version = UserRole.Member.ToString() });
-
                 c.SwaggerDoc(UserRole.Admin.ToString(), new OpenApiInfo { Title = "NET-Baires Api - Admin", Version = UserRole.Admin.ToString() });
                 c.SwaggerDoc(UserRole.Organizer.ToString(), new OpenApiInfo { Title = "NET-Baires Api - Organizador", Version = UserRole.Organizer.ToString() });
                 c.SwaggerDoc(UserAnonymous.Anonymous.ToString(), new OpenApiInfo { Title = "NET-Baires Api - Anonymous", Version = UserAnonymous.Anonymous.ToString() });
-
                 c.AddSecurityDefinition("Bearer",
                     new OpenApiSecurityScheme
                     {
@@ -111,7 +108,6 @@ namespace NetBaires.Api
                     };
                 });
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            // configure DI for application services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICurrentUser, CurrentUser>();
             services.AddScoped<IBadGrServices, BadGrServices>();
@@ -124,26 +120,16 @@ namespace NetBaires.Api
             services.AddScoped<IExternalsSyncServices, MeetupSyncServices>();
             services.AddScoped<IProcessEvents, ProcessEventsFromEventbrite>();
             services.AddScoped<IProcessEvents, ProcessEventsFromMeetup>();
-
-
-
-            
-
             services.AddApplicationInsightsTelemetry();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
 
             app.UseSwagger();
             app.UseResponseCaching();
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint($"/swagger/{UserAnonymous.Anonymous.ToString()}/swagger.json", "NET-Baires Api - Anonymous");

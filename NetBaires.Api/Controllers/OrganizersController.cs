@@ -1,16 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Auth;
-using NetBaires.Api.Handlers.Badges.Models;
 using NetBaires.Api.Handlers.Organizers;
-using NetBaires.Api.Models;
 using NetBaires.Data;
 using Swashbuckle.AspNetCore.Annotations;
 
