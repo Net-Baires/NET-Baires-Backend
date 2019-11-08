@@ -33,7 +33,6 @@
   <ItemGroup>
     <ProjectReference Include="..\NetBaires.Data\NetBaires.Data.csproj" />
     <ProjectReference Include="..\NetBaires.Host\NetBaires.Host.csproj" />
-    <ProjectReference Include="..\NetBaires.WebApi\NetBaires.WebApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>

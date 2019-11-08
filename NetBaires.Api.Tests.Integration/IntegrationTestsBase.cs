@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using NetBaires.Data;
 using NetBaires.Api.Services;
 using NetBaires.Api.Services.Sync;
+using System.Linq;
 
 namespace NetBaires.Api.Tests.Integration
 {
@@ -73,6 +74,14 @@ namespace NetBaires.Api.Tests.Integration
         {
             var token = await UserService.AuthenticateOrCreate("admin@admin.com");
             HttpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token.Token}");
+        }
+        protected void RefreshContext()
+        {
+            var refreshableObjects = Context.ChangeTracker.Entries().Select(c => c.Entity).ToList();
+            foreach (var item in refreshableObjects)
+            {
+                Context.Entry(item).Reload();
+            }
         }
 
     }

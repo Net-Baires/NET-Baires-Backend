@@ -33,12 +33,12 @@ namespace NetBaires.Api.Features.Badges.GetToAssign
         public async Task<IActionResult> Handle(GetToAssignCommand request, CancellationToken cancellationToken)
         {
             var badgesFromUser = await _context.BadgeMembers.Where(x => x.MemberId == request.MemberId).ToListAsync(cancellationToken: cancellationToken);
-            var allBadGes = await _context.Badges.ToListAsync(cancellationToken: cancellationToken);
+            var allBadges = await _context.Badges.ToListAsync(cancellationToken: cancellationToken);
 
-            var badGesAssigned = allBadGes.Where(x => badgesFromUser.Any(s => x.Id == s.BadgeId));
-            var badGesNotAssigned = allBadGes.Where(x => !badgesFromUser.Any(s => x.Id == s.BadgeId));
+            var badgesAssigned = allBadges.Where(x => badgesFromUser.Any(s => x.Id == s.BadgeId));
+            var badgesNotAssigned = allBadges.Where(x => !badgesFromUser.Any(s => x.Id == s.BadgeId));
 
-            var response = badGesNotAssigned.Aggregate(badGesAssigned.Aggregate(new List<BadgeAssignResponse>(),
+            var response = badgesNotAssigned.Aggregate(badgesAssigned.Aggregate(new List<BadgeAssignResponse>(),
                      (accum, item) => ReduceBadge(item, accum, true)),
                  (accum, item) => ReduceBadge(item, accum, false));
 

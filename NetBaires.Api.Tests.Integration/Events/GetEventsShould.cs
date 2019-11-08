@@ -16,10 +16,9 @@ namespace NetBaires.Api.Tests.Integration.Events
         [Fact]
         public async Task Return_204_Empty_Events()
         {
-            var defaultPage = await HttpClient.GetAsync("/events");
+            var response = await HttpClient.GetAsync("/events");
 
-            defaultPage.StatusCode.Should().Be(HttpStatusCode.NoContent);
-
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
         }
 
     }

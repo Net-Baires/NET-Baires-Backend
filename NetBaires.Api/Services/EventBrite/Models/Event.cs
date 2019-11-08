@@ -15,7 +15,7 @@ namespace NetBaires.Api.Services.EventBrite.Models
         public string Id { get; set; }
 
         [JsonProperty("url")]
-        public Uri Url { get; set; }
+        public string Url { get; set; }
 
         [JsonProperty("start")]
         public End Start { get; set; }

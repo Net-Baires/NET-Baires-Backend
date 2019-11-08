@@ -59,10 +59,10 @@ namespace NetBaires.Api.Features.Events
         [SwaggerOperation(Summary = "Retorna todos los eventos que ya fueron sincronizados con plataformas externas, pero  no fueron procesados en nuestro sistema")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        [ProducesResponseType(typeof(List<GetToAsyncResponseViewModel>), 200)]
+        [ProducesResponseType(typeof(List<GetToSyncResponse>), 200)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetToSync() =>
-            await _iMediator.Send(new GetToSyncHandler.GetToSync());
+            await _iMediator.Send(new GetToSyncQuery());
 
         [HttpGet("{id}/Attendances")]
         [SwaggerOperation(Summary = "Retorna toda la información requerida por el miemebro de la comunidad para reportar su asistencia a un evento")]
@@ -120,6 +120,7 @@ namespace NetBaires.Api.Features.Events
             return new StatusCodeResult(204);
 
         }
+       
         [HttpGet("{id}/Attendances/General")]
         [SwaggerOperation(Summary = "Retorna toda la información requerida para que los miembros de la comunidad puedan reportar su asistencia en conjunto, el token de registración tiene un tiempo de 5 minutos.")]
         [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
@@ -145,6 +146,7 @@ namespace NetBaires.Api.Features.Events
                 ImageUrl = eventToReturn.ImageUrl
             });
         }
+       
         [HttpPut("Attendances/General/{token}")]
         [SwaggerOperation(Summary = "Informa que asistió al evento mediante un token otorgado por los organizadores")]
         [AuthorizeRoles(UserRole.Member)]

@@ -13,5 +13,9 @@ namespace NetBaires.Api.Features.Badges.AssignMembersToBadge
             BadgeId = badgeId;
             MemberId = memberId;
         }
+        public AssignMemberToBadgeCommand()
+        {
+
+        }
     }
 }

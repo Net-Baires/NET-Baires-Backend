@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using MediatR;
@@ -13,10 +12,10 @@ using NetBaires.Api.Features.Badges.AssignMembersToBadge;
 using NetBaires.Api.Features.Badges.DeleteBadge;
 using NetBaires.Api.Features.Badges.GetBadge;
 using NetBaires.Api.Features.Badges.GetBadges;
-using NetBaires.Api.Features.Badges.GetImage;
 using NetBaires.Api.Features.Badges.GetToAssign;
 using NetBaires.Api.Features.Badges.NewBadge;
 using NetBaires.Api.Features.Badges.UpdateBadge;
+using NetBaires.Api.ViewModels;
 using NetBaires.Data;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -64,48 +63,27 @@ namespace NetBaires.Api.Features.Badges
               await _mediator.Send(new GetBagesCommand());
 
         [HttpGet("{badgeId}")]
-        [SwaggerOperation(Summary = "Retorna todos los badges disponibles de NET-Baires")]
+        [SwaggerOperation(Summary = "Retorna el detalle de un badge de NET-Baires")]
         [AllowAnonymous]
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
         [ProducesResponseType(typeof(List<Badge>), 200)]
         public async Task<IActionResult> Get(int badgeId)=>
-            await _mediator.Send(new GetBadgeCommand(badgeId));
-
-        [HttpGet("{badgeId}/image")]
-        [SwaggerOperation(Summary = "Retorna la imagen del Badge")]
-        [AllowAnonymous]
-        [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
-        [ProducesResponseType(typeof(List<Badge>), 200)]
-        public async Task<IActionResult> GetImage(int badgeId)
-        {
-            var response = await _mediator.Send(new GetIamgeCommand(badgeId));
-            return File(response.ToByteArray(), "image/png");
-        }
-
-        [HttpGet("ToAssign")]
-        [SwaggerOperation(Summary = "Retorna todos los badges disponibles de NET-Baires")]
-        [AllowAnonymous]
-        [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
-        [ProducesResponseType(typeof(List<Badge>), 200)]
-        public async Task<IActionResult> GetToAssign([FromQuery] int memberId) =>
-            await _mediator.Send(new GetToAssignCommand(memberId));
+            await _mediator.Send(new GetBadgeQuery(badgeId));
 
         [HttpGet("{badgeId}/Members")]
         [SwaggerOperation(Summary = "Retorna de la lista de usuario que recibieron el Badge")]
         [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
+        [ProducesResponseType(typeof(List<MemberDetailViewModel>), 200)]
         [ApiExplorerSettingsExtend(UserRole.Organizer)]
-        public async Task<IActionResult> GetMembersInBadge(int badgeId)
-        {
-            var users = _context.Members.Where(x => x.Badges.Any(s => s.BadgeId == badgeId)).AsNoTracking();
-            return Ok(users);
-        }
+        public async Task<IActionResult> GetMembersInBadge([FromRoute]GetMembersInBadgeQuery query) =>
+            await _mediator.Send(query);
 
         [HttpPost("{badgeId}/Members/{memberId}")]
         [SwaggerOperation(Summary = "Premia a un miembro con un Badge")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> AssignMemberToBadge([FromRoute]int badgeId, [FromRoute]int memberId)=>
-            await _mediator.Send(new AssignMemberToBadgeCommand(badgeId, memberId));
+        public async Task<IActionResult> AssignMemberToBadge([FromRoute]AssignMemberToBadgeCommand query) =>
+            await _mediator.Send(query);
         
         
         [HttpDelete("{badgeId}/Members/{memberId}")]

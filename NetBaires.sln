@@ -3,15 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetBaires.Api", "NetBaires.Api\NetBaires.Api.csproj", "{D1AFA746-AADB-4A54-B4FF-9853E2823CA1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetBaires.Data", "NetBaires.Data\NetBaires.Data.csproj", "{2B2E5FBE-F8F5-465F-A77C-187D72660F53}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetBaires.Api.Tests.Integration", "NetBaires.Api.Tests.Integration\NetBaires.Api.Tests.Integration.csproj", "{7C2399DA-CFAB-45F1-B89B-4A291C2ED7BD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetBaires.Host", "NetBaires.Host\NetBaires.Host.csproj", "{CFFD57FE-50B6-471B-8D05-05F6A9550DC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetBaires.WebApi", "NetBaires.WebApi\NetBaires.WebApi.csproj", "{4DED5CF1-4342-46E5-A08D-90B09D539CBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetBaires.Api", "NetBaires.Api\NetBaires.Api.csproj", "{EC61C5E3-1CA7-46F0-B298-D22273BE8CE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D1AFA746-AADB-4A54-B4FF-9853E2823CA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D1AFA746-AADB-4A54-B4FF-9853E2823CA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D1AFA746-AADB-4A54-B4FF-9853E2823CA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D1AFA746-AADB-4A54-B4FF-9853E2823CA1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2B2E5FBE-F8F5-465F-A77C-187D72660F53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2B2E5FBE-F8F5-465F-A77C-187D72660F53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B2E5FBE-F8F5-465F-A77C-187D72660F53}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -35,10 +29,10 @@ Global
 		{CFFD57FE-50B6-471B-8D05-05F6A9550DC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFFD57FE-50B6-471B-8D05-05F6A9550DC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFFD57FE-50B6-471B-8D05-05F6A9550DC6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4DED5CF1-4342-46E5-A08D-90B09D539CBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4DED5CF1-4342-46E5-A08D-90B09D539CBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4DED5CF1-4342-46E5-A08D-90B09D539CBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4DED5CF1-4342-46E5-A08D-90B09D539CBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC61C5E3-1CA7-46F0-B298-D22273BE8CE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC61C5E3-1CA7-46F0-B298-D22273BE8CE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC61C5E3-1CA7-46F0-B298-D22273BE8CE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC61C5E3-1CA7-46F0-B298-D22273BE8CE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

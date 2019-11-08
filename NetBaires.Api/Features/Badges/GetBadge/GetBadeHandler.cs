@@ -14,7 +14,7 @@ using NetBaires.Data;
 namespace NetBaires.Api.Features.Badges.GetBadge
 {
 
-    public class GetBadeHandler : IRequestHandler<GetBadgeCommand, IActionResult>
+    public class GetBadeHandler : IRequestHandler<GetBadgeQuery, IActionResult>
     {
         private readonly NetBairesContext _context;
         private readonly IMapper _mapper;
@@ -35,7 +35,7 @@ namespace NetBaires.Api.Features.Badges.GetBadge
         }
 
 
-        public async Task<IActionResult> Handle(GetBadgeCommand request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Handle(GetBadgeQuery request, CancellationToken cancellationToken)
         {
             var badge = await _context.Badges.FirstOrDefaultAsync(x => x.Id == request.BadgeId);
             if (badge == null)

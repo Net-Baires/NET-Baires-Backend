@@ -17,6 +17,6 @@ namespace NetBaires.Api.Services.EventBrite.Models
         public string Name { get; set; }
 
         [JsonProperty("addresses")]
-        public Addresses Addresses { get; set; }
+        public dynamic Addresses { get; set; }
     }
 }
