@@ -8,10 +8,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using NetBaires.Api.Handlers.Badges;
 using NetBaires.Api.Services;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Badges
+namespace NetBaires.Api.Handlers.Sponsors
 {
     public class UpdateSponsorHandler : IRequestHandler<UpdateSponsorHandler.UpdateSponsor, IActionResult>
     {

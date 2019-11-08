@@ -18,9 +18,9 @@ namespace NetBaires.Api.Services.Sync
             NetBairesContext context,
             ILogger<SyncServices> logger)
         {
-            this._meetupServices = meetupServices;
-            this._context = context;
-            this._logger = logger;
+            _meetupServices = meetupServices;
+            _context = context;
+            _logger = logger;
         }
         public async Task ProcessAttendees(Event eventToSync)
         {
@@ -49,7 +49,7 @@ namespace NetBaires.Api.Services.Sync
                              attende.Status == "attended"))
                             currentMember = new Attendance(newMember, eventToSync, true);
                         else
-                            currentMember = new Attendance(newMember, eventToSync);
+                            currentMember = new Attendance(newMember, eventToSync,false);
                         await _context.Attendances.AddAsync(currentMember);
                     }
                 }
@@ -59,6 +59,10 @@ namespace NetBaires.Api.Services.Sync
                          &&
                          attende.Status == "attended"))
                         currentMember.Attend();
+                    else if ((attende.Status != null
+                              &&
+                              attende.Status == "absent"))
+                        currentMember.NoAttend();
                 }
 
             }

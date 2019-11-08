@@ -3,12 +3,11 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Xunit;
 
-[assembly: CollectionBehavior(DisableTestParallelization = true)]
 namespace NetBaires.Api.Tests.Integration.Events
 {
-    public class GetEventsShould : IntegrationTestsBase
+    public class SyncWithExternalEventsShould : IntegrationTestsBase
     {
-        public GetEventsShould(CustomWebApplicationFactory<Startup> factory) : base(factory)
+        public SyncWithExternalEventsShould(CustomWebApplicationFactory<Startup> factory) : base(factory)
         {
             AuthenticateAdminAsync().GetAwaiter().GetResult(); ;
         }
@@ -16,7 +15,7 @@ namespace NetBaires.Api.Tests.Integration.Events
         [Fact]
         public async Task Return_204_Empty_Events()
         {
-            var defaultPage = await HttpClient.GetAsync("/events");
+            var defaultPage = await HttpClient.PutAsync("/events/sync", null);
 
             defaultPage.StatusCode.Should().Be(HttpStatusCode.NoContent);
 

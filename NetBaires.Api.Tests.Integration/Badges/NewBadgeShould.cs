@@ -1,17 +1,14 @@
-using System.Threading.Tasks;
-using Xunit;
-using Microsoft.EntityFrameworkCore.InMemory.Infrastructure;
-using System.Net.Http;
-using FluentAssertions;
-using System.Net;
-using System.Collections.Generic;
-using static NetBaires.Api.Handlers.Badges.GetBadeHandler;
-using System.Linq;
 using System;
-using NetBaires.Api.Handlers.Badges;
 using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using FluentAssertions;
+using NetBaires.Api.Handlers.Badges;
+using Xunit;
 
-namespace NetBaires.Api.Tests.Integration
+namespace NetBaires.Api.Tests.Integration.Badges
 {
     public class NewBadgeShould : IntegrationTestsBase
     {
@@ -44,11 +41,11 @@ namespace NetBaires.Api.Tests.Integration
             badge.Name.Should().Be("Name");
             badge.Created.Date.Should().Be(DateTime.Now.Date);
             badge.Description.Should().Be("Description");
-            (await FileServices.GetAsync(badge.ImageName, Services.Container.Badges)).Should().NotBeNull();
-            (await FileServices.GetAsync(badge.SimpleImageName, Services.Container.Badges)).Should().NotBeNull();
+            (await FileServices.GetAsync(badge.ImageName, Api.Services.Container.Badges)).Should().NotBeNull();
+            (await FileServices.GetAsync(badge.SimpleImageName, Api.Services.Container.Badges)).Should().NotBeNull();
 
-            await FileServices.DeleteAsync(badge.ImageName, Services.Container.Badges);
-            await FileServices.DeleteAsync(badge.SimpleImageName, Services.Container.Badges);
+            await FileServices.DeleteAsync(badge.ImageName, Api.Services.Container.Badges);
+            await FileServices.DeleteAsync(badge.SimpleImageName, Api.Services.Container.Badges);
         }
       
     }

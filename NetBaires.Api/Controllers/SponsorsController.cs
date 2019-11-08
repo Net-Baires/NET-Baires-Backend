@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using NetBaires.Api.Auth;
 using MediatR;
 using NetBaires.Api.Handlers.Badges;
+using NetBaires.Api.Handlers.Sponsors;
 
 namespace NetBaires.Api.Controllers
 {

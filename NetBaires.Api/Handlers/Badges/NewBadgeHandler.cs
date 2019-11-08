@@ -29,12 +29,12 @@ namespace NetBaires.Api.Handlers.Badges
         {
             _context = context;
             this.badgesServices = badgesServices;
-            this._mapper = mapper;
+            _mapper = mapper;
             this.logger = logger;
         }
 
 
-        public async Task<IActionResult> Handle(NewBadgeHandler.NewBadge request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Handle(NewBadge request, CancellationToken cancellationToken)
         {
             var newBadge = _mapper.Map(request, new Badge());
             if (request.ImageFiles != null)

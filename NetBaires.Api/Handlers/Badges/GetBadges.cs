@@ -35,7 +35,7 @@ namespace NetBaires.Api.Handlers.Badges
         {
             _context = context;
             _mapper = mapper;
-            this._badgesServices = badgesServices;
+            _badgesServices = badgesServices;
             _logger = logger;
         }
 

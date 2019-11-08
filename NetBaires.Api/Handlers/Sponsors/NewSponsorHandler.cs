@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using NetBaires.Api.Services;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Badges
+namespace NetBaires.Api.Handlers.Sponsors
 {
     public class NewSponsorHandler : IRequestHandler<NewSponsorHandler.NewSponsor, IActionResult>
     {
@@ -27,13 +25,13 @@ namespace NetBaires.Api.Handlers.Badges
             ILogger<NewSponsorHandler> logger)
         {
             _context = context;
-            this._mapper = mapper;
+            _mapper = mapper;
             this.filesServices = filesServices;
             this.logger = logger;
         }
 
 
-        public async Task<IActionResult> Handle(NewSponsorHandler.NewSponsor request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Handle(NewSponsor request, CancellationToken cancellationToken)
         {
             var newSponsor = _mapper.Map(request, new Sponsor());
             if (request.ImageFile != null)

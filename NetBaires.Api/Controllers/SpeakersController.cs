@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using NetBaires.Api.Auth;
 using NetBaires.Api.Handlers.Badges.Models;
 using NetBaires.Api.Handlers.Events;
+using NetBaires.Api.Handlers.Speakers;
 using NetBaires.Api.Models;
 using NetBaires.Data;
 using Swashbuckle.AspNetCore.Annotations;

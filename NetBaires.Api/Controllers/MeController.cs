@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetBaires.Api.Handlers.Events;
+using NetBaires.Api.Handlers.Me;
 using NetBaires.Data;
 using Swashbuckle.AspNetCore.Annotations;
 

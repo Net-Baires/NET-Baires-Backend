@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,15 +7,10 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using NetBaires.Api.Auth;
-using NetBaires.Api.Handlers.Badges.Models;
-using NetBaires.Api.Models;
-using NetBaires.Api.Options;
-using NetBaires.Api.Services;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Badges
+namespace NetBaires.Api.Handlers.Sponsors
 {
 
     public class GetSponsorsHandler : IRequestHandler<GetSponsorsHandler.GetSponsors, IActionResult>

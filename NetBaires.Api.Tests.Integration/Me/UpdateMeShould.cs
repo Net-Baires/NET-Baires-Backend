@@ -1,14 +1,12 @@
-﻿using System.Threading.Tasks;
-using Xunit;
+﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading.Tasks;
 using FluentAssertions;
-using static NetBaires.Api.Handlers.Events.GetMeHandler;
-using static NetBaires.Api.Handlers.Events.UpdateMeHandler;
-using System.Reflection;
-using System.Linq;
-using System.Collections.Generic;
+using Xunit;
+using static NetBaires.Api.Handlers.Me.GetMeHandler;
+using static NetBaires.Api.Handlers.Me.UpdateMeHandler;
 
-namespace NetBaires.Api.Tests.Integration
+namespace NetBaires.Api.Tests.Integration.Me
 {
 
     public class UpdateMeShould : IntegrationTestsBase

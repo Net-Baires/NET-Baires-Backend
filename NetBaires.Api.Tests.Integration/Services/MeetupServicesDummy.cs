@@ -1,48 +1,93 @@
-using NetBaires.Api.Services.EventBrite;
-using NetBaires.Api.Services.EventBrite.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using NetBaires.Api.Services.EventBrite;
+using NetBaires.Api.Services.EventBrite.Models;
+using NetBaires.Api.Services.Meetup;
+using NetBaires.Api.Services.Meetup.Models;
 
-public class EventBriteServicesDummy : IEventBriteServices
+namespace NetBaires.Api.Tests.Integration.Services
 {
-    public Task<List<Attendee>> GetAttendees(string eventId)
+    public class MeetupServicesDummy : IMeetupServices
     {
-        return Task.FromResult(new List<Attendee> {
-                new Attendee {
-                    profile = new Profile{
-                    Email="asisto@asistio.com",
-                    FirstName="Asistio",
-                    LastName="Asistio"
-               },
-                CheckIn = true
-            },
-                 new Attendee {
-                    profile = new Profile{
-                    Email="noAsisto@noAsistio.com",
-                    FirstName="No Asistio",
-                    LastName="No Asistio"
-               },
-                CheckIn = false
-            }
-            });
-    }
 
-    public Task<List<Event>> GetEvents()
-    {
-        return Task.FromResult(new List<Event> {
-               new Event{
-                   Name= new Description
-                   {
-                       Text="Evento Meetup",
-                       Html="Evento Meetup",
-                   },
-                   Description = new Description{
-                       Text="Descripcion del evento",
-                       Html="Descripcion del evento"
-                   },
-                   Id="123456",
-                   Url="url://meetup"
-               }
+        public Task<List<MeetupEventDetail>> GetAllEvents()
+        {
+            return Task.FromResult(new List<MeetupEventDetail>
+            {
+                new MeetupEventDetail
+                {
+                    Id = 1234,
+                    Name = "Evento test Meetup",
+                    Description = "Descripción",
+                    Link = new Uri("http://event.com.ar"),
+                    LocalDate = DateTimeOffset.Now,
+                    FeaturedPhoto = new FeaturedPhoto
+                    {
+                        HighresLink = new Uri("http://HighresLink.com.ar")
+                    }
+                },
+                new MeetupEventDetail
+                {
+                    Id = 1234567,
+                    Name = "Evento test Meetup",
+                    Description = "Descripción",
+                    Link = new Uri("http://event.com.ar"),
+                    LocalDate = DateTimeOffset.Now,
+                    FeaturedPhoto = new FeaturedPhoto
+                    {
+                        HighresLink = new Uri("http://HighresLink.com.ar")
+                    }
+                }
             });
+        }
+
+        public Task<List<AttendanceResponse>> GetAttendees(int eventId)
+        {
+            return Task.FromResult(new List<AttendanceResponse>
+            {
+                new AttendanceResponse
+                {
+                    Member = new Member
+                    {
+                        Name = "Asistio",
+                        Id = 123456,
+                        Photo = new Photo
+                        {
+                            HighresLink = new Uri("http://www.contoso.com.ar/")
+                        },
+                        Bio = "Biografia"
+                    },
+                    Status = "attended"
+                }, new AttendanceResponse
+                {
+                    Member = new Member
+                    {
+                        Name = "NoShow",
+                        Id = 1234568,
+                        Photo = new Photo
+                        {
+                            HighresLink = new Uri("http://www.contoso.com.ar/")
+                        },
+                        Bio = "Biografia"
+                    },
+                    Status = "noshow"
+                },
+                new AttendanceResponse
+                {
+                    Member = new Member
+                    {
+                        Name = "No Asistio",
+                        Id = 1234567,
+                        Photo = new Photo
+                        {
+                            HighresLink = new Uri("http://www.contoso.com.ar/")
+                        },
+                        Bio = "Biografia"
+                    },
+                    Status =  "absent"
+                }
+            });
+        }
     }
 }

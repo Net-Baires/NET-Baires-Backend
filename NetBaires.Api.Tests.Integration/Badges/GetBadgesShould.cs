@@ -1,15 +1,14 @@
-using System.Threading.Tasks;
-using Xunit;
-using Microsoft.EntityFrameworkCore.InMemory.Infrastructure;
-using System.Net.Http;
-using FluentAssertions;
-using System.Net;
-using System.Collections.Generic;
-using static NetBaires.Api.Handlers.Badges.GetBadeHandler;
-using System.Linq;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using FluentAssertions;
+using Xunit;
+using static NetBaires.Api.Handlers.Badges.GetBadeHandler;
 
-namespace NetBaires.Api.Tests.Integration
+namespace NetBaires.Api.Tests.Integration.Badges
 {
     public class GetBadgesShould : IntegrationTestsBase
     {

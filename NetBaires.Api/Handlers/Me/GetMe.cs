@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using NetBaires.Api.Auth;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Events
+namespace NetBaires.Api.Handlers.Me
 {
 
     public class GetMeHandler : IRequestHandler<GetMeHandler.GetMe, IActionResult>

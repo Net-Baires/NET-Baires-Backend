@@ -1,15 +1,11 @@
-using System.Threading.Tasks;
-using Xunit;
-using System.Net.Http;
-using FluentAssertions;
-using System.Net;
 using System.Linq;
-using System;
-using NetBaires.Api.Handlers.Badges;
-using System.IO;
+using System.Net;
+using System.Threading.Tasks;
+using FluentAssertions;
 using NetBaires.Data;
+using Xunit;
 
-namespace NetBaires.Api.Tests.Integration
+namespace NetBaires.Api.Tests.Integration.Badges
 {
     public class AssignMemberToBadgeShould : IntegrationTestsBase
     {

@@ -14,12 +14,15 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NetBaires.Api.Auth;
 using NetBaires.Api.Controllers;
+using NetBaires.Api.Filters;
+using NetBaires.Api.Handlers.Events;
 using NetBaires.Api.Options;
 using NetBaires.Api.Services;
 using NetBaires.Api.Services.BadGr;
 using NetBaires.Api.Services.EventBrite;
 using NetBaires.Api.Services.Meetup;
 using NetBaires.Api.Services.Sync;
+using NetBaires.Api.Services.Sync.Process;
 using NetBaires.Data;
 using Newtonsoft.Json.Serialization;
 
@@ -119,10 +122,12 @@ namespace NetBaires.Api
             services.AddScoped<IBadgesServices, BadgesServices>();
             services.AddScoped<IExternalsSyncServices, EventBriteSyncServices>();
             services.AddScoped<IExternalsSyncServices, MeetupSyncServices>();
+            services.AddScoped<IProcessEvents, ProcessEventsFromEventbrite>();
+            services.AddScoped<IProcessEvents, ProcessEventsFromMeetup>();
 
 
 
-
+            
 
             services.AddApplicationInsightsTelemetry();
         }

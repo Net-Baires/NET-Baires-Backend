@@ -11,6 +11,8 @@ using NetBaires.Api.Services.EventBrite;
 using NetBaires.Api.Services.EventBrite.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using NetBaires.Api.Services.Meetup;
+using NetBaires.Api.Tests.Integration.Services;
 
 namespace NetBaires.Api.Tests.Integration
 {
@@ -23,7 +25,6 @@ namespace NetBaires.Api.Tests.Integration
         {
             builder.ConfigureServices(async services =>
             {
-                // Remove the app's ApplicationDbContext registration.
                 var descriptor = services.SingleOrDefault(
                     d => d.ServiceType ==
                         typeof(DbContextOptions<NetBairesContext>));
@@ -32,31 +33,24 @@ namespace NetBaires.Api.Tests.Integration
                 {
                     services.Remove(descriptor);
                 }
-
-                // Add ApplicationDbContext using an in-memory database for testing.
                 services.AddDbContext<NetBairesContext>((options, context) =>
                 {
                     context.UseInMemoryDatabase("InMemoryDbForTesting");
 
                 });
                 services.AddTransient<IEventBriteServices, EventBriteServicesDummy>();
-                // Build the service provider.
+                services.AddTransient<IMeetupServices, MeetupServicesDummy>();
                 var sp = services.BuildServiceProvider();
-                // Create a scope to obtain a reference to the database
-                // context (ApplicationDbContext).
                 using (var scope = sp.CreateScope())
                 {
                     var scopedServices = scope.ServiceProvider;
                     var db = scopedServices.GetRequiredService<NetBairesContext>();
                     var logger = scopedServices
                         .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
-                    var a = scopedServices.GetRequiredService<IUserService>();
-                    // Ensure the database is created.
                     db.Database.EnsureDeleted();
                     db.Database.EnsureCreated();
                     try
                     {
-                        // Seed the database with test data.
                         UtilitiesDb.InitializeDbForTests(db);
                     }
                     catch (Exception ex)

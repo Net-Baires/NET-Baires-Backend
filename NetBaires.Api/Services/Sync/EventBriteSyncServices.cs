@@ -17,9 +17,9 @@ namespace NetBaires.Api.Services.Sync
          NetBairesContext context,
          ILogger<SyncServices> logger)
         {
-            this._eventBriteServices = eventBriteServices;
-            this._context = context;
-            this._logger = logger;
+            _eventBriteServices = eventBriteServices;
+            _context = context;
+            _logger = logger;
         }
         public async Task ProcessAttendees(Event eventToSync)
         {

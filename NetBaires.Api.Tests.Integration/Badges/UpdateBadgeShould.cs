@@ -1,15 +1,12 @@
-using System.Threading.Tasks;
-using Xunit;
-using System.Net.Http;
-using FluentAssertions;
-using System.Net;
-using System.Linq;
-using System;
-using NetBaires.Api.Handlers.Badges;
 using System.IO;
-using NetBaires.Data;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using FluentAssertions;
+using NetBaires.Api.Handlers.Badges;
+using Xunit;
 
-namespace NetBaires.Api.Tests.Integration
+namespace NetBaires.Api.Tests.Integration.Badges
 {
     public class UpdateBadgeShould : IntegrationTestsBase
     {
@@ -44,22 +41,16 @@ namespace NetBaires.Api.Tests.Integration
 
             //newBadge.Name.Should().Be("New Name");
             //newBadge.Description.Should().Be("New Description");
-            (await FileServices.GetAsync(oldImageName, Services.Container.Badges)).Should().BeNull();
-            (await FileServices.GetAsync(oldSimpleImageName, Services.Container.Badges)).Should().BeNull();
+            (await FileServices.GetAsync(oldImageName, Api.Services.Container.Badges)).Should().BeNull();
+            (await FileServices.GetAsync(oldSimpleImageName, Api.Services.Container.Badges)).Should().BeNull();
 
-            (await FileServices.GetAsync(badge.ImageName, Services.Container.Badges)).Should().NotBeNull();
-            (await FileServices.GetAsync(badge.SimpleImageName, Services.Container.Badges)).Should().NotBeNull();
+            (await FileServices.GetAsync(badge.ImageName, Api.Services.Container.Badges)).Should().NotBeNull();
+            (await FileServices.GetAsync(badge.SimpleImageName, Api.Services.Container.Badges)).Should().NotBeNull();
 
-            await FileServices.DeleteAsync(badge.ImageName, Services.Container.Badges);
-            await FileServices.DeleteAsync(badge.SimpleImageName, Services.Container.Badges);
+            await FileServices.DeleteAsync(badge.ImageName, Api.Services.Container.Badges);
+            await FileServices.DeleteAsync(badge.SimpleImageName, Api.Services.Container.Badges);
         }
-        public void RefreshAll()
-        {
-            foreach (var entity in Context.ChangeTracker.Entries())
-            {
-                entity.Reload();
-            }
-        }
+        
         private async Task AddNewBadge()
         {
             var file1 = File.OpenRead(@"Images\Blanco.png");

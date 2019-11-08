@@ -9,24 +9,24 @@ using Xunit;
 namespace NetBaires.Api.Tests.Integration.Services
 {
 
-    public class MeetupSyncServicesShould : IntegrationTestsBase
+    public class EventBriteSyncServicesShould : IntegrationTestsBase
     {
         private Event _event;
-        public MeetupSyncServicesShould(CustomWebApplicationFactory<Startup> factory) : base(factory)
+        public EventBriteSyncServicesShould(CustomWebApplicationFactory<Startup> factory) : base(factory)
         {
             AuthenticateAdminAsync().GetAwaiter().GetResult();
         }
 
-        private void FillData(long meetupId)
+        private void FillData(string email)
         {
             _event = new Event
             {
                 EventId = "1234",
-                Platform = EventPlatform.Meetup,
+                Platform = EventPlatform.EventBrite,
                 Attendees = new List<Attendance>{
                     new Attendance{
                         Member = new Member{
-                            MeetupId = meetupId
+                            Email= email
                         },
                         Attended = false
                     }
@@ -39,14 +39,14 @@ namespace NetBaires.Api.Tests.Integration.Services
         [Fact]
         public async Task Add_Two_New_Attendees_One_Attended_One_No_Attended()
         {
-            FillData(0000);
+            FillData("primero@primero.com");
 
             await SyncServices.SyncEvent(_event.Id);
             var attendees = Context.Attendances.Include(x => x.Member).Where(x => x.EventId == _event.Id).ToList();
 
-            var noAttended = attendees.FirstOrDefault(x => x.Member.MeetupId == 1234567);
-            var attended = attendees.FirstOrDefault(x => x.Member.MeetupId== 123456);
-            attendees.Count.Should().Be(4);
+            var noAttended = attendees.FirstOrDefault(x => x.Member.Email == "NoAsisto@NoAsistio.com");
+            var attended = attendees.FirstOrDefault(x => x.Member.Email == "Asisto@Asistio.com");
+            attendees.Count.Should().Be(3);
             noAttended.DidNotAttend.Should().BeTrue();
 
             attended.DidNotAttend.Should().BeFalse();
@@ -56,12 +56,12 @@ namespace NetBaires.Api.Tests.Integration.Services
         [Fact]
         public async Task Update_One_Attendant_In_EventBrite_Attended()
         {
-            FillData(123456);
+            FillData("Asisto@Asistio.com");
 
             await SyncServices.SyncEvent(_event.Id);
             var attendees = Context.Attendances.Include(x => x.Member).Where(x => x.EventId == _event.Id).ToList();
 
-            var attended = attendees.FirstOrDefault(x => x.Member.MeetupId == 123456);
+            var attended = attendees.FirstOrDefault(x => x.Member.Email == "Asisto@Asistio.com");
             attended.DidNotAttend.Should().BeFalse();
             attended.Attended.Should().BeTrue();
         }

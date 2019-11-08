@@ -9,10 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NetBaires.Api.Auth;
+using NetBaires.Api.Handlers.Events;
 using NetBaires.Api.Options;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Events
+namespace NetBaires.Api.Handlers.Speakers
 {
 
     public class GetSpeakersHandler : IRequestHandler<GetSpeakersHandler.GetSpeakers, IActionResult>

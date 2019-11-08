@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Badges
+namespace NetBaires.Api.Handlers.Sponsors
 {
 
     public class GetSponsorHandler : IRequestHandler<GetSponsorHandler.GetSponsor, IActionResult>

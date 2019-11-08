@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
-using Xunit;
-using System.Net.Http;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 using FluentAssertions;
-using static NetBaires.Api.Handlers.Events.GetMeHandler;
+using Xunit;
+using static NetBaires.Api.Handlers.Me.GetMeHandler;
 
-namespace NetBaires.Api.Tests.Integration
+namespace NetBaires.Api.Tests.Integration.Me
 {
     public class GetMeShould : IntegrationTestsBase
     {

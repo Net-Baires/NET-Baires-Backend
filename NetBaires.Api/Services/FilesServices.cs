@@ -18,7 +18,7 @@ namespace NetBaires.Api.Services
         ILogger<FilesServices> logger)
         {
             connectionStringsOptions = ConnectionStringsOptions.Value;
-            this._logger = logger;
+            _logger = logger;
         }
         public async Task<FileDetail> UploadAsync(Stream file, string fileName, Container container)
         {
