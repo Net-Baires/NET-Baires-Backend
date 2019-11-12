@@ -30,7 +30,8 @@ namespace NetBaires.Api.Handlers.Events
 
         public async Task<IActionResult> Handle(GetToSyncQuery request, CancellationToken cancellationToken)
         {
-            var newEvents = _context.Events.Include(x => x.Attendees).OrderByDescending(x => x.Id).Where(x => !x.Done);
+            var newEvents = await _context.Events.Include(x => x.Attendees).OrderByDescending(x => x.Id).Where(x => !x.Done)
+                .ToListAsync();
             var eventToReturn = newEvents?
                 .Select(x => new GetToSyncResponse(x,
                     x.Attendees.Count(s => s.Attended),

@@ -52,8 +52,8 @@ namespace NetBaires.Api.Features.Events
         [ApiExplorerSettingsExtend("Anonymous")]
         [ProducesResponseType(typeof(Event), 200)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> Get() =>
-        await _iMediator.Send(new GetEventsHandler.GetEvents());
+        public async Task<IActionResult> Get([FromQuery] GetEventsQuery query) =>
+        await _iMediator.Send(query);
 
         [HttpGet("ToSync")]
         [SwaggerOperation(Summary = "Retorna todos los eventos que ya fueron sincronizados con plataformas externas, pero  no fueron procesados en nuestro sistema")]
@@ -94,6 +94,7 @@ namespace NetBaires.Api.Features.Events
 
             });
         }
+
         [HttpPut("Attendances/{token}")]
         [SwaggerOperation(Summary = "Valida que el token del miembro para reportar asistencia es correcto y reporta la asistencia")]
         [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
@@ -120,7 +121,7 @@ namespace NetBaires.Api.Features.Events
             return new StatusCodeResult(204);
 
         }
-       
+
         [HttpGet("{id}/Attendances/General")]
         [SwaggerOperation(Summary = "Retorna toda la información requerida para que los miembros de la comunidad puedan reportar su asistencia en conjunto, el token de registración tiene un tiempo de 5 minutos.")]
         [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
@@ -146,7 +147,7 @@ namespace NetBaires.Api.Features.Events
                 ImageUrl = eventToReturn.ImageUrl
             });
         }
-       
+
         [HttpPut("Attendances/General/{token}")]
         [SwaggerOperation(Summary = "Informa que asistió al evento mediante un token otorgado por los organizadores")]
         [AuthorizeRoles(UserRole.Member)]
@@ -154,22 +155,12 @@ namespace NetBaires.Api.Features.Events
         public async Task<IActionResult> PutCheckAssistanceGeneral([FromRoute]string token) =>
             await _iMediator.Send(new PutCheckAssistanceGeneralHandler.PutCheckAssistanceGeneral(token));
 
-        [HttpGet("live")]
+        [HttpGet("lives")]
         [AllowAnonymous]
         [SwaggerOperation(Summary = "Retorna una lista de los eventos que se encuentra en curso.")]
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
-        public IActionResult GetLives()
-        {
-            IQueryable<Event> eventToReturn = null;
-            if (_currentUser.IsLoggued)
-                eventToReturn = _context.Events.Where(x => x.Live && !x.Attendees.Any(s => s.MemberId == _currentUser.User.Id)).AsNoTracking();
-            else
-                eventToReturn = _context.Events.Where(x => x.Live).AsNoTracking();
-            if (eventToReturn != null)
-                return Ok(eventToReturn);
-
-            return NotFound();
-        }
+        public async Task<IActionResult> GetLivesAsync() =>
+            await _iMediator.Send(new GetLivesQuery());
 
         [HttpGet("{id:int}/live")]
         [AllowAnonymous]
@@ -237,6 +228,20 @@ namespace NetBaires.Api.Features.Events
         [ApiExplorerSettingsExtend(UserRole.Admin)]
         public async Task<IActionResult> Sync(int id) =>
             await _iMediator.Send(new SyncEventHandler.SyncEvent(id));
+
+        [HttpPut("{id}/done")]
+        [SwaggerOperation(Summary = "Cambia el estado de un evento a Completado")]
+        [AuthorizeRoles(UserRole.Admin)]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
+        public async Task<IActionResult> CompleteEvent([FromRoute] CompleteEvent command) =>
+                     await _iMediator.Send(command);
+
+        [HttpPost("{eventId:int}/badges/{badgeId:int}/Attendances")]
+        [SwaggerOperation(Summary = "Sincroniza un evento en particular con la plataforma externa")]
+        [AuthorizeRoles(UserRole.Admin)]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
+        public async Task<IActionResult> AssignBadgeToAttendances([FromRoute]AssignBadgeToAttendancesCommand command) =>
+                        await _iMediator.Send(command);
 
 
     }

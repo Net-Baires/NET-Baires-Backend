@@ -2,11 +2,14 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Auth;
+using NetBaires.Api.Features.Badges.AssignMembersToBadge;
+using NetBaires.Api.Features.Badges.GetBadge;
 using NetBaires.Api.Features.Badges.Models;
 using NetBaires.Api.Features.Slack;
 using NetBaires.Api.Models;
@@ -22,15 +25,18 @@ namespace NetBaires.Api.Features.Members
     {
         private readonly ILogger<SlackController> _logger;
         private readonly NetBairesContext _context;
+        private readonly IMediator _mediator;
         private readonly IMapper _mapper;
 
         public MembersController(NetBairesContext context,
             ICurrentUser currentUser,
+            IMediator mediator,
             IMapper mapper,
             ILogger<SlackController> logger)
         {
             _logger = logger;
             _context = context;
+            this._mediator = mediator;
             _mapper = mapper;
         }
         [HttpGet]
@@ -48,18 +54,11 @@ namespace NetBaires.Api.Features.Members
             return NotFound();
         }
 
-        [HttpGet("{idMember:int}")]
+        [HttpGet("{id:int}")]
         [AllowAnonymous]
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
-        public async Task<IActionResult> GetById([FromRoute]int idMember)
-        {
-            var member = await _context.Members.FirstOrDefaultAsync(x => x.Id == idMember);
-
-            if (member != null)
-                return Ok(member);
-
-            return NotFound();
-        }
+        public async Task<IActionResult> GetById([FromRoute]GetMemberDetailQuery query) =>
+                     await _mediator.Send(query);
 
         [HttpGet("{email}")]
         [AllowAnonymous]
@@ -80,12 +79,9 @@ namespace NetBaires.Api.Features.Members
         [AllowAnonymous]
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
         [ProducesResponseType(typeof(List<BadgeViewModel>), 200)]
-        public IActionResult GetBadgesFromEmail([FromRoute] string email)
-        {
-            var badges = _context.BadgeMembers.Where(x => x.Member.Email.ToUpper() == email.ToUpper())
-                .Select((x) => _mapper.Map(x.Badge, new BadgeDetailViewModel()));
-            return Ok(badges);
-        }
+        public async Task<IActionResult> GetBadgesFromEmailAsync([FromRoute] GetBadgesFromEmailQuery query)
+            => await _mediator.Send(query);
+
         [HttpPost]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]

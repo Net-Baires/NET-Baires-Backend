@@ -28,7 +28,6 @@ namespace NetBaires.Data
                 .Property(e => e.Role)
                 .HasConversion(new EnumToStringConverter<UserRole>());
             modelBuilder.Entity<BadgeMember>().HasKey(sc => new { UserId = sc.MemberId, sc.BadgeId });
-
             modelBuilder.Entity<BadgeMember>()
                 .HasOne<Badge>(sc => sc.Badge)
                 .WithMany(s => s.Members)

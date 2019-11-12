@@ -2,7 +2,6 @@
 
 namespace NetBaires.Data
 {
-
     public class Attendance
     {
         public void Attend()

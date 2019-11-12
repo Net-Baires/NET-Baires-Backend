@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +15,7 @@ using NetBaires.Data;
 namespace NetBaires.Api.Handlers.Events
 {
 
-    public class GetEventsHandler : IRequestHandler<GetEventsHandler.GetEvents, IActionResult>
+    public class GetEventsHandler : IRequestHandler<GetEventsQuery, IActionResult>
     {
         private readonly IMapper _mapper;
         private readonly NetBairesContext _context;
@@ -34,10 +33,10 @@ namespace NetBaires.Api.Handlers.Events
         }
 
 
-        public async Task<IActionResult> Handle(GetEvents request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Handle(GetEventsQuery request, CancellationToken cancellationToken)
         {
 
-            var eventToReturn = _context.Events.OrderByDescending(x => x.Id).AsNoTracking();
+            var eventToReturn = _context.Events.Where(x => request.Done != null ? x.Done == request.Done : true).OrderByDescending(x => x.Id).AsNoTracking();
 
             if (!eventToReturn.Any())
                 return new StatusCodeResult(204);
@@ -46,30 +45,7 @@ namespace NetBaires.Api.Handlers.Events
         }
 
 
-        public class GetEvents : IRequest<IActionResult>
-        {
-
-        }
-        public class GetEventsResponse
-        {
-            public int Id { get; set; }
-            public string Title { get; set; }
-            public string Description { get; set; }
-            public string ImageUrl { get; set; }
-            public string Url { get; set; }
-            public string EventId { get; set; }
-            public bool Done { get; set; } = false;
-            public bool Live { get; set; } = false;
-            public DateTime Date { get; set; }
-        }
-        public class GetEventsProfile : Profile
-        {
-            public GetEventsProfile()
-            {
-                CreateMap<Event, GetEventsResponse>();
-
-            }
-        }
-
+      
     }
+
 }
