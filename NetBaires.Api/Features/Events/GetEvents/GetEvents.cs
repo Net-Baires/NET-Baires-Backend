@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NetBaires.Api.Auth;
+using NetBaires.Api.Helpers;
 using NetBaires.Api.Options;
 using NetBaires.Data;
 
@@ -36,16 +37,19 @@ namespace NetBaires.Api.Handlers.Events
         public async Task<IActionResult> Handle(GetEventsQuery request, CancellationToken cancellationToken)
         {
 
-            var eventToReturn = _context.Events.Where(x => request.Done != null ? x.Done == request.Done : true).OrderByDescending(x => x.Id).AsNoTracking();
-
+            var eventToReturn =await  _context.Events.Include(x=> x.Attendees)                                                    
+                                                     .Where(x => (request.Done != null ? x.Done == request.Done : true)
+                                                            &&
+                                                            (request.Live != null ? x.Live == request.Live:true))
+                                               .OrderByDescending(x => x.Id)
+                                               .Select(x=> _mapper.Map<Event, GetEventsResponse>(x))
+                                               .AsNoTracking()
+                                               .ToListAsync();
             if (!eventToReturn.Any())
-                return new StatusCodeResult(204);
+                return HttpResponseCodeHelper.NotContent();
 
-            return new ObjectResult(_mapper.Map(eventToReturn, new List<GetEventsResponse>())) { StatusCode = 200 };
-        }
-
-
-      
+            return HttpResponseCodeHelper.Ok(eventToReturn);
+        }      
     }
 
 }

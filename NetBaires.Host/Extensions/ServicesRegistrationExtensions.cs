@@ -14,8 +14,8 @@ namespace NetBaires.Api
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
+   
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICurrentUser, CurrentUser>();
             services.AddScoped<IBadGrServices, BadGrServices>();

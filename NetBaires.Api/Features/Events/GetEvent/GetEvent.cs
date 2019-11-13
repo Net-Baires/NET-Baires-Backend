@@ -32,8 +32,10 @@ namespace NetBaires.Api.Handlers.Events
         public async Task<IActionResult> Handle(GetEvent request, CancellationToken cancellationToken)
         {
 
-            var eventToReturn = await _context.Events.Include(s => s.Sponsors).FirstOrDefaultAsync(x => x.Id == request.Id);
-
+            var eventToReturn = await _context.Events.Include(s => s.Sponsors)
+                                                      .FirstOrDefaultAsync(x => (x.Id == request.Id)
+                                                                                &&
+                                                                                (request.Live != null ? x.Live == request.Live : true));
             if (eventToReturn == null)
                 return new StatusCodeResult(404);
 
@@ -43,12 +45,15 @@ namespace NetBaires.Api.Handlers.Events
 
         public class GetEvent : IRequest<IActionResult>
         {
-            public GetEvent(int id)
+
+            public int Id { get; set; }
+            public bool? Live { get; set; }
+
+            public GetEvent(int id, bool? live)
             {
                 Id = id;
+                Live = live;
             }
-
-            public int Id { get; internal set; }
         }
         public class GetEventResponse
         {

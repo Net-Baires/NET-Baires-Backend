@@ -155,44 +155,26 @@ namespace NetBaires.Api.Features.Events
         public async Task<IActionResult> PutCheckAssistanceGeneral([FromRoute]string token) =>
             await _iMediator.Send(new PutCheckAssistanceGeneralHandler.PutCheckAssistanceGeneral(token));
 
-        [HttpGet("lives")]
-        [AllowAnonymous]
-        [SwaggerOperation(Summary = "Retorna una lista de los eventos que se encuentra en curso.")]
-        [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
-        public async Task<IActionResult> GetLivesAsync() =>
-            await _iMediator.Send(new GetLivesQuery());
-
-        [HttpGet("{id:int}/live")]
-        [AllowAnonymous]
-        [ApiExplorerSettingsExtend("Anonymous")]
-        public async Task<IActionResult> GetLive([FromRoute]int id) =>
-            await _iMediator.Send(new GetLiveHandler.GetLive(id));
 
         [HttpGet("{id:int}")]
         [AllowAnonymous]
         [ApiExplorerSettingsExtend("Anonymous")]
-        public async Task<IActionResult> GetById([FromRoute]int id) =>
-        await _iMediator.Send(new GetEventHandler.GetEvent(id));
+        public async Task<IActionResult> GetById([FromRoute]int id, [FromQuery]bool live) =>
+        await _iMediator.Send(new GetEventHandler.GetEvent(id, live));
 
         [HttpGet("{id:int}/attendees")]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
         [SwaggerOperation(Summary = "Retorna todos los miembros que se encuentran registrados a un evento particular")]
         [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
-        public async Task<IActionResult> GetAttendees([FromRoute]int id)
-        {
-            var command = new GetAttendeesHandler.GetAttendees(id);
-            return await _iMediator.Send(command);
-        }
+        public async Task<IActionResult> GetAttendees([FromRoute]GetAttendeesQuery query) =>
+            await _iMediator.Send(query);
 
-        [HttpPost("{id:int}/Members/{idMember}/attende")]
+        [HttpPost("{idEvent:int}/Members/{idMember}/attende")]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
         [SwaggerOperation(Summary = "Informo que un usuario se registro en un evento")]
         [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
-        public async Task<IActionResult> AddAttendees([FromRoute]int id, [FromRoute]int idMember)
-        {
-            var command = new AddAttendeeHandler.AddAttendee(id, idMember);
-            return await _iMediator.Send(command);
-        }
+        public async Task<IActionResult> AddAttendees([FromRoute]AddAttendeeCommand command) =>
+            await _iMediator.Send(command);
 
         [HttpPut("{id:int}/Members/{idMember}/attende")]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
@@ -233,7 +215,7 @@ namespace NetBaires.Api.Features.Events
         [SwaggerOperation(Summary = "Cambia el estado de un evento a Completado")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> CompleteEvent([FromRoute] CompleteEvent command) =>
+        public async Task<IActionResult> CompleteEvent([FromRoute] CompleteEventCommand command) =>
                      await _iMediator.Send(command);
 
         [HttpPost("{eventId:int}/badges/{badgeId:int}/Attendances")]

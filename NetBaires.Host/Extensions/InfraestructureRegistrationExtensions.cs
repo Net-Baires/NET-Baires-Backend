@@ -34,6 +34,8 @@ namespace NetBaires.Api
             services.AddMediatR(typeof(DeleteBadgeHandler));
 
             services.AddHttpClient("");
+
+
             return services;
         }
         public static IApplicationBuilder UseInfraestructure(this IApplicationBuilder app, IWebHostEnvironment env)

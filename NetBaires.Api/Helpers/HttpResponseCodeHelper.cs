@@ -24,5 +24,7 @@ namespace NetBaires.Api.Helpers
              message != null ?
             new ObjectResult(message) { StatusCode = 200 }
             : new ObjectResult(string.Empty) { StatusCode = 204 };
+
     }
+   
 }

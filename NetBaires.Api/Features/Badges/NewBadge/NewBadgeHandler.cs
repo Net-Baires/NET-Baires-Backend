@@ -41,6 +41,7 @@ namespace NetBaires.Api.Features.Badges.NewBadge
                         if (badgeCreateResponse == null)
                             return new StatusCodeResult(400);
                         newBadge.ImageName = badgeCreateResponse.FileDetail.Name;
+                        newBadge.ImageUrl = badgeCreateResponse.FileDetail.FileUri.AbsoluteUri;
                     }
                     else if (item.Headers["BadgeType"] == BadgeImageName.SimpleBadge.ToString())
                     {
@@ -48,6 +49,8 @@ namespace NetBaires.Api.Features.Badges.NewBadge
                         if (badgeCreateResponse == null)
                             return new StatusCodeResult(400);
                         newBadge.SimpleImageName = badgeCreateResponse.FileDetail.Name;
+                        newBadge.SimpleImageUrl = badgeCreateResponse.FileDetail.FileUri.AbsoluteUri;
+
                     }
                 }
             }

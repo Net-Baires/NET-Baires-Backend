@@ -13,6 +13,7 @@ namespace NetBaires.Api.Handlers.Events
         public bool Done { get; set; } = false;
         public bool Live { get; set; } = false;
         public DateTime Date { get; set; }
+        public bool Registered { get; set; }
     }
 
 }

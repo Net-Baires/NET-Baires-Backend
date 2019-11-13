@@ -30,7 +30,7 @@ namespace NetBaires.Api.Services
         {
             var fileName = $"{Guid.NewGuid().ToString()}{Path.GetExtension(badge.FileName)}";
             var fileDetail = await filesServices.UploadAsync(badge.OpenReadStream(), fileName, Container.Badges);
-            return new BadgeCreationDetail(new FileDetail(fileName));
+            return new BadgeCreationDetail(fileDetail);
         }
         public async Task<BadgeCreationDetail> ReplaceAsync(IFormFile newBadge, string oldBadgeName)
         {
@@ -38,7 +38,7 @@ namespace NetBaires.Api.Services
 
             await filesServices.DeleteAsync(oldBadgeName, Container.Badges);
             var fileDetail = await filesServices.UploadAsync(newBadge.OpenReadStream(), fileName, Container.Badges);
-            return new BadgeCreationDetail(new FileDetail(fileName));
+            return new BadgeCreationDetail(fileDetail);
         }
         public async Task<bool> RemoveAsync(string badgeName)
         {

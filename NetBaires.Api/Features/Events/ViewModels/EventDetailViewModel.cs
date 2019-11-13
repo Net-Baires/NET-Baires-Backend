@@ -4,6 +4,7 @@ using System;
 
 namespace NetBaires.Api.Features.Events.ViewModels
 {
+
     public class EventDetailViewModel
     {
         public int Id { get; set; }
