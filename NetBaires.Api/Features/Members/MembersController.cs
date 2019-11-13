@@ -74,13 +74,21 @@ namespace NetBaires.Api.Features.Members
         }
 
 
-        [HttpGet("{email}/badges")]
+        [HttpGet("badges")]
         [SwaggerOperation(Summary = "Retorna todos los badges recibidos por el miembro")]
         [AllowAnonymous]
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
-        [ProducesResponseType(typeof(List<BadgeViewModel>), 200)]
-        public async Task<IActionResult> GetBadgesFromEmailAsync([FromRoute] GetBadgesFromEmailQuery query)
-            => await _mediator.Send(query);
+        [ProducesResponseType(typeof(List<BadgeDetailViewModel>), 200)]
+        public async Task<IActionResult> GetBadgesFromEmailAsync([FromQuery] string email)
+            => await _mediator.Send(new GetBadgesFromMemberQuery(email));
+
+        [HttpGet("{id:int}/badges")]
+        [SwaggerOperation(Summary = "Retorna todos los badges recibidos por el miembro")]
+        [AllowAnonymous]
+        [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
+        [ProducesResponseType(typeof(List<BadgeDetailViewModel>), 200)]
+        public async Task<IActionResult> GetBadgesFromEmailAsync([FromRoute] int id)
+                      => await _mediator.Send(new GetBadgesFromMemberQuery(id));
 
         [HttpPost]
         [AuthorizeRoles(UserRole.Admin)]
@@ -110,28 +118,12 @@ namespace NetBaires.Api.Features.Members
 
             return Ok(member);
         }
-        [HttpPut("{id}/Events/{eventId}/Assistance/")]
+        [HttpPut("{id}/Events/{eventId}/Attendances/{attended}")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> Put(int id, int eventId, bool assistance)
-        {
-            var eventMember = await _context.Attendances.FirstOrDefaultAsync(x => x.MemberId == id
-                                                                            &&
-                                                                            x.EventId == eventId);
-            if (eventMember == null)
-            {
-                eventMember = new Attendance(id, eventId);
-                await _context.Attendances.AddAsync(eventMember);
-            }
-            if (assistance)
-                eventMember.Attend();
-            else
-                eventMember.NoAttend();
+        public async Task<IActionResult> Put([FromRoute]InformAttendancesCommand command) =>
+            await _mediator.Send(command);
 
-            await _context.SaveChangesAsync();
-
-            return Ok();
-        }
         [HttpDelete("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]

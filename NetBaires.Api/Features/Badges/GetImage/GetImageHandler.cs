@@ -20,19 +20,12 @@ namespace NetBaires.Api.Features.Badges.GetImage
     {
         private readonly NetBairesContext _context;
         private readonly IBadgesServices badgesServices;
-        private readonly IMapper _mapper;
-        private readonly ILogger<GetToAssignHandler> _logger;
 
-        public GetImageHandler(ICurrentUser currentUser,
-            NetBairesContext context,
-            IBadgesServices badgesServices,
-            IMapper mapper,
-            ILogger<GetToAssignHandler> logger)
+        public GetImageHandler(NetBairesContext context,
+            IBadgesServices badgesServices)
         {
             _context = context;
-            this.badgesServices = badgesServices;
-            _mapper = mapper;
-            _logger = logger;
+            badgesServices = badgesServices;
         }
 
 

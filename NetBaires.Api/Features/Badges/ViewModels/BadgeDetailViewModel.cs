@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoMapper;
+using NetBaires.Api.Services;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Features.Badges.Models
@@ -24,7 +25,6 @@ namespace NetBaires.Api.Features.Badges.Models
                 .ForAllMembers(
                     opt => opt.Condition((src, dest, sourceMember) => sourceMember != null));
             }
-        }
+        }  
     }
-
 }

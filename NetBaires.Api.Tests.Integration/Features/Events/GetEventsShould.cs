@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
+using NetBaires.Api.Features.Events.ViewModels;
 using NetBaires.Api.Handlers.Events;
 using NetBaires.Data;
 using Xunit;
@@ -13,7 +14,7 @@ namespace NetBaires.Api.Tests.Integration.Events
 {
     public class GetEventsShould : IntegrationTestsBase
     {
-        private Event _events;
+        private Event _event;
 
         public GetEventsShould(CustomWebApplicationFactory<Startup> factory) : base(factory)
         {
@@ -33,7 +34,7 @@ namespace NetBaires.Api.Tests.Integration.Events
         {
             FillData();
             var response = await HttpClient.GetAsync("/events?done=true");
-            var events = await response.Content.ReadAsAsync<List<GetEventsResponse>>();
+            var events = await response.Content.ReadAsAsync<List<EventDetailViewModel>>();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             events.Count.Should().Be(2);
         }
@@ -42,7 +43,7 @@ namespace NetBaires.Api.Tests.Integration.Events
         {
             FillData();
             var response = await HttpClient.GetAsync("/events?done=false");
-            var events = await response.Content.ReadAsAsync<List<GetEventsResponse>>();
+            var events = await response.Content.ReadAsAsync<List<EventDetailViewModel>>();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             events.Count.Should().Be(4);
         }
@@ -52,13 +53,25 @@ namespace NetBaires.Api.Tests.Integration.Events
         {
             FillData();
             var currentMember = Context.Members.First();
-            _events.AddAttendance(currentMember);
+            _event.AddAttendance(currentMember);
             Context.SaveChanges();
             var response = await HttpClient.GetAsync("/events");
-            var events = await response.Content.ReadAsAsync<List<GetEventsResponse>>();
+            var events = await response.Content.ReadAsAsync<List<EventDetailViewModel>>();
 
-            events.First(x => x.Id == _events.Id).Registered.Should().BeTrue(); ;
+            events.First(x => x.Id == _event.Id).IsUserRegistered.Should().BeTrue(); ;
 
+        }
+
+        [Fact]
+        public async Task Return_Only_One_Event()
+        {
+            FillData();
+            var currentMember = Context.Members.First();
+            _event.AddAttendance(currentMember);
+            Context.SaveChanges();
+            var response = await HttpClient.GetAsync($"/events/{_event.Id}");
+            var eventResult = await response.Content.ReadAsAsync<EventDetailViewModel>();
+            eventResult.Id.Should().Be(_event.Id);
         }
 
         [Fact]
@@ -66,7 +79,7 @@ namespace NetBaires.Api.Tests.Integration.Events
         {
             FillData();
             var response = await HttpClient.GetAsync("/events?live=true");
-            var events = await response.Content.ReadAsAsync<List<GetEventsResponse>>();
+            var events = await response.Content.ReadAsAsync<List<EventDetailViewModel>>();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             events.Count.Should().Be(2);
         }
@@ -76,11 +89,43 @@ namespace NetBaires.Api.Tests.Integration.Events
         {
             FillData();
             var response = await HttpClient.GetAsync("/events");
-            var events = await response.Content.ReadAsAsync<List<GetEventsResponse>>();
+            var events = await response.Content.ReadAsAsync<List<EventDetailViewModel>>();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             events.Count.Should().Be(6);
         }
+        [Fact]
+        public async Task Return_Events_To_Sync()
+        {
 
+            var newEvent = new Event
+            {
+                Attendees = new List<Attendance> {
+                            new Attendance{
+                                Attended=false,
+                                DidNotAttend=true
+                            },
+                            new Attendance{
+                                Attended=false,
+                                DidNotAttend=true
+                            },
+                            new Attendance{
+                                Attended=true,
+                                DidNotAttend=false
+                            }
+                           }
+            };
+            Context.Events.Add(newEvent);
+            Context.SaveChanges();
+            var response = await HttpClient.GetAsync("/events?done=false");
+
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            var events = await response.Content.ReadAsAsync<List<EventDetailViewModel>>();
+            events.Count.Should().Be(1);
+            events.First().Attended.Should().Be(1);
+            events.First().DidNotAttend.Should().Be(2);
+            events.First().Registered.Should().Be(3);
+
+        }
         private void FillData()
         {
             Context.Events.Add(new Event());
@@ -91,11 +136,11 @@ namespace NetBaires.Api.Tests.Integration.Events
             Context.Events.Add(doneEvent);
             Context.Events.Add(doneEvent2);
             Context.Events.Add(new Event());
-            _events = new Event
+            _event = new Event
             {
                 Live = true
             };
-            Context.Events.Add(_events);
+            Context.Events.Add(_event);
             Context.Events.Add(new Event
             {
                 Live = true

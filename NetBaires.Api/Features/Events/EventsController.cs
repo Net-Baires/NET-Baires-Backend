@@ -46,23 +46,24 @@ namespace NetBaires.Api.Features.Events
             _logger = logger;
         }
 
+        [HttpGet("{id}")]
+        [AllowAnonymous]
+        [SwaggerOperation(Summary = "Retorna un evento de la comunidad")]
+        [ApiExplorerSettingsExtend("Anonymous")]
+        [ProducesResponseType(typeof(Event), 200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetById([FromRoute]int id, [FromQuery]bool? done, [FromQuery]bool? live) =>
+        await _iMediator.Send(new GetEventsQuery(done, live, id));
+
         [HttpGet]
         [AllowAnonymous]
         [SwaggerOperation(Summary = "Retorna todos los eventos de la comunidad")]
         [ApiExplorerSettingsExtend("Anonymous")]
         [ProducesResponseType(typeof(Event), 200)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> Get([FromQuery] GetEventsQuery query) =>
-        await _iMediator.Send(query);
+        public async Task<IActionResult> GetAll([FromQuery]bool? done, [FromQuery]bool? live) =>
+                await _iMediator.Send(new GetEventsQuery(done, live));
 
-        [HttpGet("ToSync")]
-        [SwaggerOperation(Summary = "Retorna todos los eventos que ya fueron sincronizados con plataformas externas, pero  no fueron procesados en nuestro sistema")]
-        [AuthorizeRoles(UserRole.Admin)]
-        [ApiExplorerSettingsExtend(UserRole.Admin)]
-        [ProducesResponseType(typeof(List<GetToSyncResponse>), 200)]
-        [ProducesResponseType(404)]
-        public async Task<IActionResult> GetToSync() =>
-            await _iMediator.Send(new GetToSyncQuery());
 
         [HttpGet("{id}/Attendances")]
         [SwaggerOperation(Summary = "Retorna toda la información requerida por el miemebro de la comunidad para reportar su asistencia a un evento")]
@@ -156,11 +157,11 @@ namespace NetBaires.Api.Features.Events
             await _iMediator.Send(new PutCheckAssistanceGeneralHandler.PutCheckAssistanceGeneral(token));
 
 
-        [HttpGet("{id:int}")]
-        [AllowAnonymous]
-        [ApiExplorerSettingsExtend("Anonymous")]
-        public async Task<IActionResult> GetById([FromRoute]int id, [FromQuery]bool live) =>
-        await _iMediator.Send(new GetEventHandler.GetEvent(id, live));
+        //[HttpGet("{id:int}")]
+        //[AllowAnonymous]
+        //[ApiExplorerSettingsExtend("Anonymous")]
+        //public async Task<IActionResult> GetById([FromRoute]int id, [FromQuery]bool live) =>
+        //await _iMediator.Send(new GetEventQuery(id, live));
 
         [HttpGet("{id:int}/attendees")]
         [ApiExplorerSettingsExtend(UserRole.Admin)]

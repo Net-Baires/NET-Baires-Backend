@@ -6,49 +6,42 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using NetBaires.Api.Services;
+using NetBaires.Api.Features.Badges.GetBadge;
+using NetBaires.Api.Features.Badges.Models;
+using NetBaires.Api.Helpers;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Features.Badges.GetBadges
 {
 
-    public class GetBadgesHandler : IRequestHandler<GetBagesCommand, IActionResult>
+    public class GetBadgesHandler : IRequestHandler<GetBadgeQuery, IActionResult>
     {
         private readonly NetBairesContext _context;
         private readonly IMapper _mapper;
-        private readonly IBadgesServices _badgesServices;
-        private readonly ILogger<GetBadgesHandler> _logger;
 
         public GetBadgesHandler(NetBairesContext context,
-            IMapper mapper,
-            IBadgesServices badgesServices,
-            ILogger<GetBadgesHandler> logger)
+            IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            _badgesServices = badgesServices;
-            _logger = logger;
         }
 
 
-        public async Task<IActionResult> Handle(GetBagesCommand request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Handle(GetBadgeQuery request, CancellationToken cancellationToken)
         {
-            var badgesFromUser = await _context.Badges.ToListAsync();
+            var badgesFromUser = await _context.Badges.Where(x => (request.BadgeId != null ? x.Id == request.BadgeId : true))
+                                                      .AsNoTracking()
+                                                      .ToListAsync();
 
             if (!badgesFromUser.Any())
-                return new StatusCodeResult(204);
+                return HttpResponseCodeHelper.NotContent();
 
-            var listBadGeReturn = new List<GetBadgeResponse>();
-            foreach (var badge in badgesFromUser)
-            {
-                var badgeToReturn = _mapper.Map(badge, new GetBadgeResponse());
-                badgeToReturn.BadgeUrl = _badgesServices.GenerateDetailUrl(badge.Id);
-                badgeToReturn.BadgeImageUrl = _badgesServices.GenerateImageUrl(badge);
-                listBadGeReturn.Add(badgeToReturn);
-            }
+            var badgeToReturn = _mapper.Map<List<BadgeDetailViewModel>>(badgesFromUser);
 
-            return new ObjectResult(listBadGeReturn) { StatusCode = 200 };
-            }
+            if (request.BadgeId != null)
+                return HttpResponseCodeHelper.Ok(badgeToReturn.First());
+            else
+                return HttpResponseCodeHelper.Ok(badgeToReturn);
         }
+    }
 }

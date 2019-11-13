@@ -60,7 +60,7 @@ namespace NetBaires.Api.Features.Badges
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
         [ProducesResponseType(typeof(List<Badge>), 200)]
         public async Task<IActionResult> GetAsync() =>
-              await _mediator.Send(new GetBagesCommand());
+              await _mediator.Send(new GetBadgeQuery());
 
         [HttpGet("{badgeId}")]
         [SwaggerOperation(Summary = "Retorna el detalle de un badge de NET-Baires")]

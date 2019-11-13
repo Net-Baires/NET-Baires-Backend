@@ -19,12 +19,10 @@ namespace NetBaires.Api.Handlers.Sponsors
         private readonly NetBairesContext _context;
         private readonly IMapper _mapper;
         private readonly IFilesServices filesServices;
-        private readonly ILogger<GetToAssignHandler> _logger;
 
         public UpdateSponsorHandler(NetBairesContext context,
-            IMapper mapper,
-                        IFilesServices filesServices,
-            ILogger<UpdateSponsorHandler> logger)
+                                    IMapper mapper,
+                                    IFilesServices filesServices)
         {
             _context = context;
             _mapper = mapper;

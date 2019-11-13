@@ -14,10 +14,8 @@ namespace NetBaires.Api.Features.Badges.AssignMembersToBadge
     public class AssignMemberToBadgeHandler : IRequestHandler<AssignMemberToBadgeCommand, IActionResult>
     {
         private readonly NetBairesContext _context;
-        private readonly ILogger<GetToAssignHandler> _logger;
 
-        public AssignMemberToBadgeHandler(NetBairesContext context,
-            ILogger<UpdateBadgeHandler> logger)
+        public AssignMemberToBadgeHandler(NetBairesContext context)
         {
             _context = context;
         }

@@ -17,12 +17,10 @@ namespace NetBaires.Api.Features.Badges.UpdateBadge
         private readonly NetBairesContext _context;
         private readonly IMapper _mapper;
         private readonly IBadgesServices badgesServices;
-        private readonly ILogger<GetToAssignHandler> _logger;
 
         public UpdateBadgeHandler(NetBairesContext context,
             IMapper mapper,
-            IBadgesServices badgesServices,
-            ILogger<UpdateBadgeHandler> logger)
+            IBadgesServices badgesServices)
         {
             _context = context;
             _mapper = mapper;

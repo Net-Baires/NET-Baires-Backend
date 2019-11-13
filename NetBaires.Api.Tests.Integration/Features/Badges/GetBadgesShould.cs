@@ -5,9 +5,8 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
-using NetBaires.Api.Features.Badges.GetBadges;
+using NetBaires.Api.Features.Badges.Models;
 using Xunit;
-using static NetBaires.Api.Features.Badges.GetBadge.GetBadeHandler;
 
 namespace NetBaires.Api.Tests.Integration.Badges
 {
@@ -27,23 +26,28 @@ namespace NetBaires.Api.Tests.Integration.Badges
                 Name = "First Badge",
                 Description = "First badge description",
                 Created = dateTimeNow,
-                ImageName = "TestImage"
+                ImageName = "TestImage",
+                ImageUrl="http://imageurltest.com",
+                SimpleImageUrl="https://simpleimage.url.com"
             };
             Context.Badges.Add(firstBadgeToAdd);
             Context.Badges.Add(new Data.Badge
             {
                 Name = "First Badge",
-                Description = "First badge description"
+                Description = "First badge description",
+                ImageUrl = "http://imageurltest.com",
+                SimpleImageUrl = "https://simpleimage.url.com"
             });
             Context.SaveChanges();
             var response = await HttpClient.GetAsync("/badges");
 
-            var badges = await response.Content.ReadAsAsync<List<GetBadgeResponse>>();
+            var badges = await response.Content.ReadAsAsync<List<BadgeDetailViewModel>>();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             badges.Count.Should().Be(2);
             badges.First().Name.Should().Be(firstBadgeToAdd.Name);
             badges.First().Description.Should().Be(firstBadgeToAdd.Description);
-            badges.First().BadgeImageUrl.Should().Contain(firstBadgeToAdd.ImageName);
+            badges.First().ImageUrl.Should().Contain(firstBadgeToAdd.ImageUrl);
+            badges.First().SimpleImageUrl.Should().Contain(firstBadgeToAdd.SimpleImageUrl);
             badges.First().Created.Should().Be(dateTimeNow);
         }
 

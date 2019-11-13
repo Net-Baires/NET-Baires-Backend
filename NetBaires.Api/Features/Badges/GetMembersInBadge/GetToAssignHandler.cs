@@ -17,15 +17,12 @@ namespace NetBaires.Api.Features.Badges.GetToAssign
     {
         private readonly NetBairesContext _context;
         private readonly IMapper _mapper;
-        private readonly ILogger<GetToAssignHandler> _logger;
 
         public GetMembersInBadgeHandler(NetBairesContext context,
-            IMapper mapper,
-            ILogger<GetToAssignHandler> logger)
+            IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            _logger = logger;
         }
 
         public async Task<IActionResult> Handle(GetMembersInBadgeQuery request, CancellationToken cancellationToken)

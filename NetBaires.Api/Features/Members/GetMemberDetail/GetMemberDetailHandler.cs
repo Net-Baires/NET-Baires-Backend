@@ -16,16 +16,13 @@ namespace NetBaires.Api.Features.Badges.GetBadge
     {
         private readonly NetBairesContext _context;
         private readonly IMapper _mapper;
-        private readonly ILogger<GetBadeHandler> _logger;
 
         public GetMemberDetailHandler(
             NetBairesContext context,
-            IMapper mapper,
-            ILogger<GetBadeHandler> logger)
+            IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            _logger = logger;
         }
 
 
@@ -33,10 +30,10 @@ namespace NetBaires.Api.Features.Badges.GetBadge
         {
             var member = await _context.Members.FirstOrDefaultAsync(x => x.Id == request.Id);
 
-            if (member != null)
-                return HttpResponseCodeHelper.Ok(_mapper.Map(member, new MemberDetailViewModel()));
+            if (member == null)
+                return HttpResponseCodeHelper.NotFound();
 
-            return HttpResponseCodeHelper.NotFound();
+            return HttpResponseCodeHelper.Ok(_mapper.Map<MemberDetailViewModel>(member));
 
         }
     }
