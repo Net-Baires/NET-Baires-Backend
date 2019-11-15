@@ -15,6 +15,22 @@ namespace NetBaires.Data.DomainEvents
             Badge = badge ?? throw new ArgumentNullException(nameof(badge));
         }
     }
+    public class EventLive : IDomainEvents
+    {
+        public Event Event { get; }
 
+        public EventLive(Event @event)
+        {
+            Event = @event ?? throw new ArgumentNullException(nameof(@event));
+        }
+    }
+    public class EventUnLive : IDomainEvents
+    {
+        public Event Event { get; }
 
+        public EventUnLive(Event @event)
+        {
+            Event = @event ?? throw new ArgumentNullException(nameof(@event));
+        }
+    }
 }

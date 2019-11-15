@@ -21,17 +21,12 @@ namespace NetBaires.Api.Handlers.Events
     {
         private readonly IMapper _mapper;
         private readonly NetBairesContext _context;
-        private readonly ILogger<UpdateEventHandler> _logger;
 
-        public GetEventsHandler(ICurrentUser currentUser,
-            IMapper mapper,
-            NetBairesContext context,
-            IOptions<AttendanceOptions> assistanceOptions,
-            ILogger<UpdateEventHandler> logger)
+        public GetEventsHandler(IMapper mapper,
+            NetBairesContext context)
         {
             _mapper = mapper;
             _context = context;
-            _logger = logger;
         }
 
 

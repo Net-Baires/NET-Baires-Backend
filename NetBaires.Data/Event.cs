@@ -65,7 +65,16 @@ namespace NetBaires.Data
             memberCheck.SetSpeaker();
             return memberCheck;
         }
-
+        public void SetLive()
+        {
+            Live = true;
+            AddDomainEvent(new EventLive(this));
+        }
+        public void SetUnLive()
+        {
+            Live = true;
+            AddDomainEvent(new EventUnLive(this));
+        }
         public void Complete()
         {
             Done = true;

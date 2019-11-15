@@ -15,37 +15,31 @@ using NetBaires.Data;
 namespace NetBaires.Api.Handlers.Events
 {
 
-    public class UpdateEventHandler : IRequestHandler<UpdateEventHandler.UpdateEvent, IActionResult>
+    public class UpdateEventHandler : IRequestHandler<UpdateEventCommand, IActionResult>
     {
         private readonly IMapper _mapper;
         private readonly NetBairesContext _context;
-        private readonly ILogger<UpdateEventHandler> _logger;
 
-        public UpdateEventHandler(ICurrentUser currentUser,
-            IMapper mapper,
-            NetBairesContext context,
-            IOptions<AttendanceOptions> assistanceOptions,
-            ILogger<UpdateEventHandler> logger)
+        public UpdateEventHandler(IMapper mapper,
+            NetBairesContext context)
         {
             _mapper = mapper;
             _context = context;
-            _logger = logger;
         }
 
 
-        public async Task<IActionResult> Handle(UpdateEvent request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Handle(UpdateEventCommand request, CancellationToken cancellationToken)
         {
             var eventToUpdate = await _context.Events.Include(x => x.Sponsors).FirstOrDefaultAsync(x => x.Id == request.Id);
             if (eventToUpdate == null)
                 return new StatusCodeResult(402);
 
+            if (request?.Live == true)
+                eventToUpdate.SetLive();
+            else if (request?.Live == false)
+                eventToUpdate.SetUnLive();
+
             _mapper.Map(request, eventToUpdate);
-
-
-
-
-
-
 
 
             _context.Entry(eventToUpdate).State = EntityState.Modified;
@@ -55,30 +49,5 @@ namespace NetBaires.Api.Handlers.Events
 
             return new ObjectResult(_mapper.Map(eventToUpdate, new EventDetail())) { StatusCode = 200 };
         }
-
-
-        public class UpdateEvent : IRequest<IActionResult>
-        {
-            public int Id { get; set; }
-            public string Title { get; set; }
-            public string Description { get; set; }
-            public string ImageUrl { get; set; }
-            public string Url { get; set; }
-            public bool? Done { get; set; } = false;
-            public bool? Live { get; set; } = false;
-            public List<SponsorEventResponse> Sponsors { get; set; }
-        }
-        public class UpdateEventProfile : Profile
-        {
-            public UpdateEventProfile()
-            {
-                CreateMap<SponsorEventResponse, SponsorEvent>();
-                CreateMap<UpdateEvent, Event>()
-                //   .ForMember(dest => dest.Sponsors, opt => opt.Ignore())
-                .ForAllMembers(
-                    opt => opt.Condition((src, dest, sourceMember) => sourceMember != null));
-            }
-        }
-
     }
 }

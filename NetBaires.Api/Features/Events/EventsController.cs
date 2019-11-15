@@ -100,10 +100,10 @@ namespace NetBaires.Api.Features.Events
         [HttpPut("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettings(GroupName = "Admin")]
-        public async Task<IActionResult> Put(int id, UpdateEventHandler.UpdateEvent eEvent)
+        public async Task<IActionResult> Put(int id, UpdateEventCommand command)
         {
-            eEvent.Id = id;
-            return await _iMediator.Send(eEvent);
+            command.Id = id;
+            return await _iMediator.Send(command);
         }
 
         [HttpPut("sync")]
