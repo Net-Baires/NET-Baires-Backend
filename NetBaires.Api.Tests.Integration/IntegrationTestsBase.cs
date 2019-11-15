@@ -23,7 +23,7 @@ namespace NetBaires.Api.Tests.Integration
 
         protected IFilesServices FileServices;
         protected ISyncServices SyncServices;
-
+        protected IAttendanceService AttendanceService;
         protected NetBairesContext Context;
         public IntegrationTestsBase(
             CustomWebApplicationFactory<Startup> factory)
@@ -40,6 +40,10 @@ namespace NetBaires.Api.Tests.Integration
                     var scopedServices = scope.ServiceProvider;
                     UserService = scopedServices
                           .GetRequiredService<IUserService>();
+
+                    AttendanceService = scopedServices
+                    .GetRequiredService<IAttendanceService>();
+
                     FileServices = scopedServices
                           .GetRequiredService<IFilesServices>();
                     SyncServices = scopedServices
@@ -68,7 +72,7 @@ namespace NetBaires.Api.Tests.Integration
         protected async Task AuthenticateAsync(string email)
         {
             var token = await UserService.AuthenticateOrCreate(email);
-            HttpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+            HttpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token.Token}");
         }
         protected async Task AuthenticateAdminAsync()
         {

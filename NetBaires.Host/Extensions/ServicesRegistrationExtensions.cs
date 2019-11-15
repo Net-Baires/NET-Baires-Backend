@@ -28,7 +28,8 @@ namespace NetBaires.Api
             services.AddScoped<IExternalsSyncServices, MeetupSyncServices>();
             services.AddScoped<IProcessEvents, ProcessEventsFromEventbrite>();
             services.AddScoped<IProcessEvents, ProcessEventsFromMeetup>();
-
+            services.AddScoped<IAttendanceService, AttendanceService>();
+            
             return services;
         }
     }

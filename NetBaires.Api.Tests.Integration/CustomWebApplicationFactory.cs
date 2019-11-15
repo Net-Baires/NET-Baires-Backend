@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using NetBaires.Api.Services.EventBrite;
 using NetBaires.Api.Services.Meetup;
 using NetBaires.Api.Tests.Integration.Services;
+using Microsoft.IdentityModel.Logging;
 
 namespace NetBaires.Api.Tests.Integration
 {
@@ -34,6 +35,7 @@ namespace NetBaires.Api.Tests.Integration
                     context.UseInMemoryDatabase("InMemoryDbForTesting");
 
                 });
+                IdentityModelEventSource.ShowPII = true;
                 services.AddTransient<IEventBriteServices, EventBriteServicesDummy>();
                 services.AddTransient<IMeetupServices, MeetupServicesDummy>();
                 var sp = services.BuildServiceProvider();

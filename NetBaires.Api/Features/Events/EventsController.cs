@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NetBaires.Api.Auth;
 using NetBaires.Api.Handlers.Events;
-using NetBaires.Api.Models;
 using NetBaires.Api.Options;
-using NetBaires.Api.Services.Meetup;
 using NetBaires.Data;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -24,26 +16,11 @@ namespace NetBaires.Api.Features.Events
     [Route("[controller]")]
     public class EventsController : ControllerBase
     {
-        private readonly IMeetupServices _meetupServices;
-        private readonly NetBairesContext _context;
-        private readonly ICurrentUser _currentUser;
         private readonly IMediator _iMediator;
-        private readonly AttendanceOptions _attendanceOptions;
-        private readonly ILogger<EventsController> _logger;
 
-        public EventsController(IMeetupServices meetupServices,
-            NetBairesContext context,
-            ICurrentUser currentUser,
-            IOptions<AttendanceOptions> attendanceOptions,
-            IMediator iMediator,
-            ILogger<EventsController> logger)
+        public EventsController(IMediator iMediator)
         {
-            _meetupServices = meetupServices;
-            _context = context;
-            _currentUser = currentUser;
             _iMediator = iMediator;
-            _attendanceOptions = attendanceOptions.Value;
-            _logger = logger;
         }
 
         [HttpGet("{id}")]
@@ -65,103 +42,34 @@ namespace NetBaires.Api.Features.Events
                 await _iMediator.Send(new GetEventsQuery(done, live));
 
 
-        [HttpGet("{id}/Attendances")]
-        [SwaggerOperation(Summary = "Retorna toda la información requerida por el miemebro de la comunidad para reportar su asistencia a un evento")]
+        [HttpGet("{id}/Attendance")]
+        [SwaggerOperation(Summary = "Retorna toda la información requerida por el miembro de la comunidad para reportar su asistencia a un evento particular")]
         [ApiExplorerSettingsExtend(UserRole.Member)]
-        public async Task<IActionResult> GetReportAttendance(int id)
-        {
-            var eventToReturn = await _context.Events.FirstOrDefaultAsync(x => x.Id == id);
-            if (eventToReturn == null)
-                return NotFound();
-
-            var currentEmail = _currentUser.User.Email;
-            var idUser = _currentUser.User.Id;
-            var token = TokenService.Generate(_attendanceOptions.ReportAttendanceSecret, new List<Claim>
-            {
-
-                new Claim(ClaimTypes.Name, idUser.ToString()),
-                new Claim(ClaimTypes.Email, currentEmail),
-                new Claim("EventId", eventToReturn.Id.ToString())
-            }, DateTime.Now.AddDays(5));
-
-            return Ok(new EventAssistanceViewModel
-            {
-                Id = eventToReturn.Id,
-                Description = eventToReturn.Description,
-                Token = token,
-                Title = eventToReturn.Title,
-                Date = eventToReturn.Date,
-                ImageUrl = eventToReturn.ImageUrl
-
-            });
-        }
+        //[AuthorizeRoles(new UserRole[1] { UserRole.Admin})]
+        [Authorize]
+        public async Task<IActionResult> GetDataToReportAttendanceToEvent([FromRoute]GetDataToReportAttendanceToEventCommand command) =>
+            await _iMediator.Send(command);
 
         [HttpPut("Attendances/{token}")]
         [SwaggerOperation(Summary = "Valida que el token del miembro para reportar asistencia es correcto y reporta la asistencia")]
         [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
         [ApiExplorerSettingsExtend(UserRole.Organizer)]
-        public async Task<IActionResult> PutReportAssistance(string token)
-        {
-
-            var response = TokenService.Validate(_attendanceOptions.ReportAttendanceSecret, token);
-            if (!response.Valid)
-                return BadRequest("El token indicado no es valido");
-
-            var memberId = int.Parse(response.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value.ToString());
-            var eventId = int.Parse(response.Claims.FirstOrDefault(x => x.Type == "EventId").Value.ToString());
-
-
-            var eventToAdd = _context.Attendances.FirstOrDefault(x => x.EventId == eventId && x.MemberId == memberId);
-            if (eventToAdd == null)
-            {
-                eventToAdd = new Attendance(memberId, eventId);
-                await _context.Attendances.AddAsync(eventToAdd);
-            }
-            eventToAdd.Attend();
-            await _context.SaveChangesAsync();
-            return new StatusCodeResult(204);
-
-        }
+        public async Task<IActionResult> PutReportAttendance([FromRoute]PutReportAttendanceCommand command) =>
+            await _iMediator.Send(command);
 
         [HttpGet("{id}/Attendances/General")]
         [SwaggerOperation(Summary = "Retorna toda la información requerida para que los miembros de la comunidad puedan reportar su asistencia en conjunto, el token de registración tiene un tiempo de 5 minutos.")]
         [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
         [ApiExplorerSettingsExtend(UserRole.Organizer)]
-        public async Task<IActionResult> CheckAssistanceGeneral(int id)
-        {
-            var eventToReturn = await _context.Events.FirstOrDefaultAsync(x => x.Id == id);
-            if (eventToReturn == null)
-                return NotFound();
-
-            var token = TokenService.Generate(_attendanceOptions.AskAttendanceSecret, new List<Claim>
-            {
-                new Claim("EventId", eventToReturn.Id.ToString())
-            }, DateTime.Now.AddDays(3));
-
-            return Ok(new EventAssistanceViewModel
-            {
-                Id = eventToReturn.Id,
-                Description = eventToReturn.Description,
-                Token = token,
-                Title = eventToReturn.Title,
-                Date = eventToReturn.Date,
-                ImageUrl = eventToReturn.ImageUrl
-            });
-        }
+        public async Task<IActionResult> InfoToCheckAttendanceGeneral([FromRoute]GetInfoToCheckAttendanceGeneralCommand command) =>
+            await _iMediator.Send(command);
 
         [HttpPut("Attendances/General/{token}")]
         [SwaggerOperation(Summary = "Informa que asistió al evento mediante un token otorgado por los organizadores")]
         [AuthorizeRoles(UserRole.Member)]
         [ApiExplorerSettingsExtend(UserRole.Member)]
-        public async Task<IActionResult> PutCheckAssistanceGeneral([FromRoute]string token) =>
-            await _iMediator.Send(new PutCheckAssistanceGeneralHandler.PutCheckAssistanceGeneral(token));
-
-
-        //[HttpGet("{id:int}")]
-        //[AllowAnonymous]
-        //[ApiExplorerSettingsExtend("Anonymous")]
-        //public async Task<IActionResult> GetById([FromRoute]int id, [FromQuery]bool live) =>
-        //await _iMediator.Send(new GetEventQuery(id, live));
+        public async Task<IActionResult> PutCheckAttendanceGeneral([FromRoute]PutCheckAttendanceGeneralCommand command) =>
+            await _iMediator.Send(command);
 
         [HttpGet("{id:int}/attendees")]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
