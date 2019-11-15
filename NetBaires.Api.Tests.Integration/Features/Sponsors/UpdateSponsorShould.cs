@@ -24,12 +24,12 @@ namespace NetBaires.Api.Tests.Integration.Features.Sponsors
             var file1 = File.OpenRead(@"Images\Blanco.png");
             var badgeFile = new StreamContent(file1);
             var formData = new MultipartFormDataContent();
-            formData.Add(badgeFile, nameof(UpdateSponsorCommand.ImageFile), $"NewImage.jpg");
-            formData.Add(new StringContent(nameof(UpdateSponsorCommand.Name)), "New Name");
-            formData.Add(new StringContent(nameof(UpdateSponsorCommand.Description)), "New Description");
-            formData.Add(new StringContent(nameof(UpdateSponsorCommand.SiteUrl)), "New SiteUrl");
+            formData.Add(badgeFile, nameof(NewSponsorCommand.ImageFile), $"NewImage.jpg");
+            formData.Add(new StringContent("New Name"), nameof(NewSponsorCommand.Name));
+            formData.Add(new StringContent("New Description"), nameof(NewSponsorCommand.Description));
+            formData.Add(new StringContent("New SiteUrl"), nameof(NewSponsorCommand.SiteUrl));
 
-            var response = await HttpClient.PostAsync($"/sponsors/{sponsor.Id}", formData);
+            var response = await HttpClient.PutAsync($"/sponsors/{sponsor.Id}", formData);
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -52,9 +52,9 @@ namespace NetBaires.Api.Tests.Integration.Features.Sponsors
             var badgeFile = new StreamContent(file1);
             var formData = new MultipartFormDataContent();
             formData.Add(badgeFile, nameof(NewSponsorCommand.ImageFile), $"NewImage.jpg");
-            formData.Add(new StringContent(nameof(NewSponsorCommand.Name)), "Name");
-            formData.Add(new StringContent(nameof(NewSponsorCommand.Description)), "Description");
-            formData.Add(new StringContent(nameof(NewSponsorCommand.SiteUrl)), "SiteUrl");
+            formData.Add(new StringContent("Name"), nameof(NewSponsorCommand.Name));
+            formData.Add(new StringContent("Description"), nameof(NewSponsorCommand.Description));
+            formData.Add(new StringContent("SiteUrl"), nameof(NewSponsorCommand.SiteUrl));
             var response = await HttpClient.PostAsync("/sponsors", formData);
             return response;
         }

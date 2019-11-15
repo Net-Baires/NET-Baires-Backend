@@ -32,8 +32,8 @@ namespace NetBaires.Api.Tests.Integration.Badges
             var formData = new MultipartFormDataContent();
             formData.Add(badgeFile, nameof(UpdateBadgeCommand.ImageFiles), $"{BadgeImageName.Badge}.jpg");
             formData.Add(simpleBadgeFile, nameof(UpdateBadgeCommand.ImageFiles), $"{BadgeImageName.SimpleBadge}.jpg");
-            formData.Add(new StringContent(nameof(UpdateBadgeCommand.Name)), "New Name");
-            formData.Add(new StringContent(nameof(UpdateBadgeCommand.Description)), "New Description");
+            formData.Add(new StringContent("New Name"), nameof(UpdateBadgeCommand.Name));
+            formData.Add(new StringContent("New Description"), nameof(UpdateBadgeCommand.Description));
 
             await HttpClient.PutAsync($"/badges/{badge.Id}", formData);
 
@@ -63,8 +63,8 @@ namespace NetBaires.Api.Tests.Integration.Badges
             var formData = new MultipartFormDataContent();
             formData.Add(badgeFile, nameof(NewBadgeCommand.ImageFiles), $"{BadgeImageName.Badge}.jpg");
             formData.Add(simpleBadgeFile, nameof(NewBadgeCommand.ImageFiles), $"{BadgeImageName.SimpleBadge}.jpg");
-            formData.Add(new StringContent(nameof(NewBadgeCommand.Name)), "Name");
-            formData.Add(new StringContent(nameof(NewBadgeCommand.Description)), "Description");
+            formData.Add(new StringContent("Name"), nameof(NewBadgeCommand.Name));
+            formData.Add(new StringContent("Description"), nameof(NewBadgeCommand.Description));
             var response = await HttpClient.PostAsync("/badges", formData);
         }
     }
