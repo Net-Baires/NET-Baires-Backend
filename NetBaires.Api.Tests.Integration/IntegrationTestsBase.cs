@@ -10,6 +10,7 @@ using NetBaires.Data;
 using NetBaires.Api.Services;
 using NetBaires.Api.Services.Sync;
 using System.Linq;
+using NetBaires.Api.Services.Sync.Process;
 
 namespace NetBaires.Api.Tests.Integration
 {
@@ -40,7 +41,7 @@ namespace NetBaires.Api.Tests.Integration
                     var scopedServices = scope.ServiceProvider;
                     UserService = scopedServices
                           .GetRequiredService<IUserService>();
-
+                    
                     AttendanceService = scopedServices
                     .GetRequiredService<IAttendanceService>();
 

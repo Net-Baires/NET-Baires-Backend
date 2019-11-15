@@ -25,7 +25,8 @@ namespace NetBaires.Api.Services.Sync
         {
             var eventToSync = _context.Events
                 .Include(x => x.Attendees)
-                .ThenInclude(x => x.Member).FirstOrDefault(x => x.Id == internalEventId);
+                .ThenInclude(x => x.Member)
+                .FirstOrDefault(x => x.Id == internalEventId);
 
             if (eventToSync != null)
                 foreach (var item in _services)

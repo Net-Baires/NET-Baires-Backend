@@ -8,7 +8,7 @@ using NetBaires.Api.Services.Sync.Process;
 
 namespace NetBaires.Api.Handlers.Events
 {
-    public class SyncWithExternalEventsHandler : IRequestHandler<SyncWithExternalEventsHandler.SyncWithExternalEvents, IActionResult>
+    public class SyncWithExternalEventsHandler : IRequestHandler<SyncWithExternalEventsCommand, IActionResult>
     {
         private readonly IEnumerable<IProcessEvents> _processEvents;
         private readonly ILogger<SyncWithExternalEventsHandler> _logger;
@@ -21,7 +21,7 @@ namespace NetBaires.Api.Handlers.Events
             _logger = logger;
         }
 
-        public async Task<IActionResult> Handle(SyncWithExternalEvents request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Handle(SyncWithExternalEventsCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation($"Start Sync with external Platform");
 
@@ -32,8 +32,5 @@ namespace NetBaires.Api.Handlers.Events
 
             return new StatusCodeResult(204);
         }
-
-        public class SyncWithExternalEvents : IRequest<IActionResult> { }
-
     }
 }

@@ -11,11 +11,10 @@ using Microsoft.Extensions.Logging;
 using NetBaires.Api.Features.Badges.AssignMembersToBadge;
 using NetBaires.Api.Features.Badges.DeleteBadge;
 using NetBaires.Api.Features.Badges.GetBadge;
-using NetBaires.Api.Features.Badges.GetBadges;
 using NetBaires.Api.Features.Badges.GetToAssign;
 using NetBaires.Api.Features.Badges.NewBadge;
 using NetBaires.Api.Features.Badges.UpdateBadge;
-using NetBaires.Api.ViewModels;
+using NetBaires.Api.Features.Members.ViewModels;
 using NetBaires.Data;
 using Swashbuckle.AspNetCore.Annotations;
 

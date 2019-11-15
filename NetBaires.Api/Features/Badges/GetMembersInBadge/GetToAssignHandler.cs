@@ -6,8 +6,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using NetBaires.Api.ViewModels;
+using NetBaires.Api.Features.Members.ViewModels;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Features.Badges.GetToAssign

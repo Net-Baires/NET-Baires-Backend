@@ -57,6 +57,14 @@ namespace NetBaires.Data
             }
             return memberCheck;
         }
+        public Attendance AddSpeaker(Member member)
+        {
+            var memberCheck = Attendees.FirstOrDefault(x => x.MemberId == member.Id);
+            if (memberCheck == null)
+                memberCheck = AddAttendance(member);
+            memberCheck.SetSpeaker();
+            return memberCheck;
+        }
 
         public void Complete()
         {

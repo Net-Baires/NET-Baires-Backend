@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using NetBaires.Api.Features.Members.ViewModels;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Features.Events.ViewModels
@@ -16,16 +17,13 @@ namespace NetBaires.Api.Features.Events.ViewModels
         public bool DoNotKnow { get; set; }
         public bool Organizer { get; set; }
         public bool Speaker { get; set; }
+        public MemberDetailViewModel MemberDetail { get; set; }
         public class GetAttendeesProfile : Profile
         {
             public GetAttendeesProfile()
             {
                 CreateMap<Attendance, AttendantViewModel>()
-                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Member.Email))
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Member.Id))
-                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Member.FirstName))
-                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Member.LastName))
-                .ForMember(dest => dest.Picture, opt => opt.MapFrom(src => src.Member.Picture));
+                    .ForMember(dest => dest.MemberDetail, opt => opt.MapFrom(src => src.Member));
 
             }
 

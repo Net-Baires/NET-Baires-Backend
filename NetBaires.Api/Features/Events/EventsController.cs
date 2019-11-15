@@ -89,11 +89,11 @@ namespace NetBaires.Api.Features.Events
         [ApiExplorerSettingsExtend(UserRole.Admin)]
         [SwaggerOperation(Summary = "Informo que un usuario asistio a un evento. Este se registra con el estado Attended")]
         [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
-        public async Task<IActionResult> UpdateAttendeAttended([FromRoute]int id, [FromRoute]int idMember, UpdateAttendeeHandler.UpdateAttendee attende)
+        public async Task<IActionResult> UpdateAttendeAttended([FromRoute]int id, [FromRoute]int idMember, UpdateAttendeeCommand command)
         {
-            attende.EventId = id;
-            attende.MemberId = idMember;
-            return await _iMediator.Send(attende);
+            command.EventId = id;
+            command.MemberId = idMember;
+            return await _iMediator.Send(command);
 
         }
 
@@ -110,8 +110,8 @@ namespace NetBaires.Api.Features.Events
         [SwaggerOperation(Summary = "Sincroniza los Eventos con las plataformas externas y recupera su información")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> Sync() =>
-            await _iMediator.Send(new SyncWithExternalEventsHandler.SyncWithExternalEvents());
+        public async Task<IActionResult> SyncWithExternalEvents() =>
+            await _iMediator.Send(new SyncWithExternalEventsCommand());
 
         [HttpPut("{id}/sync")]
         [SwaggerOperation(Summary = "Sincroniza un evento en particular con la plataforma externa")]

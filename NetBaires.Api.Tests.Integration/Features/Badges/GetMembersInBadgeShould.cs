@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
-using NetBaires.Api.ViewModels;
+using NetBaires.Api.Features.Members.ViewModels;
 using NetBaires.Data;
 using Xunit;
 
