@@ -34,14 +34,15 @@ namespace NetBaires.Api.Tests.Integration.Badges
             formData.Add(simpleBadgeFile, nameof(UpdateBadgeCommand.ImageFiles), $"{BadgeImageName.SimpleBadge}.jpg");
             formData.Add(new StringContent(nameof(UpdateBadgeCommand.Name)), "New Name");
             formData.Add(new StringContent(nameof(UpdateBadgeCommand.Description)), "New Description");
-            var response = await HttpClient.PutAsync($"/badges/{badge.Id}", formData);
+
+            await HttpClient.PutAsync($"/badges/{badge.Id}", formData);
 
             var oldImageName = badge.ImageName;
             var oldSimpleImageName = badge.SimpleImageName;
             Context.Entry(badge).Reload();
+            badge.Name.Should().Be("New Name");
+            badge.Description.Should().Be("New Description");
 
-            //newBadge.Name.Should().Be("New Name");
-            //newBadge.Description.Should().Be("New Description");
             (await FileServices.GetAsync(oldImageName, Api.Services.Container.Badges)).Should().BeNull();
             (await FileServices.GetAsync(oldSimpleImageName, Api.Services.Container.Badges)).Should().BeNull();
 
@@ -51,7 +52,7 @@ namespace NetBaires.Api.Tests.Integration.Badges
             await FileServices.DeleteAsync(badge.ImageName, Api.Services.Container.Badges);
             await FileServices.DeleteAsync(badge.SimpleImageName, Api.Services.Container.Badges);
         }
-        
+
         private async Task AddNewBadge()
         {
             var file1 = File.OpenRead(@"Images\Blanco.png");

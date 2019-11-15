@@ -18,8 +18,8 @@ namespace NetBaires.Api.Features.Members.ViewModels
         public string Biography { get; set; }
         public string Picture { get; set; }
         public bool Blocked { get; set; }
-        public bool Organized { get; set; } = false;
-        public bool Colaborator { get; set; } = false;
+        public bool Organized { get; set; }
+        public bool Colaborator { get; set; }
         public class MemberDetailViewModelProfile : Profile
         {
             public MemberDetailViewModelProfile()

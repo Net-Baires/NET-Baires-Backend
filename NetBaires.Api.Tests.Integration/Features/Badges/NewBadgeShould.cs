@@ -26,12 +26,14 @@ namespace NetBaires.Api.Tests.Integration.Badges
             badgeFile.Headers.Add("BadgeType", BadgeImageName.Badge.ToString());
             var simpleBadgeFile = new StreamContent(file1);
             simpleBadgeFile.Headers.Add("BadgeType", BadgeImageName.SimpleBadge.ToString());
+
             var formData = new MultipartFormDataContent();
-            // Add file (file, field name, file name)
+
             formData.Add(badgeFile, nameof(NewBadgeCommand.ImageFiles), $"{BadgeImageName.Badge}.jpg");
             formData.Add(simpleBadgeFile, nameof(NewBadgeCommand.ImageFiles), $"{BadgeImageName.SimpleBadge}.jpg");
             formData.Add(new StringContent(nameof(NewBadgeCommand.Name)), "Name");
             formData.Add(new StringContent(nameof(NewBadgeCommand.Description)), "Description");
+
             var response = await HttpClient.PostAsync("/badges", formData);
 
 

@@ -16,63 +16,44 @@ namespace NetBaires.Api.Features.Sponsors
     [Route("[controller]")]
     public class SponsorsController : ControllerBase
     {
-        private readonly ILogger<SlackController> _logger;
-        private readonly NetBairesContext _context;
-        private readonly ICurrentUser _currentUser;
-        private readonly IMediator mediator;
+        private readonly IMediator _mediator;
 
-        public SponsorsController(NetBairesContext context,
-            ICurrentUser currentUser,
-            IMediator mediator,
-            ILogger<SlackController> logger)
+        public SponsorsController(IMediator mediator)
         {
-            _logger = logger;
-            _context = context;
-            _currentUser = currentUser;
-            this.mediator = mediator;
+            _mediator = mediator;
         }
 
         [HttpGet]
         [AllowAnonymous]
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
         public async Task<IActionResult> Get() =>
-        await mediator.Send(new GetSponsorsHandler.GetSponsors());
+        await _mediator.Send(new GetSponsorsQuery());
 
         [HttpGet("{id}")]
         [AllowAnonymous]
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
-        public async Task<IActionResult> GetById(int id)
-        {
-            var command = new GetSponsorHandler.GetSponsor(id);
-            return await mediator.Send(command);
-        }
+        public async Task<IActionResult> GetById([FromRoute]GetSponsorsQuery query) =>
+            await _mediator.Send(query);
 
         [HttpPost]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> Post([FromForm]NewSponsorHandler.NewSponsor sponsor) =>
-             await mediator.Send(sponsor);
+        public async Task<IActionResult> Post([FromForm]NewSponsorCommand command) =>
+             await _mediator.Send(command);
 
         [HttpPut("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> Put(int id, [FromForm]UpdateSponsorHandler.UpdateSponsor sponsor)
+        public async Task<IActionResult> Put([FromForm]UpdateSponsorCommand command, [FromRoute]int id)
         {
-            sponsor.Id = id;
-            return await mediator.Send(sponsor);
+            command.Id = id;
+            return await _mediator.Send(command);
         }
 
         [HttpDelete("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var sponsorToDelete = await _context.Sponsors.FirstOrDefaultAsync(x => x.Id == id);
-            if (sponsorToDelete == null)
-                return NotFound();
-            _context.Sponsors.Remove(sponsorToDelete);
-            await _context.SaveChangesAsync();
-            return NoContent();
-        }
+        public async Task<IActionResult> Delete([FromRoute]DeleteSponsorCommand command) =>
+            await _mediator.Send(command);
     }
 }

@@ -24,12 +24,12 @@ namespace NetBaires.Api.Features.Me
         [SwaggerOperation(Summary = "Retorna toda la información de perfil del usuario autenticado")]
         [ProducesResponseType(typeof(Event), 200)]
         public async Task<IActionResult> Get() =>
-         await _iMediator.Send(new GetMeHandler.GetMe());
+         await _iMediator.Send(new GetMeQuery());
 
         [HttpPut]
         [SwaggerOperation(Summary = "Actualiza la información del usuario logueado")]
         [ProducesResponseType(typeof(Event), 200)]
-        public async Task<IActionResult> Update([FromForm]UpdateMeHandler.UpdateMe me) =>
+        public async Task<IActionResult> Update([FromForm]UpdateMeCommand me) =>
            await _iMediator.Send(me);
 
     }

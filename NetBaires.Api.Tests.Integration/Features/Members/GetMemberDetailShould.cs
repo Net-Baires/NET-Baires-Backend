@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace NetBaires.Api.Tests.Integration.Features.BadgeGroups
+namespace NetBaires.Api.Tests.Integration.Features.Members
 {
     public class GetMemberDetailShould : IntegrationTestsBase
     {
@@ -21,7 +21,7 @@ namespace NetBaires.Api.Tests.Integration.Features.BadgeGroups
             var member = new Member
             {
                 Email = "Test@test.com",
-                Github="Github Test"
+                Github = "Github Test"
             };
             await Context.Members.AddAsync(member);
             await Context.SaveChangesAsync();

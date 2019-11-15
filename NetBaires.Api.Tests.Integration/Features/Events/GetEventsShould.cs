@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NetBaires.Api.Features.Events.ViewModels;
-using NetBaires.Api.Handlers.Events;
 using NetBaires.Data;
 using Xunit;
 

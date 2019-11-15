@@ -9,7 +9,7 @@ using NetBaires.Api.Handlers.Speakers;
 using NetBaires.Data;
 using Xunit;
 
-namespace NetBaires.Api.Tests.Integration.Events
+namespace NetBaires.Api.Tests.Integration.Features.Speakers
 {
     public class GetSpeakersShould : IntegrationTestsBase
     {
@@ -31,13 +31,13 @@ namespace NetBaires.Api.Tests.Integration.Events
             event3.AddSpeaker(member);
             Context.Events.AddRange(new List<Event> { event1, event2, event3, event4 });
             Context.SaveChanges();
-            var memebrs = Context.Members.Include(x=> x.Events).ToList();
+            var memebrs = Context.Members.Include(x => x.Events).ToList();
             var response = await HttpClient.GetAsync("/speakers");
             var speakers = await response.Content.ReadAsAsync<List<GetSpeakersResponse>>();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             speakers.Count.Should().Be(1);
             speakers.First().CounEventsAsSpeaker.Should().Be(3);
         }
-    
+
     }
 }

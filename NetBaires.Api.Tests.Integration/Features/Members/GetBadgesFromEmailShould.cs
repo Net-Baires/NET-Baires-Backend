@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using NetBaires.Api.Features.Badges.Models;
-using NetBaires.Api.Handlers.Events;
 using NetBaires.Data;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +8,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace NetBaires.Api.Tests.Integration.Features.BadgeGroups
+namespace NetBaires.Api.Tests.Integration.Features.Members
 {
     public class GetBadgesFromEmailShould : IntegrationTestsBase
     {

@@ -17,20 +17,10 @@ namespace NetBaires.Api.Features.Organizers
     [Route("[controller]")]
     public class OrganizersController : ControllerBase
     {
-        private readonly ILogger<SlackController> _logger;
-        private readonly NetBairesContext _context;
-        private readonly IMapper _mapper;
         private readonly IMediator _mediator;
 
-        public OrganizersController(NetBairesContext context,
-            ICurrentUser currentUser,
-            IMapper mapper,
-            IMediator mediator,
-            ILogger<SlackController> logger)
+        public OrganizersController(IMediator mediator)
         {
-            _logger = logger;
-            _context = context;
-            _mapper = mapper;
             _mediator = mediator;
         }
 
@@ -40,7 +30,7 @@ namespace NetBaires.Api.Features.Organizers
         [SwaggerOperation(Summary = "Retorna todos los miembros que actualmente son organizadores de la Comunidad")]
 
         public async Task<IActionResult> Get() =>
-            await _mediator.Send(new GetOrganizersHandler.GetOrganizers());
+            await _mediator.Send(new GetOrganizersQuery());
 
 
     }

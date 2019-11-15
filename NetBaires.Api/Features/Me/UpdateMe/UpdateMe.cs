@@ -4,18 +4,19 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Auth;
+using NetBaires.Api.Features.Members.ViewModels;
+using NetBaires.Api.Helpers;
 using NetBaires.Api.Services;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Handlers.Me
 {
 
-    public class UpdateMeHandler : IRequestHandler<UpdateMeHandler.UpdateMe, IActionResult>
+    public class UpdateMeHandler : IRequestHandler<UpdateMeCommand, IActionResult>
     {
         private readonly ICurrentUser currentUser;
         private readonly IMapper _mapper;
@@ -37,7 +38,7 @@ namespace NetBaires.Api.Handlers.Me
         }
 
 
-        public async Task<IActionResult> Handle(UpdateMe request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Handle(UpdateMeCommand request, CancellationToken cancellationToken)
         {
             var currentMemberId = currentUser.User.Id;
             var member = await _context.Members.FirstOrDefaultAsync(x => x.Id == currentMemberId);
@@ -55,44 +56,7 @@ namespace NetBaires.Api.Handlers.Me
             }
 
             await _context.SaveChangesAsync();
-
-            return new ObjectResult(_mapper.Map(member, new UpdateMeResponse())) { StatusCode = 200 };
+            return HttpResponseCodeHelper.Ok(_mapper.Map(member, new MemberDetailViewModel()));
         }
-
-
-        public class UpdateMe : UpdateMeCommon, IRequest<IActionResult>
-        {
-            public IFormFile ImageFile { get; set; }
-
-        }
-        public class UpdateMeResponse : UpdateMeCommon
-        {
-            public string Email { get; set; }
-
-        }
-        public class UpdateMeCommon
-        {
-            public string FirstName { get; set; }
-            public string LastName { get; set; }
-            public string Username { get; set; }
-            public string Twitter { get; set; }
-            public string WorkPosition { get; set; }
-
-            public string Instagram { get; set; }
-            public string Linkedin { get; set; }
-            public string Github { get; set; }
-            public string Biography { get; set; }
-            public string Picture { get; set; }
-
-        }
-        public class UpdateMeProfile : Profile
-        {
-            public UpdateMeProfile()
-            {
-                CreateMap<UpdateMe, Member>();
-                CreateMap<Member, UpdateMeResponse>();
-            }
-        }
-
     }
 }
