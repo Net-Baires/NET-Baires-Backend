@@ -8,6 +8,22 @@ using NetBaires.Data;
 
 namespace NetBaires.Api.Auth
 {
+    public static class StringExtension
+    {
+        public static string LowercaseFirst(this string s)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return string.Empty;
+            }
+
+            char[] a = s.ToCharArray();
+            a[0] = char.ToLower(a[0]);
+
+            return new string(a);
+        }
+
+    }
     public class UserService : IUserService
     {
         private readonly NetBairesContext _context;
@@ -37,9 +53,9 @@ namespace NetBaires.Api.Auth
             }
             return new AuthenticateUser(TokenService.Generate(_appSettings.Secret, new List<CustomClaim>
             {
-                new CustomClaim(EnumClaims.UserId.ToString(), user.Id.ToString()),
-                new CustomClaim(EnumClaims.Email.ToString(), user.Email),
-                new CustomClaim(EnumClaims.Role.ToString(), user.Role.ToString())
+                new CustomClaim(EnumClaims.UserId.ToString().LowercaseFirst(), user.Id.ToString()),
+                new CustomClaim(EnumClaims.Email.ToString().LowercaseFirst(), user.Email),
+                new CustomClaim(EnumClaims.Role.ToString().LowercaseFirst(), user.Role.ToString())
             }, DateTime.UtcNow.AddDays(30)));
         }
         public LoginToken Validate(string tokenToValidate)
