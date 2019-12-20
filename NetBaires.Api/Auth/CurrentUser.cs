@@ -19,9 +19,9 @@ namespace NetBaires.Api.Auth
             get
             {
 
-                var email = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == EnumClaims.Email.ToString()).Value;
-                var id = int.Parse(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == EnumClaims.UserId.ToString()).Value);
-                var rol = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == EnumClaims.Role.ToString()).Value;
+                var email = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == EnumClaims.Email.ToString().LowercaseFirst()).Value;
+                var id = int.Parse(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == EnumClaims.UserId.ToString().LowercaseFirst()).Value);
+                var rol = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == EnumClaims.Role.ToString().LowercaseFirst()).Value;
                 return new CurrentUserDto(email, id, EnumExtensions.ParseEnum<UserRole>(rol));
             }
         }
