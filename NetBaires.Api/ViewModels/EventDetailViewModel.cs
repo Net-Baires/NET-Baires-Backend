@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using NetBaires.Api.Auth;
 using NetBaires.Data;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace NetBaires.Api.Features.Events.ViewModels
 {
@@ -12,6 +15,7 @@ namespace NetBaires.Api.Features.Events.ViewModels
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        //[JsonConverter(typeof(StringEnumConverter))]
         public EventPlatform Platform { get; set; }
         public string ImageUrl { get; set; }
         public string Url { get; set; }

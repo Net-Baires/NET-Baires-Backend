@@ -36,7 +36,8 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
                 Description = "Description 2",
                 Title = "Title 2",
                 ImageUrl = "ImageUrl 2",
-                Url = "Url 2"
+                Url = "Url 2",
+                Done = true
             };
 
             var response = await HttpClient.PutAsync($"/events/{_newEvent.Id}",
@@ -48,6 +49,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
             eventToCheck.Title.Should().Be(update.Title);
             eventToCheck.ImageUrl.Should().Be(update.ImageUrl);
             eventToCheck.Url.Should().Be(update.Url);
+            eventToCheck.Done.Should().BeTrue();
             eventToCheck.Live.Should().BeFalse();
 
         }

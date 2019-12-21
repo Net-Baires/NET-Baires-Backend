@@ -39,7 +39,7 @@ namespace NetBaires.Api
         public static IApplicationBuilder UseAuthentication(this IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseAuthentication();
-            app.UseAuthorization();
+            ////app.UseAuthorization();
             return app;
         }
     }

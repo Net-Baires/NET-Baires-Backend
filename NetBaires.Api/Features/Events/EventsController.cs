@@ -2,10 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using NetBaires.Api.Handlers.Events;
-using NetBaires.Api.Options;
 using NetBaires.Data;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -41,6 +38,16 @@ namespace NetBaires.Api.Features.Events
         public async Task<IActionResult> GetAll([FromQuery]bool? done, [FromQuery]bool? live) =>
                 await _iMediator.Send(new GetEventsQuery(done, live));
 
+
+        [HttpGet("{id}/LiveDetail")]
+        [AllowAnonymous]
+        [SwaggerOperation(Summary = "Retorna el detalle de un evento en vivo")]
+        [ApiExplorerSettingsExtend(UserRole.Organizer)]
+        [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
+        [ProducesResponseType(typeof(Event), 200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetEventLiveDetail([FromRoute]int id) =>
+                         await _iMediator.Send(new GetEventLiveDetailQuery(id));
 
         [HttpGet("{id}/Attendance")]
         [SwaggerOperation(Summary = "Retorna toda la información requerida por el miembro de la comunidad para reportar su asistencia a un evento particular")]

@@ -39,6 +39,12 @@ namespace NetBaires.Data
                 }
             return DomainResponse.Ok();
         }
+
+        public void SetDone()
+        {
+            Done = true;
+        }
+
         public Attendance AddAttendance(Member member)
         {
             var attendance = new Attendance(member, this);

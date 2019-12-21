@@ -11,5 +11,6 @@ namespace NetBaires.Api.Handlers.Events
         public string ImageUrl { get; set; }
         public string Url { get; set; }
         public bool? Live { get; set; }
+        public bool? Done { get; set; }
     }
 }
