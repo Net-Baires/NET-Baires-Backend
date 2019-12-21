@@ -29,13 +29,13 @@ namespace NetBaires.Api.Features.Badges.GetBadge
 
         public async Task<IActionResult> Handle(SearchMemberQuery request, CancellationToken cancellationToken)
         {
-            var members = _context.Members.Where(x => x.Email.ToUpper().Contains(request.Query.ToUpper())
-                                                                        ||
-                                                                        x.FirstName.ToUpper().Contains(request.Query.ToUpper())
-                                                                        ||
-                                                                        x.LastName.ToUpper().Contains(request.Query.ToUpper())
-                                                                        ||
-                                                                        x.MeetupId.ToString().ToUpper().Contains(request.Query.ToUpper()))
+            var members = _context.Members.Where(x => x.Email.Contains(request.Query)
+                                                                       ||
+                                                                        x.FirstName.Contains(request.Query)
+                                                                       ||
+                                                                        x.LastName.Contains(request.Query)
+                                                                       ||
+                                                                        x.MeetupId.ToString().Contains(request.Query))
                                                .Take(10)
                                                .AsNoTracking();
 

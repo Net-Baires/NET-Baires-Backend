@@ -19,6 +19,8 @@ namespace NetBaires.Data
         public string EventId { get; set; }
         public bool Done { get; protected set; } = false;
         public bool Live { get; set; } = false;
+        public DateTime? StartLiveTime { get; set; }
+        public DateTime? EndLiveTime { get; set; }
         public DateTime Date { get; set; }
         public List<SponsorEvent> Sponsors { get; set; }
 
@@ -74,11 +76,13 @@ namespace NetBaires.Data
         public void SetLive()
         {
             Live = true;
+            StartLiveTime = DateTime.Now;
             AddDomainEvent(new EventLive(this));
         }
         public void SetUnLive()
         {
             Live = true;
+            EndLiveTime = DateTime.Now;
             AddDomainEvent(new EventUnLive(this));
         }
         public void Complete()

@@ -69,6 +69,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
             RefreshContext();
             var eventToCheck = Context.Events.First();
             eventToCheck.Live.Should().BeTrue();
+            eventToCheck.StartLiveTime.Should().NotBeNull();
         }
         [Fact]
         public async Task Set_Event_UnLive()
@@ -86,6 +87,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
             RefreshContext();
             var eventToCheck = Context.Events.First();
             eventToCheck.Live.Should().BeFalse();
+            eventToCheck.EndLiveTime.Should().NotBeNull();
         }
 
         private void FillData()

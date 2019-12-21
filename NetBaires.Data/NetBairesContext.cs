@@ -21,6 +21,12 @@ namespace NetBaires.Data
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<SponsorEvent> SponsorEvents { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.EnableSensitiveDataLogging();
+            base.OnConfiguring(optionsBuilder);
+
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder

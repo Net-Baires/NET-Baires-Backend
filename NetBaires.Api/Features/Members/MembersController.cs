@@ -63,8 +63,8 @@ namespace NetBaires.Api.Features.Members
         [HttpGet("{query}")]
         [AllowAnonymous]
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
-        public async Task<IActionResult> Get([FromRoute]SearchMemberQuery query) =>
-                     await _mediator.Send(query);
+        public async Task<IActionResult> Get([FromRoute]string query) =>
+                     await _mediator.Send(new SearchMemberQuery(query));
 
 
         [HttpGet("badges")]

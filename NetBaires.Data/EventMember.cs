@@ -59,7 +59,7 @@ namespace NetBaires.Data
         public DateTime Date { get; set; } = DateTime.Now.ToUniversalTime();
         public DateTime AttendedTime { get; set; }
         public bool Organizer { get; set; } = false;
-        public bool Speaker { get; protected set; } = false;
+        public bool Speaker { get;  set; } = false;
         public bool DidNotAttend { get; set; } = false;
         public bool Attended { get; set; } = false;
         public bool NotifiedAbsence { get; set; } = false;
