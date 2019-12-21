@@ -60,18 +60,11 @@ namespace NetBaires.Api.Features.Members
         public async Task<IActionResult> GetById([FromRoute]GetMemberDetailQuery query) =>
                      await _mediator.Send(query);
 
-        [HttpGet("{email}")]
+        [HttpGet("{query}")]
         [AllowAnonymous]
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
-        public async Task<IActionResult> Get([FromRoute]string email)
-        {
-            var member = await _context.Members.FirstOrDefaultAsync(x => x.Email.ToUpper() == email.ToUpper());
-
-            if (member != null)
-                return Ok(member);
-
-            return NotFound();
-        }
+        public async Task<IActionResult> Get([FromRoute]SearchMemberQuery query) =>
+                     await _mediator.Send(query);
 
 
         [HttpGet("badges")]
@@ -93,16 +86,9 @@ namespace NetBaires.Api.Features.Members
         [HttpPost]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> Post(Member member)
-        {
-            if (_context.Members.Any(x => x.Email.ToUpper() == member.Email.ToUpper()))
-                return BadRequest("Ya se encuentra un usuario registrado con ese email");
+        public async Task<IActionResult> Post(AddMemberCommand command)
+                      => await _mediator.Send(command);
 
-            member.Role = UserRole.Member;
-            await _context.Members.AddAsync(member);
-            await _context.SaveChangesAsync();
-            return Ok(member);
-        }
         [HttpPut("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]

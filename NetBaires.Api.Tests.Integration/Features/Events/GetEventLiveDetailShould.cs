@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
-using NetBaires.Api.Features.Events.ViewModels;
 using NetBaires.Api.Handlers.Events;
 using NetBaires.Data;
 using Xunit;
@@ -14,19 +12,9 @@ namespace NetBaires.Api.Tests.Integration.Events
 {
     public class GetEventLiveDetailShould : IntegrationTestsBase
     {
-        private Event _event;
-
         public GetEventLiveDetailShould(CustomWebApplicationFactory<Startup> factory) : base(factory)
         {
             AuthenticateAdminAsync().GetAwaiter().GetResult(); ;
-        }
-
-        [Fact]
-        public async Task Return_204_Empty_Events()
-        {
-            var response = await HttpClient.GetAsync("/events");
-
-            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
         }
 
         [Fact]
@@ -51,8 +39,8 @@ namespace NetBaires.Api.Tests.Integration.Events
                 Live = true,
                 Title = "Title",
                 Description = "Description",
-                Platform= EventPlatform.Meetup,
-                Date= DateTime.Now,
+                Platform = EventPlatform.Meetup,
+                Date = DateTime.Now,
                 Attendees = new List<Attendance> {
                     new Attendance{
                             Member= firstAttended,
@@ -75,7 +63,7 @@ namespace NetBaires.Api.Tests.Integration.Events
             };
             Context.Events.Add(newEventLive);
             Context.SaveChanges();
-            var response = await HttpClient.GetAsync($"/events/{newEventLive.Id}/LiveDetail");
+            var response = await HttpClient.GetAsync($"/events/{newEventLive.Id}/Live/Detail");
             var eventDetail = await response.Content.ReadAsAsync<GetEventLiveDetailQuery.Response>();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             eventDetail.Id.Should().Be(newEventLive.Id);

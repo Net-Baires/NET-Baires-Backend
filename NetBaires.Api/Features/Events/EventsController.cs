@@ -39,7 +39,7 @@ namespace NetBaires.Api.Features.Events
                 await _iMediator.Send(new GetEventsQuery(done, live));
 
 
-        [HttpGet("{id}/LiveDetail")]
+        [HttpGet("{id}/Live/Detail")]
         [AllowAnonymous]
         [SwaggerOperation(Summary = "Retorna el detalle de un evento en vivo")]
         [ApiExplorerSettingsExtend(UserRole.Organizer)]
