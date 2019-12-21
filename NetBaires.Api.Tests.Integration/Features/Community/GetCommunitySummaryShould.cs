@@ -62,6 +62,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Members
             memberResponse.Organizers.Count.Should().Be(3);
             memberResponse.Sponsors.Count.Should().Be(2);
             memberResponse.TotalEvents.Should().Be(2);
+            memberResponse.TotalSpeakers.Should().Be(2);
             memberResponse.TotalUsersMeetup.Should().Be(8);
         }
 

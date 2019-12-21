@@ -18,6 +18,7 @@ namespace NetBaires.Api.Features.Badges.GetBadge
             public List<SponsorDetailViewModel> Sponsors { get; set; }
             public int TotalEvents { get; set; }
             public int TotalUsersMeetup { get; set; }
+            public int TotalSpeakers { get; set; }
             public int TotalUsersSlack { get; set; }
         }
     }

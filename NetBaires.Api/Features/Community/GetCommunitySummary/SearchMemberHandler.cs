@@ -34,6 +34,7 @@ namespace NetBaires.Api.Features.Badges.GetBadge
             var sponsors = _context.Sponsors.AsNoTracking();
             var speakers = _context.Members
                                     .Where(x => x.Events.Any(s => s.Speaker))
+                                    .Take(10)
                                     .AsNoTracking();
             var lastEvents = _context.Events
                                      .OrderByDescending(x => x.Date)
@@ -49,7 +50,9 @@ namespace NetBaires.Api.Features.Badges.GetBadge
                 Organizers = _mapper.Map<List<MemberDetailViewModel>>(organizers),
                 LastEvents = _mapper.Map<List<EventDetailViewModel>>(lastEvents),
                 TotalEvents = _context.Events.Count(),
-                TotalUsersMeetup = _context.Members.Count()
+                TotalUsersMeetup = _context.Members.Count(),
+                TotalSpeakers = _context.Members
+                                    .Where(x => x.Events.Any(s => s.Speaker)).Count()
             };
             return HttpResponseCodeHelper.Ok(response);
         }
