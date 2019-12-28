@@ -15,6 +15,24 @@ namespace NetBaires.Data.DomainEvents
             Badge = badge ?? throw new ArgumentNullException(nameof(badge));
         }
     }
+    public class EnableGeneralAttendance : IDomainEvents
+    {
+        public int EventId { get; }
+
+        public EnableGeneralAttendance(int eventId)
+        {
+            EventId = eventId;
+        }
+    }
+    public class DisableGeneralAttendance : IDomainEvents
+    {
+        public int EventId { get; }
+
+        public DisableGeneralAttendance(int eventId)
+        {
+            EventId = eventId;
+        }
+    }
     public class EventLive : IDomainEvents
     {
         public Event Event { get; }

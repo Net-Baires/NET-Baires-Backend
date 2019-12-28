@@ -4,7 +4,7 @@ using Newtonsoft.Json.Converters;
 
 namespace NetBaires.Data
 {
-    [JsonConverter(typeof(StringEnumConverter))]
+   
     public enum EventPlatform
     {
         [EnumMember(Value = "Meetup")]

@@ -5,6 +5,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NetBaires.Api.Auth;
 using NetBaires.Api.Features.Events.ViewModels;
 using NetBaires.Api.Helpers;
 using NetBaires.Data;
@@ -15,12 +16,15 @@ namespace NetBaires.Api.Handlers.Events
     public class GetEventLiveDetailHandler : IRequestHandler<GetEventLiveDetailQuery, IActionResult>
     {
         private readonly IMapper _mapper;
+        private readonly IAttendanceService _attendanceService;
         private readonly NetBairesContext _context;
 
         public GetEventLiveDetailHandler(IMapper mapper,
+            IAttendanceService attendanceService,
             NetBairesContext context)
         {
             _mapper = mapper;
+            _attendanceService = attendanceService;
             _context = context;
         }
 
@@ -39,9 +43,12 @@ namespace NetBaires.Api.Handlers.Events
                                                    Description = x.Description,
                                                    ImageUrl = x.ImageUrl,
                                                    Platform = x.Platform,
+                                                   StartLiveTime = x.StartLiveTime,
+                                                   GeneralAttended = x.GeneralAttended,
                                                    GeneralAttendance = new GetEventLiveDetailQuery.Response.ReportGeneralAttendance
                                                    {
-                                                       TokenToReportGeneralAttendance = ""
+                                                       TokenToReportGeneralAttendance = _attendanceService.GetTokenToReportGeneralAttendance(x),
+                                                       GeneralAttendedCode = x.GeneralAttendedCode
                                                    },
                                                    MembersDetails = new GetEventLiveDetailQuery.Response.Members
                                                    {
@@ -56,14 +63,17 @@ namespace NetBaires.Api.Handlers.Events
             eventToReturn.MembersDetails.MembersAttended = await _context.Attendances.Where(x => x.EventId == eventToReturn.Id
                                                                                                 &&
                                                                                                 x.Attended)
-                                                                                    .Select(s => new GetEventLiveDetailQuery.Response.MemberDetail
-                                                                                    {
-                                                                                        Id = s.Member.Id,
-                                                                                        FirstName = s.Member.FirstName,
-                                                                                        LastName = s.Member.LastName,
-                                                                                        Picture = s.Member.Picture,
-                                                                                        Username = s.Member.Username
-                                                                                    }).ToListAsync();
+                .OrderByDescending(x => x.AttendedTime)
+                .Take(8)
+                .Select(s => new GetEventLiveDetailQuery.Response.MemberDetail
+                {
+                    Id = s.Member.Id,
+                    FirstName = s.Member.FirstName,
+                    LastName = s.Member.LastName,
+                    Picture = s.Member.Picture,
+                    Username = s.Member.Username,
+                    AttendedTime = s.AttendedTime
+                }).ToListAsync();
 
 
             if (request.Id != null)

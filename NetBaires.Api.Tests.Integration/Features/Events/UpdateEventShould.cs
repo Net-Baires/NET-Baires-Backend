@@ -1,11 +1,10 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using NetBaires.Api.Features.Events.ViewModels;
 using NetBaires.Api.Handlers.Events;
-using NetBaires.Api.Models;
 using NetBaires.Data;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -18,6 +17,8 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
     public class UpdateEventShould : IntegrationTestsBase
     {
         private Event _newEvent;
+        private Sponsor _firstSponsor;
+        private Sponsor _secondSponsor;
         private Member _newMember;
         private Attendance _attendance;
 
@@ -37,7 +38,8 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
                 Title = "Title 2",
                 ImageUrl = "ImageUrl 2",
                 Url = "Url 2",
-                Done = true
+                Done = true,
+                GeneralAttended = true
             };
 
             var response = await HttpClient.PutAsync($"/events/{_newEvent.Id}",
@@ -49,8 +51,73 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
             eventToCheck.Title.Should().Be(update.Title);
             eventToCheck.ImageUrl.Should().Be(update.ImageUrl);
             eventToCheck.Url.Should().Be(update.Url);
+            eventToCheck.GeneralAttended.Should().Be(update.GeneralAttended.Value);
             eventToCheck.Done.Should().BeTrue();
             eventToCheck.Live.Should().BeFalse();
+
+        }
+
+        [Fact]
+        public async Task Add_Sponsors()
+        {
+            FillData();
+
+            var update = new UpdateEventCommand
+            {
+                Sponsors = new List<UpdateEventCommand.SponsorEvent>
+                {
+                    new UpdateEventCommand.SponsorEvent{ SponsorId=2, Detail="Detail test"}
+                }
+            };
+
+            var response = await HttpClient.PutAsync($"/events/{_newEvent.Id}",
+                new StringContent(JsonConvert.SerializeObject(update), Encoding.UTF8, "application/json"));
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            RefreshContext();
+            var eventToCheck = Context.Events.Include(x => x.Sponsors).First();
+            eventToCheck.Sponsors.Count.Should().Be(1);
+
+        }
+        [Fact]
+        public async Task Remove_All_Sponsors()
+        {
+            FillData();
+            _newEvent.AddSponsor(_firstSponsor, "Razón");
+            _newEvent.AddSponsor(_secondSponsor, "Razón");
+
+            Context.SaveChanges();
+            var update = new UpdateEventCommand
+            {
+                Sponsors = new List<UpdateEventCommand.SponsorEvent>()
+            };
+
+            var response = await HttpClient.PutAsync($"/events/{_newEvent.Id}",
+                new StringContent(JsonConvert.SerializeObject(update), Encoding.UTF8, "application/json"));
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            RefreshContext();
+            var eventToCheck = Context.Events.Include(x => x.Sponsors).First();
+            eventToCheck.Sponsors.Count.Should().Be(0);
+
+        }
+        [Fact]
+        public async Task Remove_A_Sponsors()
+        {
+            FillData();
+            _newEvent.AddSponsor(_firstSponsor, "Razón");
+            _newEvent.AddSponsor(_secondSponsor, "Razón");
+            Context.SaveChanges();
+            var update = new UpdateEventCommand
+            {
+                Sponsors = new List<UpdateEventCommand.SponsorEvent> { new UpdateEventCommand.SponsorEvent { SponsorId = _secondSponsor.Id, Detail = "Yeahh" } }
+            };
+
+            var response = await HttpClient.PutAsync($"/events/{_newEvent.Id}",
+                new StringContent(JsonConvert.SerializeObject(update), Encoding.UTF8, "application/json"));
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            RefreshContext();
+            var eventToCheck = Context.Events.Include(x => x.Sponsors).First();
+            eventToCheck.Sponsors.Count.Should().Be(1);
+            eventToCheck.Sponsors.First().Detail.Should().Be(update.Sponsors.First().Detail);
 
         }
         [Fact]
@@ -71,6 +138,25 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
             eventToCheck.Live.Should().BeTrue();
             eventToCheck.StartLiveTime.Should().NotBeNull();
         }
+        [Fact]
+        public async Task Enable_event_General_Attendance()
+        {
+            FillData();
+
+            var update = new UpdateEventCommand
+            {
+                GeneralAttended = true
+            };
+
+            var response = await HttpClient.PutAsync($"/events/{_newEvent.Id}",
+                new StringContent(JsonConvert.SerializeObject(update), Encoding.UTF8, "application/json"));
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            RefreshContext();
+            var eventToCheck = Context.Events.First();
+            eventToCheck.GeneralAttended.Should().BeTrue();
+            eventToCheck.GeneralAttendedCode.Should().NotBeNull();
+        }
+
         [Fact]
         public async Task Set_Event_UnLive()
         {
@@ -102,6 +188,10 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
                 Title = "Title",
                 Url = "Meetupurl"
             };
+            _firstSponsor = new Sponsor { Name = "Sponsor 1" };
+            _secondSponsor = new Sponsor { Name = "Sponsor 2" };
+            Context.Sponsors.Add(_firstSponsor);
+            Context.Sponsors.Add(_secondSponsor);
             Context.Events.Add(_newEvent);
             Context.SaveChanges();
         }

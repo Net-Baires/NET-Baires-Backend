@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using NetBaires.Data;
+using System;
 
 namespace NetBaires.Api.Features.Members.ViewModels
 {
@@ -15,6 +16,7 @@ namespace NetBaires.Api.Features.Members.ViewModels
         public string Instagram { get; set; }
         public string Linkedin { get; set; }
         public string Github { get; set; }
+        public DateTime FirstLogin { get; set; }
         public string Biography { get; set; }
         public string Picture { get; set; }
         public bool Blocked { get; set; }

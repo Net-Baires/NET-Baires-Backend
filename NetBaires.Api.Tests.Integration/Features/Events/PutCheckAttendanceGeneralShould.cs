@@ -22,7 +22,8 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
             var newEvent = new Event
             {
                 Title = "Event Test",
-                Description = "Event Description Test"
+                Description = "Event Description Test",
+                GeneralAttended = true
             };
             var newMember = new Member
             {
@@ -36,7 +37,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
             var eventToCheck = await (await HttpClient.GetAsync($"/events/{newEvent.Id}/Attendance"))
                         .Content.ReadAsAsync<EventToReportAttendanceViewModel>();
 
-            var response = await HttpClient.PutAsync($"/events/Attendances/{eventToCheck.Token}", null);
+            var response = await HttpClient.PutAsync($"/events/Attendances/general/{eventToCheck.Token}", null);
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
             var eventToTest = await Context.Events.Include(x => x.Attendees).FirstAsync();
@@ -46,6 +47,31 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
             eventToTest.Attendees.First().DidNotAttend.Should().BeFalse();
             eventToTest.Attendees.First().DoNotKnow.Should().BeFalse();
             eventToTest.Attendees.First().NotifiedAbsence.Should().BeFalse();
+        }
+        [Fact]
+        public async Task Does_Not_Report_Attendance_Event_Has_not_GeneralAttended()
+        {
+            var newEvent = new Event
+            {
+                Title = "Event Test",
+                Description = "Event Description Test",
+                GeneralAttended = false
+            };
+            var newMember = new Member
+            {
+                Email = "test@test.com",
+                Role = UserRole.Member
+            };
+            Context.Events.Add(newEvent);
+            Context.Members.Add(newMember);
+            Context.SaveChanges();
+            await AuthenticateAsync(newMember.Email);
+            var eventToCheck = await (await HttpClient.GetAsync($"/events/{newEvent.Id}/Attendance"))
+                        .Content.ReadAsAsync<EventToReportAttendanceViewModel>();
+
+            var response = await HttpClient.PutAsync($"/events/Attendances/general/{eventToCheck.Token}", null);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+
         }
     }
 }

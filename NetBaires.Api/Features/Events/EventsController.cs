@@ -78,12 +78,12 @@ namespace NetBaires.Api.Features.Events
         public async Task<IActionResult> PutCheckAttendanceGeneral([FromRoute]PutCheckAttendanceGeneralCommand command) =>
             await _iMediator.Send(command);
 
-        [HttpGet("{id:int}/attendees")]
+        [HttpGet("{eventId:int}/attendees")]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
         [SwaggerOperation(Summary = "Retorna todos los miembros que se encuentran registrados a un evento particular")]
         [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
-        public async Task<IActionResult> GetAttendees([FromRoute]GetAttendeesQuery query) =>
-            await _iMediator.Send(query);
+        public async Task<IActionResult> GetAttendees([FromRoute]int eventId, [FromQuery]int? memberId) =>
+            await _iMediator.Send(new GetAttendeesQuery(eventId, memberId));
 
         [HttpPost("{idEvent:int}/Members/{idMember}/attende")]
         [ApiExplorerSettingsExtend(UserRole.Admin)]

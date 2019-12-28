@@ -19,10 +19,12 @@ namespace NetBaires.Data
         public string EventId { get; set; }
         public bool Done { get; protected set; } = false;
         public bool Live { get; set; } = false;
+        public bool GeneralAttended { get; set; } = false;
+        public string GeneralAttendedCode { get; set; }
         public DateTime? StartLiveTime { get; set; }
         public DateTime? EndLiveTime { get; set; }
         public DateTime Date { get; set; }
-        public List<SponsorEvent> Sponsors { get; set; }
+        public List<SponsorEvent> Sponsors { get; set; } = new List<SponsorEvent>();
 
         public DomainResponse AssignBadgeToAttended(Badge badge)
         {
@@ -73,15 +75,34 @@ namespace NetBaires.Data
             memberCheck.SetSpeaker();
             return memberCheck;
         }
+        public void AddSponsor(Sponsor sponsor, string detail)
+        {
+            Sponsors.Add(new SponsorEvent
+            {
+                Detail = detail,
+                Sponsor = sponsor
+            });
+        }
         public void SetLive()
         {
             Live = true;
             StartLiveTime = DateTime.Now;
             AddDomainEvent(new EventLive(this));
         }
+        public void EnableGeneralAttendace()
+        {
+            GeneralAttended = true;
+            GeneralAttendedCode = RandomHelper.RandomString(7);
+            AddDomainEvent(new EnableGeneralAttendance(Id));
+        }
+        public void DisableGeneralAttendace()
+        {
+            GeneralAttended = false;
+            AddDomainEvent(new DisableGeneralAttendance(Id));
+        }
         public void SetUnLive()
         {
-            Live = true;
+            Live = false;
             EndLiveTime = DateTime.Now;
             AddDomainEvent(new EventUnLive(this));
         }
@@ -98,6 +119,16 @@ namespace NetBaires.Data
                      });
 
 
+        }
+    }
+    public static class RandomHelper
+    {
+        private static Random random = new Random();
+        public static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }

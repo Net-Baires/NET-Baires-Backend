@@ -74,15 +74,15 @@ namespace NetBaires.Api.Tests.Integration.Events
             eventDetail.MembersDetails.TotalMembersAttended.Should().Be(2);
             eventDetail.MembersDetails.TotalMembersRegistered.Should().Be(3);
             eventDetail.MembersDetails.MembersAttended.Count.Should().Be(2);
-            eventDetail.MembersDetails.MembersAttended[0].FirstName.Should().Be(firstAttended.FirstName);
-            eventDetail.MembersDetails.MembersAttended[0].LastName.Should().Be(firstAttended.LastName);
-            eventDetail.MembersDetails.MembersAttended[0].Picture.Should().Be(firstAttended.Picture);
-            eventDetail.MembersDetails.MembersAttended[0].Username.Should().Be(firstAttended.Username);
+            eventDetail.MembersDetails.MembersAttended[1].FirstName.Should().Be(firstAttended.FirstName);
+            eventDetail.MembersDetails.MembersAttended[1].LastName.Should().Be(firstAttended.LastName);
+            eventDetail.MembersDetails.MembersAttended[1].Picture.Should().Be(firstAttended.Picture);
+            eventDetail.MembersDetails.MembersAttended[1].Username.Should().Be(firstAttended.Username);
 
-            eventDetail.MembersDetails.MembersAttended[1].FirstName.Should().Be(SecondAttended.FirstName);
-            eventDetail.MembersDetails.MembersAttended[1].LastName.Should().Be(SecondAttended.LastName);
-            eventDetail.MembersDetails.MembersAttended[1].Picture.Should().Be(SecondAttended.Picture);
-            eventDetail.MembersDetails.MembersAttended[1].Username.Should().Be(SecondAttended.Username);
+            eventDetail.MembersDetails.MembersAttended[0].FirstName.Should().Be(SecondAttended.FirstName);
+            eventDetail.MembersDetails.MembersAttended[0].LastName.Should().Be(SecondAttended.LastName);
+            eventDetail.MembersDetails.MembersAttended[0].Picture.Should().Be(SecondAttended.Picture);
+            eventDetail.MembersDetails.MembersAttended[0].Username.Should().Be(SecondAttended.Username);
 
         }
 

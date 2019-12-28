@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace NetBaires.Api.Handlers.Events
 {
@@ -12,5 +13,11 @@ namespace NetBaires.Api.Handlers.Events
         public string Url { get; set; }
         public bool? Live { get; set; }
         public bool? Done { get; set; }
+        public bool? GeneralAttended { get; set; }
+        public List<SponsorEvent> Sponsors { get; set; }
+        public class SponsorEvent {
+            public int SponsorId { get; set; }
+            public string Detail { get; set; }
+        }
     }
 }

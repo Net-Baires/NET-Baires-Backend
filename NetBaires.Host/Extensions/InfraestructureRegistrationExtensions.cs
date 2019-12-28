@@ -9,6 +9,7 @@ using NetBaires.Api.Features.Badges.DeleteBadge;
 using NetBaires.Api.Features.Badges.NewBadge;
 using NetBaires.Api.Filters;
 using Newtonsoft.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace NetBaires.Api
 {
@@ -26,6 +27,9 @@ namespace NetBaires.Api
                 options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
 
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+            }).AddJsonOptions(options => {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                options.JsonSerializerOptions.IgnoreNullValues = true;
             })
               .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<NewBadgeValidator>())
               .AddFeatureFolders();

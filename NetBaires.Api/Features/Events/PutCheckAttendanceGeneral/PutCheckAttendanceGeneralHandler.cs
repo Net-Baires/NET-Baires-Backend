@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NetBaires.Api.Auth;
+using NetBaires.Api.Helpers;
 using NetBaires.Api.Options;
 using NetBaires.Data;
 
@@ -34,19 +35,24 @@ namespace NetBaires.Api.Handlers.Events
         public async Task<IActionResult> Handle(PutCheckAttendanceGeneralCommand request, CancellationToken cancellationToken)
         {
             var response = TokenService.Validate<LoginToken>(_assistanceOptions.AskAttendanceSecret, request.Token);
-            //if (!response.Valid)
-            //    return new StatusCodeResult(400);
 
+            var eventToCheck = _context.Events.Any(x => x.Id == response.EventId
+                                                       &&
+                                                       x.GeneralAttended);
+            if (!eventToCheck)
+                return  HttpResponseCodeHelper.NotFound();
 
             var memberId = _currentUser.User.Id;
 
-            var eventToAdd = _context.Attendances.FirstOrDefault(x => x.EventId == response.EventId && x.MemberId == memberId);
+            var eventToAdd = _context.Attendances.FirstOrDefault(x => x.EventId == response.EventId 
+                                                                      && 
+                                                                      x.MemberId == memberId);
             if (eventToAdd == null)
                 eventToAdd = new Attendance(memberId, response.EventId);
             eventToAdd.Attend();
             await _context.Attendances.AddAsync(eventToAdd);
             await _context.SaveChangesAsync();
-            return new StatusCodeResult(200);
+            return HttpResponseCodeHelper.NotContent();
         }
     }
 }

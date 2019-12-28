@@ -34,6 +34,7 @@ namespace NetBaires.Api.Handlers.Events
         {
 
             var eventToReturn = await _context.Events.Include(x => x.Attendees)
+                                                     .Include(x=> x.Sponsors)
                                                      .Where(x => (request.Done != null ? x.Done == request.Done : true)
                                                             &&
                                                             (request.Live != null ? x.Live == request.Live : true)

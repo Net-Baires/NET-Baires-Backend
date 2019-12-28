@@ -34,12 +34,19 @@ namespace NetBaires.Api.Handlers.Events
             if (eventToUpdate == null)
                 return new StatusCodeResult(402);
 
+            _mapper.Map(request, eventToUpdate);
+
             if (request?.Live == true)
                 eventToUpdate.SetLive();
             else if (request?.Live == false)
                 eventToUpdate.SetUnLive();
+            if (request?.GeneralAttended == true)
+                eventToUpdate.EnableGeneralAttendace();
+            else if (request?.GeneralAttended == false)
+                eventToUpdate.DisableGeneralAttendace();
 
-            _mapper.Map(request, eventToUpdate);
+            
+         
 
 
             _context.Entry(eventToUpdate).State = EntityState.Modified;

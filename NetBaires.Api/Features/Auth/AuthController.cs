@@ -33,27 +33,27 @@ namespace NetBaires.Api.Features.Auth
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
         public async Task<IActionResult> Meetup([FromBody]AuthenticateModel model)
         {
-            //var dict = new Dictionary<string, string>
-            //{
-            //    {"client_id", _meetupEndPointOptions.Value.ClientId},
-            //    {"client_secret", _meetupEndPointOptions.Value.ClientSecret},
-            //    {"grant_type", "refresh_token"},
-            //    {"refresh_token", model.Token}
-            //};
-            //var req = new HttpRequestMessage(HttpMethod.Get, "https://api.meetup.com/members/self")
-            //{
-            //    Content = new FormUrlEncodedContent(dict)
-            //};
-            //req.Headers.Add("Authorization", $"Bearer {model.Token}");
-            //var result = await _client.SendAsync(req);
-            //if (result.IsSuccessStatusCode)
-            //{
-            //    var response = await result.Content.ReadAsAsync<MeetupSelf>();
-            // var user = await _userService.AuthenticateOrCreate(response.email);
-            var user = await _userService.AuthenticateOrCreate("german.kuber@outlook.com");
+            var dict = new Dictionary<string, string>
+            {
+                {"client_id", _meetupEndPointOptions.Value.ClientId},
+                {"client_secret", _meetupEndPointOptions.Value.ClientSecret},
+                {"grant_type", "refresh_token"},
+                {"refresh_token", model.Token}
+            };
+            var req = new HttpRequestMessage(HttpMethod.Get, "https://api.meetup.com/members/self")
+            {
+                Content = new FormUrlEncodedContent(dict)
+            };
+            req.Headers.Add("Authorization", $"Bearer {model.Token}");
+            var result = await _client.SendAsync(req);
+            if (result.IsSuccessStatusCode)
+            {
+                var response = await result.Content.ReadAsAsync<MeetupSelf>();
+                var user = await _userService.AuthenticateOrCreate(response.email);
+                //var user = await _userService.AuthenticateOrCreate("german.kuber@outlook.com");
 
-            return Ok(user);
-            //}
+                return Ok(user);
+            }
 
             return BadRequest();
         }

@@ -35,23 +35,24 @@ namespace NetBaires.Api.Handlers.Events
                                         .FirstOrDefaultAsync(x => x.EventId == request.EventId
                                                                   &&
                                                                   x.MemberId == request.MemberId);
-            if (attendee == null)
-                return HttpResponseCodeHelper.NotFound();
+            if (attendee == null){ 
+                attendee = new Attendance(request.MemberId, request.EventId);
+                _context.Attendances.Add(attendee);
+            }
+            if (request?.Attended == true)
+                attendee.Attend();
+            else if (request?.Attended == false)
+                attendee.NoAttend();
 
             if (request?.Speaker == true)
                 attendee.SetSpeaker();
             else if (request?.Speaker == false)
                 attendee.RemoveSpeaker();
 
-            if (request?.Attended == true)
-                attendee.Attend();
-            else if (request?.Attended == false)
-                attendee.NoAttend();
+     
 
             if (request?.NotifiedAbsence == true)
                 attendee.NotifyAbsence();
-            else if (request?.NotifiedAbsence == false)
-                attendee.NoAttend();
 
             if (request?.Organizer == true)
                 attendee.SetOrganizer();

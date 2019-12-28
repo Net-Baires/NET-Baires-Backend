@@ -10,7 +10,7 @@ namespace NetBaires.Api.Handlers.Events
     {
         public string? Status { get; set; }
         public bool? Organizer { get; set; }
-        public bool Speaker { get; set; }
+        public bool? Speaker { get; set; }
         [JsonIgnore]
         public int EventId { get; internal set; }
         [JsonIgnore]

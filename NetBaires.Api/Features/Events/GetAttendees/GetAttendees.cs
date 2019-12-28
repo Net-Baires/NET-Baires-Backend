@@ -32,14 +32,26 @@ namespace NetBaires.Api.Handlers.Events
 
         public async Task<IActionResult> Handle(GetAttendeesQuery request, CancellationToken cancellationToken)
         {
-            var attendees = await _context.Attendances
-                                        .Include(x => x.Member)
-                                        .Where(x => x.EventId == request.Id)
-                                        .ToListAsync();
+            var attendees = new List<Attendance>();
+            if (request.MemberId != null)
+                attendees = await _context.Attendances
+                                           .Include(x => x.Member)
+                                           .Where(x => x.EventId == request.EventId
+                                                       &&
+                                                       request.MemberId.Value == x.MemberId)
+                                           .ToListAsync();
+            else attendees = await _context.Attendances
+                            .Include(x => x.Member)
+                            .Where(x => x.EventId == request.EventId)
+                            .ToListAsync();
+
             if (attendees == null || !attendees.Any())
                 return HttpResponseCodeHelper.NotContent();
 
-            return HttpResponseCodeHelper.Ok(_mapper.Map(attendees, new List<AttendantViewModel>()));
+            if (attendees.Count == 1)
+                return HttpResponseCodeHelper.Ok(_mapper.Map(attendees, new List<AttendantViewModel>()).First());
+            else
+                return HttpResponseCodeHelper.Ok(_mapper.Map(attendees, new List<AttendantViewModel>()));
         }
 
     }

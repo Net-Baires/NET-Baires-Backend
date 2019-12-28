@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using NetBaires.Data;
+using System;
 using System.Collections.Generic;
 
 namespace NetBaires.Api.Handlers.Events
@@ -22,9 +23,13 @@ namespace NetBaires.Api.Handlers.Events
             public string ImageUrl { get; set; }
             public ReportGeneralAttendance GeneralAttendance { get; set; }
             public Members MembersDetails { get; set; }
+            public DateTime? StartLiveTime { get; internal set; }
+            public bool GeneralAttended { get; internal set; }
+
             public class ReportGeneralAttendance
             {
                 public string TokenToReportGeneralAttendance { get; set; }
+                public string GeneralAttendedCode { get; internal set; }
             }
             public class Members
             {
@@ -39,6 +44,7 @@ namespace NetBaires.Api.Handlers.Events
                 public string LastName { get; set; }
                 public string Username { get; set; }
                 public string Picture { get; set; }
+                public DateTime AttendedTime { get;  set; }
             }
         }
     }

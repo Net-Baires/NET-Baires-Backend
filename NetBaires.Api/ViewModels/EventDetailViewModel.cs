@@ -2,20 +2,18 @@
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using NetBaires.Api.Auth;
 using NetBaires.Data;
-using Newtonsoft.Json.Converters;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace NetBaires.Api.Features.Events.ViewModels
 {
-
     public class EventDetailViewModel
     {
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        //[JsonConverter(typeof(StringEnumConverter))]
         public EventPlatform Platform { get; set; }
         public string ImageUrl { get; set; }
         public string Url { get; set; }
@@ -24,10 +22,16 @@ namespace NetBaires.Api.Features.Events.ViewModels
         public bool Live { get; set; }
         public DateTime Date { get; set; }
         public bool IsUserRegistered { get; set; }
+        public bool GeneralAttended { get; set; } 
         public int Attended { get; set; }
         public int DidNotAttend { get; set; }
         public int Registered { get; set; }
-
+        public List<SponsorEventViewModel> Sponsors { get; set; }
+        public class SponsorEventViewModel
+        {
+            public int SponsorId { get; set; }
+            public string Detail { get; set; }
+        }
         public class EventDetailViewModelProfile : Profile
         {
             public EventDetailViewModelProfile()
@@ -37,6 +41,8 @@ namespace NetBaires.Api.Features.Events.ViewModels
                      .ForMember(dest => dest.Attended, o => o.MapFrom(s => s.Attendees.Count(c => c.Attended)))
                      .ForMember(dest => dest.DidNotAttend, o => o.MapFrom(s => s.Attendees.Count(c => c.DidNotAttend)))
                      .ForMember(dest => dest.Registered, o => o.MapFrom(s => s.Attendees.Count()));
+                CreateMap<SponsorEvent, SponsorEventViewModel>();
+
             }
         }
         public class RegisteredCurrentUserInEventResolver : IValueResolver<Event, EventDetailViewModel, bool>
