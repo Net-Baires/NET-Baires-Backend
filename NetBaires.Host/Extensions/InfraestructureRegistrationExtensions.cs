@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using NetBaires.Api.Features.Badges.DeleteBadge;
 using NetBaires.Api.Features.Badges.NewBadge;
 using NetBaires.Api.Filters;
+using NetBaires.Api.Hubs;
 using Newtonsoft.Json.Serialization;
 
 namespace NetBaires.Host.Extensions
@@ -52,6 +53,7 @@ namespace NetBaires.Host.Extensions
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<CommunicationsHub>("/communicationsHub");
             });
             return app;
         }

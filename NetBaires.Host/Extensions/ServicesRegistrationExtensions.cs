@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using NetBaires.Api.Auth;
 using NetBaires.Api.Services;
 using NetBaires.Api.Services.BadGr;
@@ -14,7 +15,7 @@ namespace NetBaires.Host.Extensions
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-   
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICurrentUser, CurrentUser>();
@@ -29,7 +30,7 @@ namespace NetBaires.Host.Extensions
             services.AddScoped<IProcessEvents, ProcessEventsFromEventbrite>();
             services.AddScoped<IProcessEvents, ProcessEventsFromMeetup>();
             services.AddScoped<IAttendanceService, AttendanceService>();
-            
+
             return services;
         }
     }

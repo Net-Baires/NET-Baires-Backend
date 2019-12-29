@@ -8,12 +8,14 @@ namespace NetBaires.Api.Features.Events.UpdateEvent
         public UpdateEventProfile()
         {
             CreateMap<UpdateEventCommand, Event>()
-            .ForAllMembers(
+                .ForMember(x=> x.Live, opt=> opt.Ignore())
+                .ForMember(x=> x.GeneralAttended, opt=> opt.Ignore())
+                .ForAllMembers(
                 opt => opt.Condition((src, dest, sourceMember) => sourceMember != null));
             CreateMap<UpdateEventCommand.SponsorEvent, SponsorEvent>()
-          .ForAllMembers(
-              opt => opt.Condition((src, dest, sourceMember) => sourceMember != null));
-            
+                .ForAllMembers(
+                    opt => opt.Condition((src, dest, sourceMember) => sourceMember != null));
+
         }
     }
 }

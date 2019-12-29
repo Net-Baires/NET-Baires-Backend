@@ -8,9 +8,11 @@ namespace NetBaires.Host.Extensions
         public static IApplicationBuilder UseCors(this IApplicationBuilder app)
         {
             app.UseCors(x => x
-                              .AllowAnyOrigin()
                               .AllowAnyMethod()
-                              .AllowAnyHeader());
+                              .AllowAnyHeader()
+                              .AllowAnyOrigin()
+                              .WithOrigins("http://localhost:8080")
+                              .AllowCredentials());
             return app;
         }
 

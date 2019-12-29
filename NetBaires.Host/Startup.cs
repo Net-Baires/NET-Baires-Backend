@@ -26,6 +26,7 @@ namespace NetBaires.Host
                 .AddContext(Configuration)
                 .AddSwagger()
                 .AddServices()
+                .AddSignalRServices()
                 .AddTelemetry();
 
         }
@@ -35,6 +36,7 @@ namespace NetBaires.Host
             CorsRegistrationExtensions.UseCors(app.UseSwagger(env))
                 .UseAuthentication(env)
                 .UseCache(env)
+                .UseSignalRServices(env)
                 .UseInfraestructure(env);
         }
     }
