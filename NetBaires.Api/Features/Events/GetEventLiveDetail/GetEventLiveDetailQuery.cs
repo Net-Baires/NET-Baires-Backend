@@ -25,6 +25,8 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
             public Members MembersDetails { get; set; }
             public DateTime? StartLiveTime { get; internal set; }
             public bool GeneralAttended { get; internal set; }
+            public bool? Attended { get; internal set; }
+            public string? TokenToReportMyAttendance { get; set; }
 
             public class ReportGeneralAttendance
             {

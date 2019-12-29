@@ -8,12 +8,12 @@ using NetBaires.Api.Auth;
 using NetBaires.Api.Models.ServicesResponse;
 using NetBaires.Api.Options;
 using NetBaires.Data;
+using PusherServer;
 
 namespace NetBaires.Api.Features.Auth
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
     public class AuthController : ControllerBase
     {
         private IUserService _userService;
@@ -29,7 +29,7 @@ namespace NetBaires.Api.Features.Auth
             _client = httpClientFactory.CreateClient();
         }
         [AllowAnonymous]
-        [HttpPost("Meetup")]
+        [HttpPost("Auth/Meetup")]
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
         public async Task<IActionResult> Meetup([FromBody]AuthenticateModel model)
         {
@@ -58,9 +58,22 @@ namespace NetBaires.Api.Features.Auth
             return BadRequest();
         }
 
+        [AllowAnonymous]
+        [HttpPost("Pusher/Auth")]
+        [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
+        public async Task<IActionResult> Pusher([FromForm]string channel_name, [FromForm]string socket_id)
+        {
+            var pusher = new Pusher("924297", "b764a51bdf1cdf760ad6", "9250a463d6d5efea534d", new PusherOptions
+            {
+                Cluster = "us2"
+            });
+            var auth = pusher.Authenticate(channel_name, socket_id,new PresenceChannelData()).ToJson();
+            return new ContentResult { Content = auth, ContentType = "application/json" };
+        }
+
 
         [AllowAnonymous]
-        [HttpPost("EventBrite")]
+        [HttpPost("Auth/EventBrite")]
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
         public IActionResult EventBrite([FromBody]AuthenticateModel model)
         {

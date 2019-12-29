@@ -15,14 +15,17 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
     public class GetEventLiveDetailHandler : IRequestHandler<GetEventLiveDetailQuery, IActionResult>
     {
         private readonly IMapper _mapper;
+        private readonly ICurrentUser _currentUser;
         private readonly IAttendanceService _attendanceService;
         private readonly NetBairesContext _context;
 
         public GetEventLiveDetailHandler(IMapper mapper,
+            ICurrentUser currentUser,
             IAttendanceService attendanceService,
             NetBairesContext context)
         {
             _mapper = mapper;
+            _currentUser = currentUser;
             _attendanceService = attendanceService;
             _context = context;
         }
@@ -44,11 +47,17 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
                                                    Platform = x.Platform,
                                                    StartLiveTime = x.StartLiveTime,
                                                    GeneralAttended = x.GeneralAttended,
-                                                   GeneralAttendance = x.GeneralAttended ? new GetEventLiveDetailQuery.Response.ReportGeneralAttendance
-                                                   {
-                                                       TokenToReportGeneralAttendance = _attendanceService.GetTokenToReportGeneralAttendance(x),
-                                                       GeneralAttendedCode = x.GeneralAttendedCode
-                                                   }: null,
+                                                   Attended = x.Attendees.Any(a => a.MemberId == _currentUser.User.Id
+                                                                                    &&
+                                                                                    a.Attended),
+                                                   TokenToReportMyAttendance = _attendanceService.GetTokenToReportMyAttendance(x),
+                                                   GeneralAttendance = x.GeneralAttended && (_currentUser.User.Rol == UserRole.Admin
+                                                                                             ||
+                                                                                             _currentUser.User.Rol == UserRole.Organizer) ? new GetEventLiveDetailQuery.Response.ReportGeneralAttendance
+                                                                                             {
+                                                                                                 TokenToReportGeneralAttendance = _attendanceService.GetTokenToReportGeneralAttendance(x),
+                                                                                                 GeneralAttendedCode = x.GeneralAttendedCode
+                                                                                             } : null,
                                                    MembersDetails = new GetEventLiveDetailQuery.Response.Members
                                                    {
                                                        TotalMembersRegistered = x.Attendees.Count,

@@ -49,10 +49,11 @@ namespace NetBaires.Api.Features.Events.PutCheckAttendanceGeneral
             var eventToAdd = _context.Attendances.FirstOrDefault(x => x.EventId == response.EventId 
                                                                       && 
                                                                       x.MemberId == memberId);
-            if (eventToAdd == null)
+            if (eventToAdd == null) { 
                 eventToAdd = new Attendance(memberId, response.EventId);
+                await _context.Attendances.AddAsync(eventToAdd);
+                }
             eventToAdd.Attend();
-            await _context.Attendances.AddAsync(eventToAdd);
             await _context.SaveChangesAsync();
             return HttpResponseCodeHelper.NotContent();
         }
