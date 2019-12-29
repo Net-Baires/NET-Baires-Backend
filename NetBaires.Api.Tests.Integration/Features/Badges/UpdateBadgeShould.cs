@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NetBaires.Api.Features.Badges.NewBadge;
 using NetBaires.Api.Features.Badges.UpdateBadge;
+using NetBaires.Host;
 using Xunit;
 
-namespace NetBaires.Api.Tests.Integration.Badges
+namespace NetBaires.Api.Tests.Integration.Features.Badges
 {
     public class UpdateBadgeShould : IntegrationTestsBase
     {

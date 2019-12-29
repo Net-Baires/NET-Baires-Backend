@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using NetBaires.Api.Handlers.Events;
 using NetBaires.Data;
 using Newtonsoft.Json;
 using System;
@@ -10,6 +9,8 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using NetBaires.Api.Features.Events.UpdateEvent;
+using NetBaires.Host;
 using Xunit;
 
 namespace NetBaires.Api.Tests.Integration.Features.Events

@@ -1,10 +1,10 @@
-﻿using MediatR;
+﻿using System;
+using System.Collections.Generic;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using NetBaires.Data;
-using System;
-using System.Collections.Generic;
 
-namespace NetBaires.Api.Handlers.Events
+namespace NetBaires.Api.Features.Events.GetEventLiveDetail
 {
     public class GetEventLiveDetailQuery : IRequest<IActionResult>
     {

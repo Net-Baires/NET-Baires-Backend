@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using NetBaires.Data;
-using static NetBaires.Api.Handlers.Speakers.GetSpeakersHandler;
 
-namespace NetBaires.Api.Handlers.Speakers
+namespace NetBaires.Api.Features.Speakers.GetSpeakers
 {
     public class GetSpeakersProfile : Profile
     {

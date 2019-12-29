@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace NetBaires.Api
+namespace NetBaires.Host.Extensions
 {
     public static class TelemetryRegistrationExtensions
     {

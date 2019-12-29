@@ -3,9 +3,10 @@ using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NetBaires.Data;
+using NetBaires.Host;
 using Xunit;
 
-namespace NetBaires.Api.Tests.Integration.Events
+namespace NetBaires.Api.Tests.Integration.Features.Events
 {
     public class SyncWithExternalEventsShould : IntegrationTestsBase
     {

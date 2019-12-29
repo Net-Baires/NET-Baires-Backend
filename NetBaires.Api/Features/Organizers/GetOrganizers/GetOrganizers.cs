@@ -6,11 +6,11 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NetBaires.Api.Features.Members.ViewModels;
 using NetBaires.Api.Helpers;
+using NetBaires.Api.ViewModels;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Organizers
+namespace NetBaires.Api.Features.Organizers.GetOrganizers
 {
     public class GetOrganizersHandler : IRequestHandler<GetOrganizersQuery, IActionResult>
     {

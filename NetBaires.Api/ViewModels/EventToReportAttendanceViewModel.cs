@@ -1,7 +1,4 @@
-﻿using NetBaires.Api.Features.Events.ViewModels;
-using System;
-
-namespace NetBaires.Api.Models
+﻿namespace NetBaires.Api.ViewModels
 {
     public class EventToReportAttendanceViewModel
     {

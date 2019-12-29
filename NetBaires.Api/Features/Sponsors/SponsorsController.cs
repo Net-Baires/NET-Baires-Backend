@@ -6,7 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Auth;
 using NetBaires.Api.Features.Slack;
-using NetBaires.Api.Handlers.Sponsors;
+using NetBaires.Api.Features.Sponsors.DeleteSponsor;
+using NetBaires.Api.Features.Sponsors.GetSponsors;
+using NetBaires.Api.Features.Sponsors.NewSponsor;
+using NetBaires.Api.Features.Sponsors.UpdateSponsor;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Features.Sponsors

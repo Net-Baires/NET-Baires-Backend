@@ -1,13 +1,11 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
-using NetBaires.Api.Auth;
-using NetBaires.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json.Serialization;
+using AutoMapper;
+using NetBaires.Api.Auth;
+using NetBaires.Data;
 
-namespace NetBaires.Api.Features.Events.ViewModels
+namespace NetBaires.Api.ViewModels
 {
     public class EventDetailViewModel
     {

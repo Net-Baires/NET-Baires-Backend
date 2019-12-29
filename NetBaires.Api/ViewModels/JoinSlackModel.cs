@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NetBaires.Api.Models
+namespace NetBaires.Api.ViewModels
 {
     public class JoinSlackModel
     {

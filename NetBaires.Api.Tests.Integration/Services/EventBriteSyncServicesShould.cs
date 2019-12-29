@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NetBaires.Data;
+using NetBaires.Host;
 using Xunit;
 
 namespace NetBaires.Api.Tests.Integration.Services

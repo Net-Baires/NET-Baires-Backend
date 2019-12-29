@@ -8,7 +8,7 @@ using NetBaires.Api.Helpers;
 using NetBaires.Api.Services;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Sponsors
+namespace NetBaires.Api.Features.Sponsors.DeleteSponsor
 {
     public class DeleteSponsorHandler : IRequestHandler<DeleteSponsorCommand, IActionResult>
     {

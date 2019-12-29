@@ -5,10 +5,11 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
-using NetBaires.Api.Features.Badges.Models;
+using NetBaires.Api.ViewModels;
+using NetBaires.Host;
 using Xunit;
 
-namespace NetBaires.Api.Tests.Integration.Badges
+namespace NetBaires.Api.Tests.Integration.Features.Badges
 {
     public class GetBadgesShould : IntegrationTestsBase
     {

@@ -1,11 +1,9 @@
-﻿using MediatR;
+﻿using System.Collections.Generic;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using NetBaires.Api.Features.Events.ViewModels;
-using NetBaires.Api.Features.Members.ViewModels;
-using NetBaires.Api.Handlers.Sponsors;
-using System.Collections.Generic;
+using NetBaires.Api.ViewModels;
 
-namespace NetBaires.Api.Features.Badges.GetBadge
+namespace NetBaires.Api.Features.Community.GetCommunitySummary
 {
     public class GetCommunitySummaryQuery : IRequest<IActionResult>
     {

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Http;
+using NetBaires.Api.Auth.CustomsClaims;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Auth

@@ -4,11 +4,12 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
-using NetBaires.Api.Handlers.Events;
+using NetBaires.Api.Features.Events.GetEventLiveDetail;
 using NetBaires.Data;
+using NetBaires.Host;
 using Xunit;
 
-namespace NetBaires.Api.Tests.Integration.Events
+namespace NetBaires.Api.Tests.Integration.Features.Events
 {
     public class GetEventLiveDetailShould : IntegrationTestsBase
     {

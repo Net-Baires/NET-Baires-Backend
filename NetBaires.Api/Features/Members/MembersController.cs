@@ -9,10 +9,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Auth;
 using NetBaires.Api.Features.Badges.AssignMembersToBadge;
-using NetBaires.Api.Features.Badges.GetBadge;
-using NetBaires.Api.Features.Badges.Models;
+using NetBaires.Api.Features.Members.AddMember;
+using NetBaires.Api.Features.Members.GetBadgesFromMember;
+using NetBaires.Api.Features.Members.GetMemberDetail;
+using NetBaires.Api.Features.Members.InformAttendances;
+using NetBaires.Api.Features.Members.SearchMember;
 using NetBaires.Api.Features.Slack;
 using NetBaires.Api.Models;
+using NetBaires.Api.ViewModels;
 using NetBaires.Data;
 using Swashbuckle.AspNetCore.Annotations;
 

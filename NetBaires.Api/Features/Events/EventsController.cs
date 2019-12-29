@@ -2,6 +2,20 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NetBaires.Api.Features.Events.AddAttendee;
+using NetBaires.Api.Features.Events.AssignBadgeToAttendances;
+using NetBaires.Api.Features.Events.CompleteEvent;
+using NetBaires.Api.Features.Events.GetAttendees;
+using NetBaires.Api.Features.Events.GetDataToReportAttendanceToEvent;
+using NetBaires.Api.Features.Events.GetEventLiveDetail;
+using NetBaires.Api.Features.Events.GetEvents;
+using NetBaires.Api.Features.Events.GetInfoToCheckAttendanceGeneral;
+using NetBaires.Api.Features.Events.PutCheckAttendanceByCode;
+using NetBaires.Api.Features.Events.PutReportAttendance;
+using NetBaires.Api.Features.Events.SyncEvent;
+using NetBaires.Api.Features.Events.SyncWithExternalEvents;
+using NetBaires.Api.Features.Events.UpdateAttendee;
+using NetBaires.Api.Features.Events.UpdateEvent;
 using NetBaires.Api.Handlers.Events;
 using NetBaires.Data;
 using Swashbuckle.AspNetCore.Annotations;
@@ -77,6 +91,13 @@ namespace NetBaires.Api.Features.Events
         [ApiExplorerSettingsExtend(UserRole.Member)]
         public async Task<IActionResult> PutCheckAttendanceGeneral([FromRoute]PutCheckAttendanceGeneralCommand command) =>
             await _iMediator.Send(command);
+
+        [HttpPut("{eventId:int}/Attendances/General/{code}")]
+        [SwaggerOperation(Summary = "Informa que asistió al evento mediante un código entregado por los organizadores")]
+        [AuthorizeRoles(UserRole.Member)]
+        [ApiExplorerSettingsExtend(UserRole.Member)]
+        public async Task<IActionResult> PutCheckAttendanceByCode([FromRoute] int eventId, [FromRoute]string code) =>
+            await _iMediator.Send(new PutCheckAttendanceByCodeCommand(eventId, code));
 
         [HttpGet("{eventId:int}/attendees")]
         [ApiExplorerSettingsExtend(UserRole.Admin)]

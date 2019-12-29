@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace NetBaires.Api.Handlers.Sponsors
+namespace NetBaires.Api.Features.Sponsors.NewSponsor
 {
     public class NewSponsorCommand :  IRequest<IActionResult>
     {

@@ -1,8 +1,7 @@
-﻿using System;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace NetBaires.Api.Features.Badges.AssignMembersToBadge
+namespace NetBaires.Api.Features.Members.InformAttendances
 {
     public class InformAttendancesCommand : IRequest<IActionResult>
     {

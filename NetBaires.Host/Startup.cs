@@ -2,8 +2,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NetBaires.Host.Extensions;
 
-namespace NetBaires.Api
+namespace NetBaires.Host
 {
     public class Startup
     {
@@ -31,8 +32,7 @@ namespace NetBaires.Api
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseSwagger(env)
-                .UseCors()
+            CorsRegistrationExtensions.UseCors(app.UseSwagger(env))
                 .UseAuthentication(env)
                 .UseCache(env)
                 .UseInfraestructure(env);

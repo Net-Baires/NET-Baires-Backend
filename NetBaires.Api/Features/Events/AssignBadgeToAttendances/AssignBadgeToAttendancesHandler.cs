@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using NetBaires.Api.Helpers;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Events
+namespace NetBaires.Api.Features.Events.AssignBadgeToAttendances
 {
 
     public class AssignBadgeToAttendancesHandler : IRequestHandler<AssignBadgeToAttendancesCommand, IActionResult>

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NetBaires.Api.Models;
 using NetBaires.Api.Options;
+using NetBaires.Api.ViewModels;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Features.Slack

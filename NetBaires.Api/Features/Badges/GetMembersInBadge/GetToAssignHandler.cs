@@ -6,10 +6,10 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NetBaires.Api.Features.Members.ViewModels;
+using NetBaires.Api.ViewModels;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Features.Badges.GetToAssign
+namespace NetBaires.Api.Features.Badges.GetMembersInBadge
 {
 
     public class GetMembersInBadgeHandler : IRequestHandler<GetMembersInBadgeQuery, IActionResult>

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
 
-namespace NetBaires.Api.Auth
+namespace NetBaires.Api.Auth.Tokens
 {
     public class ValidateToken
     {

@@ -6,11 +6,10 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NetBaires.Api.Auth;
-using NetBaires.Api.Features.Events.ViewModels;
 using NetBaires.Api.Helpers;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Events
+namespace NetBaires.Api.Features.Events.GetEventLiveDetail
 {
 
     public class GetEventLiveDetailHandler : IRequestHandler<GetEventLiveDetailQuery, IActionResult>
@@ -45,11 +44,11 @@ namespace NetBaires.Api.Handlers.Events
                                                    Platform = x.Platform,
                                                    StartLiveTime = x.StartLiveTime,
                                                    GeneralAttended = x.GeneralAttended,
-                                                   GeneralAttendance = new GetEventLiveDetailQuery.Response.ReportGeneralAttendance
+                                                   GeneralAttendance = x.GeneralAttended ? new GetEventLiveDetailQuery.Response.ReportGeneralAttendance
                                                    {
                                                        TokenToReportGeneralAttendance = _attendanceService.GetTokenToReportGeneralAttendance(x),
                                                        GeneralAttendedCode = x.GeneralAttendedCode
-                                                   },
+                                                   }: null,
                                                    MembersDetails = new GetEventLiveDetailQuery.Response.Members
                                                    {
                                                        TotalMembersRegistered = x.Attendees.Count,

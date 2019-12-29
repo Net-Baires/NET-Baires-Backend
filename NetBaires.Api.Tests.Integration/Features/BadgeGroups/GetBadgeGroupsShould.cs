@@ -1,13 +1,12 @@
 ﻿using FluentAssertions;
-using NetBaires.Api.Handlers.Events;
 using NetBaires.Data;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
+using NetBaires.Api.Features.BadgeGroups.ViewModels;
+using NetBaires.Host;
 using Xunit;
 
 namespace NetBaires.Api.Tests.Integration.Features.BadgeGroups

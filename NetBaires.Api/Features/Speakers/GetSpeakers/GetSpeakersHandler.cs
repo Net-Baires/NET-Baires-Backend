@@ -7,11 +7,11 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using NetBaires.Api.Handlers.Events;
+using NetBaires.Api.Features.Events.UpdateEvent;
 using NetBaires.Api.Helpers;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Speakers
+namespace NetBaires.Api.Features.Speakers.GetSpeakers
 {
 
     public class GetSpeakersHandler : IRequestHandler<GetSpeakersQuery, IActionResult>

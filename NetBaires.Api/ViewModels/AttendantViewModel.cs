@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using NetBaires.Api.Features.Members.ViewModels;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Features.Events.ViewModels
+namespace NetBaires.Api.ViewModels
 {
     public class AttendantViewModel
     {

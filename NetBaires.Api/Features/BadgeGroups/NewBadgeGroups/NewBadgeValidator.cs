@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace NetBaires.Api.Features.Badges.NewBadge
+namespace NetBaires.Api.Features.BadgeGroups.NewBadgeGroups
 {
     public class NewBadgeGroupValidator : AbstractValidator<NewBadgeGroupCommand>
     {

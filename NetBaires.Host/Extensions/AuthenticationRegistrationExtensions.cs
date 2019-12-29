@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using NetBaires.Api.Auth;
 
-namespace NetBaires.Api
+namespace NetBaires.Host.Extensions
 {
     public static class AuthenticationRegistrationExtensions
     {

@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NetBaires.Api.Handlers.Speakers;
+using NetBaires.Api.Features.Speakers.GetSpeakers;
 using NetBaires.Data;
 using Swashbuckle.AspNetCore.Annotations;
 

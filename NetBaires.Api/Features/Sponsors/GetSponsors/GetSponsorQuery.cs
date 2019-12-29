@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace NetBaires.Api.Handlers.Sponsors
+namespace NetBaires.Api.Features.Sponsors.GetSponsors
 {
     public class GetSponsorsQuery : IRequest<IActionResult>
     {

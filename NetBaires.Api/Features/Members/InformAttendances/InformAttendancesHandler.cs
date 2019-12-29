@@ -1,16 +1,13 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using NetBaires.Api.Features.Badges.Models;
 using NetBaires.Api.Helpers;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Features.Badges.AssignMembersToBadge
+namespace NetBaires.Api.Features.Members.InformAttendances
 {
     public class InformAttendancesHandler : IRequestHandler<InformAttendancesCommand, IActionResult>
     {

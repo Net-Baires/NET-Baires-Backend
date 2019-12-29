@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Events
+namespace NetBaires.Api.Features.Events.UpdateEvent
 {
     public class UpdateEventProfile : Profile
     {

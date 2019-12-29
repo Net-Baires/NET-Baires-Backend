@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Services.Sync;
 
-namespace NetBaires.Api.Handlers.Events
+namespace NetBaires.Api.Features.Events.SyncEvent
 {
     public class SyncEventHandler : IRequestHandler<SyncEventHandler.SyncEvent, IActionResult>
     {

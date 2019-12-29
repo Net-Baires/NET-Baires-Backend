@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using NetBaires.Api.Options;
 
-namespace NetBaires.Api
+namespace NetBaires.Host.Extensions
 {
     public static class OptionsRegistrationExtensions
     {

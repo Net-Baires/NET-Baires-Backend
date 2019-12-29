@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 
-namespace NetBaires.Api
+namespace NetBaires.Host.Extensions
 {
     public static class CorsRegistrationExtensions
     {

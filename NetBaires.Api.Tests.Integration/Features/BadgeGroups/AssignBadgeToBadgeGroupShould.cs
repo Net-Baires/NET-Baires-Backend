@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using NetBaires.Data;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
+using NetBaires.Host;
 using Xunit;
 
 namespace NetBaires.Api.Tests.Integration.Features.BadgeGroups

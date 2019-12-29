@@ -2,7 +2,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NetBaires.Api.Handlers.Me;
+using NetBaires.Api.Features.Me.GetMe;
+using NetBaires.Api.Features.Me.UpdateMe;
 using NetBaires.Data;
 using Swashbuckle.AspNetCore.Annotations;
 

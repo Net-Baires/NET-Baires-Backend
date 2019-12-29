@@ -2,13 +2,11 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
-using NetBaires.Api.Features.Members.ViewModels;
-using NetBaires.Api.Handlers.Me;
+using NetBaires.Api.ViewModels;
+using NetBaires.Host;
 using Xunit;
-using static NetBaires.Api.Handlers.Me.GetMeHandler;
-using static NetBaires.Api.Handlers.Me.UpdateMeHandler;
 
-namespace NetBaires.Api.Tests.Integration.Me
+namespace NetBaires.Api.Tests.Integration.Features.Me
 {
 
     public class UpdateMeShould : IntegrationTestsBase

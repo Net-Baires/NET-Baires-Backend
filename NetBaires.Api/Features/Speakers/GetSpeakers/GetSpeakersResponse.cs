@@ -1,6 +1,6 @@
-﻿using NetBaires.Api.Features.Members.ViewModels;
+﻿using NetBaires.Api.ViewModels;
 
-namespace NetBaires.Api.Handlers.Speakers
+namespace NetBaires.Api.Features.Speakers.GetSpeakers
 {
     public class GetSpeakersResponse : MemberDetailViewModel
     {

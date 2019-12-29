@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using JWT.Algorithms;
 using JWT.Builder;
+using NetBaires.Api.Auth.CustomsClaims;
 using Newtonsoft.Json;
 
-namespace NetBaires.Api.Auth
+namespace NetBaires.Api.Auth.Tokens
 {
     public static class TokenService
     {

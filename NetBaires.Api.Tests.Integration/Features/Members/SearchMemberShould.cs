@@ -1,11 +1,12 @@
 ﻿using FluentAssertions;
-using NetBaires.Api.Features.Members.ViewModels;
 using NetBaires.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using NetBaires.Api.ViewModels;
+using NetBaires.Host;
 using Xunit;
 
 namespace NetBaires.Api.Tests.Integration.Features.Members

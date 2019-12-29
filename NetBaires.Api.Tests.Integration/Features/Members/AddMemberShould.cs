@@ -1,15 +1,13 @@
 ﻿using FluentAssertions;
-using NetBaires.Api.Features.Badges.GetBadge;
-using NetBaires.Api.Features.Badges.Models;
-using NetBaires.Api.Features.Members.ViewModels;
 using NetBaires.Data;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using NetBaires.Api.Features.Members.AddMember;
+using NetBaires.Host;
 using Xunit;
 
 namespace NetBaires.Api.Tests.Integration.Features.Members

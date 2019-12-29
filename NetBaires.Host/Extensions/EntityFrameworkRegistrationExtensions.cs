@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NetBaires.Data;
 
-namespace NetBaires.Api
+namespace NetBaires.Host.Extensions
 {
     public static class EntityFrameworkRegistrationExtensions
     {

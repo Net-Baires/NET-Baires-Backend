@@ -1,14 +1,14 @@
-﻿using FluentAssertions;
-using NetBaires.Api.Features.Badges.GetBadge;
-using NetBaires.Api.Features.Members.ViewModels;
-using NetBaires.Data;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using FluentAssertions;
+using NetBaires.Api.Features.Community.GetCommunitySummary;
+using NetBaires.Data;
+using NetBaires.Host;
 using Xunit;
 
-namespace NetBaires.Api.Tests.Integration.Features.Members
+namespace NetBaires.Api.Tests.Integration.Features.Community
 {
     public class GetCommunitySummaryShould : IntegrationTestsBase
     {

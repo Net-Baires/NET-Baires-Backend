@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Text.Json.Serialization;
+using AutoMapper;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -9,9 +10,8 @@ using NetBaires.Api.Features.Badges.DeleteBadge;
 using NetBaires.Api.Features.Badges.NewBadge;
 using NetBaires.Api.Filters;
 using Newtonsoft.Json.Serialization;
-using System.Text.Json.Serialization;
 
-namespace NetBaires.Api
+namespace NetBaires.Host.Extensions
 {
     public static class InfraestructureRegistrationExtensions
     {

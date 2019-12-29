@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using NetBaires.Api.Helpers;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Events
+namespace NetBaires.Api.Features.Events.CompleteEvent
 {
 
     public class CompleteEventHandler : IRequestHandler<CompleteEventCommand, IActionResult>

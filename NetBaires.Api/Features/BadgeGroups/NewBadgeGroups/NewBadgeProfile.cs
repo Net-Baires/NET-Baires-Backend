@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Features.Badges.NewBadge
+namespace NetBaires.Api.Features.BadgeGroups.NewBadgeGroups
 {
     public class NewBadgeGroupProfile : Profile
     {

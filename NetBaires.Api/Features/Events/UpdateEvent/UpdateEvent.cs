@@ -1,18 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using NetBaires.Api.Auth;
-using NetBaires.Api.Handlers.Events.Models;
-using NetBaires.Api.Options;
+using NetBaires.Api.ViewModels;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Events
+namespace NetBaires.Api.Features.Events.UpdateEvent
 {
 
     public class UpdateEventHandler : IRequestHandler<UpdateEventCommand, IActionResult>
@@ -36,11 +31,11 @@ namespace NetBaires.Api.Handlers.Events
 
             _mapper.Map(request, eventToUpdate);
 
-            if (request?.Live == true)
+            if (request?.Live == true && !eventToUpdate.Live)
                 eventToUpdate.SetLive();
             else if (request?.Live == false)
                 eventToUpdate.SetUnLive();
-            if (request?.GeneralAttended == true)
+            if (request?.GeneralAttended == true && !eventToUpdate.GeneralAttended)
                 eventToUpdate.EnableGeneralAttendace();
             else if (request?.GeneralAttended == false)
                 eventToUpdate.DisableGeneralAttendace();

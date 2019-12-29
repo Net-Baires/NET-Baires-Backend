@@ -1,4 +1,4 @@
-﻿namespace NetBaires.Api.Auth
+﻿namespace NetBaires.Api.Auth.CustomsClaims
 {
     public enum EnumClaims
     {

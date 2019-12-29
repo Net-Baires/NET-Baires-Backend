@@ -1,9 +1,7 @@
-﻿using System;
-using MediatR;
-using Microsoft.AspNetCore.Http;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace NetBaires.Api.Features.Badges.NewBadge
+namespace NetBaires.Api.Features.BadgeGroups.AssignBadgeToBadgeGroup
 {
     public class AssignBadgeToBadgeGroupCommand : IRequest<IActionResult>
     {

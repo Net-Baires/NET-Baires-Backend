@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using NetBaires.Data;
 
-namespace NetBaires.Api
+namespace NetBaires.Host.Extensions
 {
     public static class SwaggerRegistrationExtensions
     {

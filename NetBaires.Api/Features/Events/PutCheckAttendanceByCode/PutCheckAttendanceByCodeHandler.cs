@@ -6,26 +6,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NetBaires.Api.Auth;
-using NetBaires.Api.Auth.Tokens;
-using NetBaires.Api.Handlers.Events;
 using NetBaires.Api.Helpers;
 using NetBaires.Api.Options;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Features.Events.PutCheckAttendanceGeneral
+namespace NetBaires.Api.Features.Events.PutCheckAttendanceByCode
 {
 
-    public class PutCheckAttendanceGeneralHandler : IRequestHandler<PutCheckAttendanceGeneralCommand, IActionResult>
+    public class PutCheckAttendanceByCodeHandler : IRequestHandler<PutCheckAttendanceByCodeCommand, IActionResult>
     {
         private readonly ICurrentUser _currentUser;
         private readonly NetBairesContext _context;
         private readonly AttendanceOptions _assistanceOptions;
-        private readonly ILogger<PutCheckAttendanceGeneralHandler> _logger;
+        private readonly ILogger<PutCheckAttendanceByCodeHandler> _logger;
 
-        public PutCheckAttendanceGeneralHandler(ICurrentUser currentUser,
+        public PutCheckAttendanceByCodeHandler(ICurrentUser currentUser,
             NetBairesContext context,
             IOptions<AttendanceOptions> assistanceOptions,
-            ILogger<PutCheckAttendanceGeneralHandler> logger)
+            ILogger<PutCheckAttendanceByCodeHandler> logger)
         {
             _currentUser = currentUser;
             _context = context;
@@ -34,23 +32,24 @@ namespace NetBaires.Api.Features.Events.PutCheckAttendanceGeneral
         }
 
 
-        public async Task<IActionResult> Handle(PutCheckAttendanceGeneralCommand request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Handle(PutCheckAttendanceByCodeCommand request, CancellationToken cancellationToken)
         {
-            var response = TokenService.Validate<LoginToken>(_assistanceOptions.AskAttendanceSecret, request.Token);
 
-            var eventToCheck = _context.Events.Any(x => x.Id == response.EventId
+            var eventToCheck = _context.Events.Any(x => x.Id == request.EventId
                                                        &&
-                                                       x.GeneralAttended);
+                                                       x.GeneralAttended
+                                                       &&
+                                                       x.GeneralAttendedCode == request.Code);
             if (!eventToCheck)
                 return  HttpResponseCodeHelper.NotFound();
 
             var memberId = _currentUser.User.Id;
 
-            var eventToAdd = _context.Attendances.FirstOrDefault(x => x.EventId == response.EventId 
+            var eventToAdd = _context.Attendances.FirstOrDefault(x => x.EventId == request.EventId 
                                                                       && 
                                                                       x.MemberId == memberId);
             if (eventToAdd == null)
-                eventToAdd = new Attendance(memberId, response.EventId);
+                eventToAdd = new Attendance(memberId, request.EventId);
             eventToAdd.Attend();
             await _context.Attendances.AddAsync(eventToAdd);
             await _context.SaveChangesAsync();

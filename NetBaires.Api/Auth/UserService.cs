@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using NetBaires.Api.Auth.CustomsClaims;
+using NetBaires.Api.Auth.Tokens;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Auth

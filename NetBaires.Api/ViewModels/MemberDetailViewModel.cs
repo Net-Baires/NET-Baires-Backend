@@ -1,8 +1,8 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using NetBaires.Data;
-using System;
 
-namespace NetBaires.Api.Features.Members.ViewModels
+namespace NetBaires.Api.ViewModels
 {
     public class MemberDetailViewModel
     {

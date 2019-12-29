@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using NetBaires.Api.Features.Badges.GetBadge;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Events
+namespace NetBaires.Api.Features.Members.AddMember
 {
     public class AddMemberProfile : Profile
     {

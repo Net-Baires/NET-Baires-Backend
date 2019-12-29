@@ -4,12 +4,11 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using NetBaires.Api.Features.Members.ViewModels;
 using NetBaires.Api.Helpers;
+using NetBaires.Api.ViewModels;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Features.Badges.GetBadge
+namespace NetBaires.Api.Features.Members.GetMemberDetail
 {
 
     public class GetMemberDetailHandler : IRequestHandler<GetMemberDetailQuery, IActionResult>

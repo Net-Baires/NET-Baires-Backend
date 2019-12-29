@@ -1,8 +1,8 @@
-﻿using MediatR;
+﻿using System.Collections.Generic;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
-namespace NetBaires.Api.Handlers.Events
+namespace NetBaires.Api.Features.Events.UpdateEvent
 {
     public class UpdateEventCommand : IRequest<IActionResult>
     {

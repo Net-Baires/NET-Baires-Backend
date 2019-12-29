@@ -1,14 +1,12 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Features.Badges.NewBadge
+namespace NetBaires.Api.Features.BadgeGroups.AssignBadgeToBadgeGroup
 {
     public class AssignBadgeToBadgeGroupHandler : IRequestHandler<AssignBadgeToBadgeGroupCommand, IActionResult>
     {

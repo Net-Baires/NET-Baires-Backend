@@ -4,9 +4,10 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NetBaires.Api.Features.Badges.NewBadge;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Features.Badges.NewBadge
+namespace NetBaires.Api.Features.BadgeGroups.NewBadgeGroups
 {
     public class NewBadgeGroupHandler : IRequestHandler<NewBadgeGroupCommand, IActionResult>
     {

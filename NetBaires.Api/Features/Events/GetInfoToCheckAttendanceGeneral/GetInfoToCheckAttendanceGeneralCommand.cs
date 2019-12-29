@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace NetBaires.Api.Handlers.Events
+namespace NetBaires.Api.Features.Events.GetInfoToCheckAttendanceGeneral
 {
     public class GetInfoToCheckAttendanceGeneralCommand : IRequest<IActionResult>
     {

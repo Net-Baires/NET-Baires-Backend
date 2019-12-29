@@ -7,9 +7,10 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NetBaires.Api.Helpers;
+using NetBaires.Api.ViewModels;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Sponsors
+namespace NetBaires.Api.Features.Sponsors.GetSponsors
 {
 
     public class GetSponsorsHandler : IRequestHandler<GetSponsorsQuery, IActionResult>

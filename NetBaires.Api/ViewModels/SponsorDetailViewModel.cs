@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Sponsors
+namespace NetBaires.Api.ViewModels
 {
     public class SponsorDetailViewModel
     {

@@ -10,7 +10,7 @@ using NetBaires.Data;
 using NetBaires.Api.Services;
 using NetBaires.Api.Services.Sync;
 using System.Linq;
-using NetBaires.Api.Services.Sync.Process;
+using NetBaires.Host;
 
 namespace NetBaires.Api.Tests.Integration
 {

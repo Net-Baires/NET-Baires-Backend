@@ -1,9 +1,9 @@
-﻿using MediatR;
+﻿using System.Text.Json.Serialization;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json.Serialization;
 
-namespace NetBaires.Api.Handlers.Sponsors
+namespace NetBaires.Api.Features.Sponsors.UpdateSponsor
 {
     public class UpdateSponsorCommand : IRequest<IActionResult>
     {

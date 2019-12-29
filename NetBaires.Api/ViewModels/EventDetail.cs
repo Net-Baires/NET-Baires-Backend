@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Profile = AutoMapper.Profile;
 
-namespace NetBaires.Api.Handlers.Events.Models
+namespace NetBaires.Api.ViewModels
 {
     public class EventDetail
     {

@@ -8,7 +8,7 @@ using NetBaires.Api.Services.Meetup;
 using NetBaires.Api.Services.Sync;
 using NetBaires.Api.Services.Sync.Process;
 
-namespace NetBaires.Api
+namespace NetBaires.Host.Extensions
 {
     public static class ServicesRegistrationExtensions
     {

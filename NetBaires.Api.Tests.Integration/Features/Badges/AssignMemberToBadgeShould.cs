@@ -3,9 +3,10 @@ using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NetBaires.Data;
+using NetBaires.Host;
 using Xunit;
 
-namespace NetBaires.Api.Tests.Integration.Badges
+namespace NetBaires.Api.Tests.Integration.Features.Badges
 {
     public class AssignMemberToBadgeShould : IntegrationTestsBase
     {

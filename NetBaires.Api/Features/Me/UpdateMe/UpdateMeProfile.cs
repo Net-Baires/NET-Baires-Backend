@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Me
+namespace NetBaires.Api.Features.Me.UpdateMe
 {
     public class UpdateMeProfile : Profile
     {

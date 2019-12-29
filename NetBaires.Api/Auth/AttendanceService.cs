@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using JWT.Builder;
 using Microsoft.Extensions.Options;
+using NetBaires.Api.Auth.CustomsClaims;
+using NetBaires.Api.Auth.Tokens;
 using NetBaires.Api.Options;
 using NetBaires.Data;
 

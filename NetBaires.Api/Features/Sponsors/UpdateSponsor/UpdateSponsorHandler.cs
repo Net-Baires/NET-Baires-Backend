@@ -10,7 +10,7 @@ using NetBaires.Api.Helpers;
 using NetBaires.Api.Services;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Sponsors
+namespace NetBaires.Api.Features.Sponsors.UpdateSponsor
 {
     public class UpdateSponsorHandler : IRequestHandler<UpdateSponsorCommand, IActionResult>
     {

@@ -8,12 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Auth;
-using NetBaires.Api.Features.Members.ViewModels;
 using NetBaires.Api.Helpers;
 using NetBaires.Api.Services;
+using NetBaires.Api.ViewModels;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Me
+namespace NetBaires.Api.Features.Me.UpdateMe
 {
 
     public class UpdateMeHandler : IRequestHandler<UpdateMeCommand, IActionResult>

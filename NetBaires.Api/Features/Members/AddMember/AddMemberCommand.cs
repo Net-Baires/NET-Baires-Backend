@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace NetBaires.Api.Features.Badges.GetBadge
+namespace NetBaires.Api.Features.Members.AddMember
 {
     public class AddMemberCommand : IRequest<IActionResult>
     {

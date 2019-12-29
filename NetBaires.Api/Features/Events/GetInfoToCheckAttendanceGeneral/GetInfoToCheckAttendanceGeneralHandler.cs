@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NetBaires.Api.Auth;
 using NetBaires.Api.Helpers;
-using NetBaires.Api.Models;
+using NetBaires.Api.ViewModels;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Events
+namespace NetBaires.Api.Features.Events.GetInfoToCheckAttendanceGeneral
 {
 
     public class GetInfoToCheckAttendanceGeneralHandler : IRequestHandler<GetInfoToCheckAttendanceGeneralCommand, IActionResult>

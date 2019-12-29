@@ -6,9 +6,11 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using NetBaires.Api.Features.BadgeGroups.ViewModels;
+using NetBaires.Api.Features.Events.UpdateEvent;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Events
+namespace NetBaires.Api.Features.BadgeGroups.GetBadgeGroup
 {
 
     public class GetBadgeGroupHandler : IRequestHandler<GetBadgeGroupQuery, IActionResult>

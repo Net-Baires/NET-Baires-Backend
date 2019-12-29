@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Events
+namespace NetBaires.Api.Features.BadgeGroups.ViewModels
 {
     public class BadgeGroupDetailViewModel
     {

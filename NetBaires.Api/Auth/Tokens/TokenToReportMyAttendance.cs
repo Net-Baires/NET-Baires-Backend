@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace NetBaires.Api.Auth
+namespace NetBaires.Api.Auth.Tokens
 {
     public partial class TokenToReportMyAttendance
     {

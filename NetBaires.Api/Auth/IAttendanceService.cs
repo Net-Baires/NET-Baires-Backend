@@ -1,4 +1,5 @@
-﻿using NetBaires.Data;
+﻿using NetBaires.Api.Auth.Tokens;
+using NetBaires.Data;
 
 namespace NetBaires.Api.Auth
 {

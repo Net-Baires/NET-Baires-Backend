@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NetBaires.Api.Auth
+namespace NetBaires.Api.Auth.CustomsClaims
 {
     public class CustomClaim
     {

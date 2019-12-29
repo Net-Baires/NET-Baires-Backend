@@ -4,12 +4,13 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
-using NetBaires.Api.Features.Events.ViewModels;
+using NetBaires.Api.ViewModels;
 using NetBaires.Data;
+using NetBaires.Host;
 using Xunit;
 
 [assembly: CollectionBehavior(DisableTestParallelization = true)]
-namespace NetBaires.Api.Tests.Integration.Events
+namespace NetBaires.Api.Tests.Integration.Features.Events
 {
     public class GetEventsShould : IntegrationTestsBase
     {

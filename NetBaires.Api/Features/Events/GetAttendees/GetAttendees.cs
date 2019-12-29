@@ -7,11 +7,11 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using NetBaires.Api.Features.Events.ViewModels;
 using NetBaires.Api.Helpers;
+using NetBaires.Api.ViewModels;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Handlers.Events
+namespace NetBaires.Api.Features.Events.GetAttendees
 {
 
     public class GetAttendeesHandler : IRequestHandler<GetAttendeesQuery, IActionResult>

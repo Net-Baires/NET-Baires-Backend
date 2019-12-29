@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Services.Sync.Process;
 
-namespace NetBaires.Api.Handlers.Events
+namespace NetBaires.Api.Features.Events.SyncWithExternalEvents
 {
     public class SyncWithExternalEventsHandler : IRequestHandler<SyncWithExternalEventsCommand, IActionResult>
     {
