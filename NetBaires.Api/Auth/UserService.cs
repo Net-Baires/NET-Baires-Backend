@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -103,11 +104,11 @@ namespace NetBaires.Api.Auth
                     await _context.SaveChangesAsync();
                 }
             }
-            return new AuthenticateUser(TokenService.Generate(_appSettings.Secret, new List<Claim>
+            return new AuthenticateUser(TokenService.Generate(_appSettings.Secret, new List<CustomClaim>
             {
-                new Claim(ClaimTypes.Name, id.ToString()),
-                new Claim(ClaimTypes.Email, email),
-                new Claim(ClaimTypes.Role, rol.ToString())
+                new CustomClaim(ClaimTypes.Name, id.ToString()),
+                new CustomClaim(ClaimTypes.Email, email),
+                new CustomClaim(ClaimTypes.Role, rol.ToString())
             }, DateTime.UtcNow.AddDays(30)));
         }
         public async Task<AuthenticateUser> AuthenticateOrCreate(string email)
