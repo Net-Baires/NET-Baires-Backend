@@ -21,7 +21,7 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
             public string Description { get; set; }
             public EventPlatform Platform { get; set; }
             public string ImageUrl { get; set; }
-            public ReportGeneralAttendance GeneralAttendance { get; set; }
+            public ReportGeneralAttendance GeneralAttendance { get; set; } = new ReportGeneralAttendance();
             public Members MembersDetails { get; set; }
             public DateTime? StartLiveTime { get; internal set; }
             public bool GeneralAttended { get; internal set; }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -34,11 +35,11 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
         public async Task<IActionResult> Handle(GetEventLiveDetailQuery request, CancellationToken cancellationToken)
         {
 
-            var eventToReturn = await _context.Events.Include(x => x.Attendees)
+            var eventToReturn =  _context.Events.Include(x => x.Attendees)
                                                      .Where(x => x.Id == request.Id
                                                      &&
                                                      x.Live)
-                                               .Select(x => new GetEventLiveDetailQuery.Response
+                                               .Select(x =>  Tuple.Create(x,new GetEventLiveDetailQuery.Response
                                                {
                                                    Id = x.Id,
                                                    Title = x.Title,
@@ -49,26 +50,32 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
                                                    GeneralAttended = x.GeneralAttended,
                                                    Attended = x.Attendees.Any(a => a.MemberId == _currentUser.User.Id
                                                                                     &&
-                                                                                    a.Attended),
-                                                   TokenToReportMyAttendance = _attendanceService.GetTokenToReportMyAttendance(x),
-                                                   GeneralAttendance = x.GeneralAttended && (_currentUser.User.Rol == UserRole.Admin
-                                                                                             ||
-                                                                                             _currentUser.User.Rol == UserRole.Organizer) ? new GetEventLiveDetailQuery.Response.ReportGeneralAttendance
-                                                                                             {
-                                                                                                 TokenToReportGeneralAttendance = _attendanceService.GetTokenToReportGeneralAttendance(x),
-                                                                                                 GeneralAttendedCode = x.GeneralAttendedCode
-                                                                                             } : null,
-                                                   MembersDetails = new GetEventLiveDetailQuery.Response.Members
-                                                   {
-                                                       TotalMembersRegistered = x.Attendees.Count,
-                                                       TotalMembersAttended = x.Attendees.Count(l => l.Attended)
-                                                   }
-                                               })
-                                               .FirstOrDefaultAsync();
-            if (eventToReturn == null)
-                return HttpResponseCodeHelper.NotContent();
+                                                                                    a.Attended)
+                                               }))
+                                               .FirstOrDefault();
 
-            eventToReturn.MembersDetails.MembersAttended = await _context.Attendances.Where(x => x.EventId == eventToReturn.Id
+            eventToReturn.Item2.GeneralAttendance = eventToReturn.Item1.GeneralAttended &&
+                                                    (_currentUser.User.Rol == UserRole.Admin
+                                                     ||
+                                                     _currentUser.User.Rol == UserRole.Organizer)
+                ? new GetEventLiveDetailQuery.Response.ReportGeneralAttendance
+                {
+                    TokenToReportGeneralAttendance =
+                        _attendanceService.GetTokenToReportGeneralAttendance(eventToReturn.Item1),
+                    GeneralAttendedCode = eventToReturn.Item1.GeneralAttendedCode
+                }
+                : new GetEventLiveDetailQuery.Response.ReportGeneralAttendance();
+            eventToReturn.Item2.TokenToReportMyAttendance = _attendanceService.GetTokenToReportMyAttendance(eventToReturn.Item1);
+
+
+            if (eventToReturn.Item1 == null)
+                return HttpResponseCodeHelper.NotContent();
+            eventToReturn.Item2.MembersDetails = new GetEventLiveDetailQuery.Response.Members
+            {
+                TotalMembersRegistered = eventToReturn.Item1.Attendees.Count,
+                TotalMembersAttended = eventToReturn.Item1.Attendees.Count(l => l.Attended)
+            };
+            eventToReturn.Item2.MembersDetails.MembersAttended = await _context.Attendances.Include(x=> x.Member).Where(x => x.EventId == eventToReturn.Item2.Id
                                                                                                 &&
                                                                                                 x.Attended)
                 .OrderByDescending(x => x.AttendedTime)
@@ -85,8 +92,8 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
 
 
             if (request.Id != null)
-                return HttpResponseCodeHelper.Ok(eventToReturn);
-            return HttpResponseCodeHelper.Ok(eventToReturn);
+                return HttpResponseCodeHelper.Ok(eventToReturn.Item2);
+            return HttpResponseCodeHelper.Ok(eventToReturn.Item2);
         }
     }
 
