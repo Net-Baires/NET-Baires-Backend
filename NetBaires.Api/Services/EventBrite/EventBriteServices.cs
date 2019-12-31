@@ -30,7 +30,7 @@ namespace NetBaires.Api.Services.EventBrite
         public async Task<List<Attendee>> GetAttendees(string eventId)
         {
             var req = new HttpRequestMessage(HttpMethod.Get,
-                $"{_eventBriteApiOptions.Url}/events/${eventId}/attendees?token=${_eventBriteApiOptions.Token}");
+                $"{_eventBriteApiOptions.Url}/events/{eventId}/attendees?token={_eventBriteApiOptions.Token}");
             req.Headers.Add("Accept", "application/json");
             var result = await _client.SendAsync(req);
             var attendeesResponse = await result.Content.ReadAsAsync<AttendeesResponse>();
