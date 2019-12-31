@@ -20,7 +20,7 @@ namespace NetBaires.Api.ViewModels
         public bool Live { get; set; }
         public DateTime Date { get; set; }
         public bool IsUserRegistered { get; set; }
-        public bool GeneralAttended { get; set; } 
+        public bool GeneralAttended { get; set; }
         public int Attended { get; set; }
         public int DidNotAttend { get; set; }
         public int Registered { get; set; }
@@ -52,9 +52,9 @@ namespace NetBaires.Api.ViewModels
             }
             public bool Resolve(Event source, EventDetailViewModel destination, bool destMember, ResolutionContext context)
             {
-                return source.Attendees.Any(a => a.MemberId == _currentUser.User.Id);
+                return _currentUser.IsLoggued && source.Attendees.Any(a => a.MemberId == _currentUser.User.Id);
             }
         }
-     
+
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using NetBaires.Api.Models.ServicesResponse.Attendance;
 using NetBaires.Api.ViewModels;
 using NetBaires.Host;
 using Xunit;
@@ -39,7 +40,8 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
                         .Content.ReadAsAsync<EventToReportAttendanceViewModel>();
 
             var response = await HttpClient.PutAsync($"/events/Attendances/general/{eventToCheck.Token}", null);
-            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            (await response.Content.ReadAsAsync<CheckAttendanceGeneralResponse>()).EventId.Should().Be(newEvent.Id);
 
             var eventToTest = await Context.Events.Include(x => x.Attendees).FirstAsync();
             eventToTest.Attendees.Count.Should().Be(1);

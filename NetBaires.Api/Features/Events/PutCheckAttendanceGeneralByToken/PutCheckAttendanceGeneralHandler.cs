@@ -9,6 +9,7 @@ using NetBaires.Api.Auth;
 using NetBaires.Api.Auth.Tokens;
 using NetBaires.Api.Handlers.Events;
 using NetBaires.Api.Helpers;
+using NetBaires.Api.Models.ServicesResponse.Attendance;
 using NetBaires.Api.Options;
 using NetBaires.Data;
 
@@ -55,7 +56,7 @@ namespace NetBaires.Api.Features.Events.PutCheckAttendanceGeneral
                 }
             eventToAdd.Attend();
             await _context.SaveChangesAsync();
-            return HttpResponseCodeHelper.NotContent();
+            return HttpResponseCodeHelper.Ok(new CheckAttendanceGeneralResponse(response.EventId));
         }
     }
 }

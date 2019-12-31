@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using NetBaires.Data;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
+using NetBaires.Api.Models.ServicesResponse.Attendance;
 using NetBaires.Host;
 using Xunit;
 
@@ -25,7 +27,8 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
             await AuthenticateAsync(_newMember.Email);
 
             var response = await HttpClient.PutAsync($"/events/{_newEvent.Id}/Attendances/general/{_newEvent.GeneralAttendedCode}", null);
-            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            (await response.Content.ReadAsAsync<CheckAttendanceGeneralResponse>()).EventId.Should().Be(_newEvent.Id);
             RefreshContext();
             var eventToTest = await Context.Events.Include(x => x.Attendees).FirstAsync();
             eventToTest.Attendees.Count.Should().Be(1);

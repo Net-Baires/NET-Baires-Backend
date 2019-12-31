@@ -19,6 +19,7 @@ namespace NetBaires.Host.Extensions
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICurrentUser, CurrentUser>();
+            services.AddScoped<ICurrentUserSignalR, CurrentUserSignalR>();
             services.AddScoped<IBadGrServices, BadGrServices>();
             services.AddScoped<IMeetupServices, MeetupServices>();
             services.AddScoped<IEventBriteServices, EventBriteServices>();

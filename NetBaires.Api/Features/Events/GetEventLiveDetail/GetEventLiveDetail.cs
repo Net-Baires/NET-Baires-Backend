@@ -61,7 +61,7 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
                                                    MembersDetails = new GetEventLiveDetailQuery.Response.Members
                                                    {
                                                        TotalMembersRegistered = x.Attendees.Count,
-                                                       TotalMembersAttended = x.Attendees.Count(x => x.Attended)
+                                                       TotalMembersAttended = x.Attendees.Count(l => l.Attended)
                                                    }
                                                })
                                                .FirstOrDefaultAsync();

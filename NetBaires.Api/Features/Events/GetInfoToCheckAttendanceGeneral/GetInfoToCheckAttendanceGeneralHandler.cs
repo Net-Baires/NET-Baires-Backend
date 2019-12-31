@@ -30,7 +30,9 @@ namespace NetBaires.Api.Features.Events.GetInfoToCheckAttendanceGeneral
 
         public async Task<IActionResult> Handle(GetInfoToCheckAttendanceGeneralCommand request, CancellationToken cancellationToken)
         {
-            var eventToReturn = await _context.Events.FirstOrDefaultAsync(x => x.Id == request.Id);
+            var eventToReturn = await _context.Events.FirstOrDefaultAsync(x => x.Id == request.Id
+                                                                               && 
+                                                                               x.GeneralAttended);
             if (eventToReturn == null)
                 return HttpResponseCodeHelper.NotFound();
 

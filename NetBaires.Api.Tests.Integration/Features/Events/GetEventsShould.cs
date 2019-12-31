@@ -18,7 +18,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
 
         public GetEventsShould(CustomWebApplicationFactory<Startup> factory) : base(factory)
         {
-            AuthenticateAdminAsync().GetAwaiter().GetResult(); ;
+            AuthenticateAdminAsync().GetAwaiter().GetResult();
         }
 
         [Fact]

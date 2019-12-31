@@ -49,6 +49,7 @@ namespace NetBaires.Api.Features.Community.GetCommunitySummary
                 LastEvents = _mapper.Map<List<EventDetailViewModel>>(lastEvents),
                 TotalEvents = _context.Events.Count(),
                 TotalUsersMeetup = _context.Members.Count(),
+                TotalUsersSlack = 970,
                 TotalSpeakers = _context.Members
                                     .Where(x => x.Events.Any(s => s.Speaker)).Count()
             };

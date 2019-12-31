@@ -97,7 +97,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
         public async Task Set_Attende_Like_No_Organizer()
         {
             FillData();
-            _attendance.SetSpeaker();
+            _newEvent.Attended(_newMember);
             Context.SaveChanges();
             var update = new UpdateAttendeeCommand
             {

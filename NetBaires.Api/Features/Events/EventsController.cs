@@ -73,10 +73,10 @@ namespace NetBaires.Api.Features.Events
 
         [HttpPut("Attendances/{token}")]
         [SwaggerOperation(Summary = "Valida que el token del miembro para reportar asistencia es correcto y reporta la asistencia")]
-        [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
+        [AuthorizeRoles(UserRole.Organizer, UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Organizer)]
-        public async Task<IActionResult> PutReportAttendance([FromRoute]PutReportAttendanceCommand command) =>
-            await _iMediator.Send(command);
+        public async Task<IActionResult> PutReportAttendance([FromRoute]string token) =>
+            await _iMediator.Send(new PutReportAttendanceCommand { Token = token });
 
         [HttpGet("{id}/Attendances/General")]
         [SwaggerOperation(Summary = "Retorna toda la información requerida para que los miembros de la comunidad puedan reportar su asistencia en conjunto, el token de registración tiene un tiempo de 5 minutos.")]

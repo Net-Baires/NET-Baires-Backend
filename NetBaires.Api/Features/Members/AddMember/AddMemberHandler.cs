@@ -27,7 +27,9 @@ namespace NetBaires.Api.Features.Members.AddMember
 
         public async Task<IActionResult> Handle(AddMemberCommand request, CancellationToken cancellationToken)
         {
-            var memberToCheck = await _context.Members.FirstOrDefaultAsync(x => (x.Email.ToUpper() == request.Email.ToUpper()));
+            var memberToCheck = await _context.Members.FirstOrDefaultAsync(x => x.Email.ToUpper() == request.Email.ToUpper()
+                                                                                ||
+                                                                                request.MeetupId != null ? x.MeetupId == request.MeetupId : true);
             if (memberToCheck != null)
                 return HttpResponseCodeHelper.Conflict("Ya se encuentra un usuario registrado con ese email");
 

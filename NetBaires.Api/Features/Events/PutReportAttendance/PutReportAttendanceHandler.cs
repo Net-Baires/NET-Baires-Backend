@@ -14,12 +14,15 @@ namespace NetBaires.Api.Features.Events.PutReportAttendance
     public class PutReportAttendanceHandler : IRequestHandler<PutReportAttendanceCommand, IActionResult>
     {
         private readonly NetBairesContext _context;
+        private readonly ICurrentUser _currentUser;
         private readonly IAttendanceService attendanceService;
 
         public PutReportAttendanceHandler(NetBairesContext context,
+            ICurrentUser currentUser,
             IAttendanceService attendanceService)
         {
             _context = context;
+            _currentUser = currentUser;
             this.attendanceService = attendanceService;
         }
 
@@ -31,7 +34,7 @@ namespace NetBaires.Api.Features.Events.PutReportAttendance
             var member = _context.Members.FirstOrDefault(x => x.Id == response.UserId);
             eventToAdd.Attended(member);
             await _context.SaveChangesAsync();
-            return HttpResponseCodeHelper.NotContent();
+            return HttpResponseCodeHelper.Ok(new PutReportAttendanceCommand.Response(eventToAdd.Id, member.Id));
         }
     }
 }

@@ -1,10 +1,12 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NetBaires.Data;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using NetBaires.Api.Features.Events.PutReportAttendance;
 using NetBaires.Api.ViewModels;
 using NetBaires.Host;
 using Xunit;
@@ -36,10 +38,12 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
             await AuthenticateAsync(newMember.Email);
             var eventToCheck = await (await HttpClient.GetAsync($"/events/{newEvent.Id}/Attendance"))
                         .Content.ReadAsAsync<EventToReportAttendanceViewModel>();
-
+            AuthenticateAdminAsync().GetAwaiter().GetResult(); 
             var response = await HttpClient.PutAsync($"/events/Attendances/{eventToCheck.Token}", null);
-            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
-
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            var eventResponse = await response.Content.ReadAsAsync<PutReportAttendanceCommand.Response>();
+            eventResponse.EventId.Should().Be(newEvent.Id);
+            eventResponse.MemberId.Should().Be(newMember.Id);
             var eventToTest = await Context.Events.Include(x => x.Attendees).FirstAsync();
             eventToTest.Attendees.Count.Should().Be(1);
             eventToTest.Attendees.First().MemberId.Should().Be(newMember.Id);
