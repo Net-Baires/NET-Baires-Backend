@@ -2,7 +2,6 @@
 
 namespace NetBaires.Data
 {
-
     public class Attendance
     {
         public void Attend()
@@ -33,7 +32,25 @@ namespace NetBaires.Data
             DoNotKnow = true;
             NotifiedAbsence = false;
         }
+        public void SetSpeaker()
+        {
+            Attend();
+            Speaker = true;
+        }
+        public void RemoveSpeaker()
+        {
+            Speaker = false;
+        }
 
+        public void SetOrganizer()
+        {
+            Attend();
+            Organizer = true;
+        }
+        public void RemoveOrganizer()
+        {
+            Organizer = false;
+        }
 
         public int EventId { get; set; }
         public Event Event { get; set; }
@@ -42,7 +59,7 @@ namespace NetBaires.Data
         public DateTime Date { get; set; } = DateTime.Now.ToUniversalTime();
         public DateTime AttendedTime { get; set; }
         public bool Organizer { get; set; } = false;
-        public bool Speaker { get; set; } = false;
+        public bool Speaker { get;  set; } = false;
         public bool DidNotAttend { get; set; } = false;
         public bool Attended { get; set; } = false;
         public bool NotifiedAbsence { get; set; } = false;

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace NetBaires.Api.Controllers
+namespace NetBaires.Api.Filters
 {
     public class ExceptionActionFilter : ExceptionFilterAttribute
     {

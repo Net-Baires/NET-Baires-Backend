@@ -18,7 +18,7 @@ namespace NetBaires.Api.Services
         ILogger<FilesServices> logger)
         {
             connectionStringsOptions = ConnectionStringsOptions.Value;
-            this._logger = logger;
+            _logger = logger;
         }
         public async Task<FileDetail> UploadAsync(Stream file, string fileName, Container container)
         {
@@ -74,10 +74,19 @@ namespace NetBaires.Api.Services
                     cloudBlobClient.GetContainerReference(container.ToString().ToLower());
             await cloudBlobContainer.CreateIfNotExistsAsync();
 
-            CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(fileName);
-            var blob = cloudBlobContainer.GetBlockBlobReference(fileName);
-            Stream blobStream = await blob.OpenReadAsync();
-            return blobStream;
+            try
+            {
+                CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(fileName);
+                var blob = cloudBlobContainer.GetBlockBlobReference(fileName);
+                Stream blobStream = await blob.OpenReadAsync();
+                return blobStream;
+            }
+            catch (StorageException)
+            {
+
+                return null;
+            }
+          
 
 
         }

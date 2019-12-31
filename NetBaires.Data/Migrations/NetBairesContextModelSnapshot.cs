@@ -15,7 +15,7 @@ namespace NetBaires.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.0.0")
+                .HasAnnotation("ProductVersion", "3.1.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -65,6 +65,9 @@ namespace NetBaires.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("BadgeGroupId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -74,12 +77,44 @@ namespace NetBaires.Data.Migrations
                     b.Property<string>("ImageName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SimpleImageName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SimpleImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BadgeGroupId");
+
+                    b.ToTable("Badges");
+                });
+
+            modelBuilder.Entity("NetBaires.Data.BadgeGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Badges");
+                    b.ToTable("BadgeGroups");
                 });
 
             modelBuilder.Entity("NetBaires.Data.BadgeMember", b =>
@@ -116,7 +151,16 @@ namespace NetBaires.Data.Migrations
                     b.Property<bool>("Done")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime?>("EndLiveTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("EventId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("GeneralAttended")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("GeneralAttendedCode")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
@@ -128,6 +172,9 @@ namespace NetBaires.Data.Migrations
                     b.Property<string>("Platform")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("StartLiveTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -158,6 +205,9 @@ namespace NetBaires.Data.Migrations
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FirstLogin")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
@@ -268,10 +318,17 @@ namespace NetBaires.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("NetBaires.Data.Badge", b =>
+                {
+                    b.HasOne("NetBaires.Data.BadgeGroup", null)
+                        .WithMany("Badges")
+                        .HasForeignKey("BadgeGroupId");
+                });
+
             modelBuilder.Entity("NetBaires.Data.BadgeMember", b =>
                 {
                     b.HasOne("NetBaires.Data.Badge", "Badge")
-                        .WithMany("Users")
+                        .WithMany("Members")
                         .HasForeignKey("BadgeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

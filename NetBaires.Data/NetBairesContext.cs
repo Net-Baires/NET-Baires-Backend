@@ -15,11 +15,18 @@ namespace NetBaires.Data
         public DbSet<Sponsor> Sponsors { get; set; }
         public DbSet<Member> Members { get; set; }
         public DbSet<Badge> Badges { get; set; }
+        public DbSet<BadgeGroup> BadgeGroups { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<BadgeMember> BadgeMembers { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<SponsorEvent> SponsorEvents { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.EnableSensitiveDataLogging();
+            base.OnConfiguring(optionsBuilder);
+
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder
@@ -27,10 +34,9 @@ namespace NetBaires.Data
                 .Property(e => e.Role)
                 .HasConversion(new EnumToStringConverter<UserRole>());
             modelBuilder.Entity<BadgeMember>().HasKey(sc => new { UserId = sc.MemberId, sc.BadgeId });
-
             modelBuilder.Entity<BadgeMember>()
                 .HasOne<Badge>(sc => sc.Badge)
-                .WithMany(s => s.Users)
+                .WithMany(s => s.Members)
                 .HasForeignKey(sc => sc.BadgeId);
 
 

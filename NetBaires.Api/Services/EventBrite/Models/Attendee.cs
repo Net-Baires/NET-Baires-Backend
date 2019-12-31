@@ -5,6 +5,10 @@ namespace NetBaires.Api.Services.EventBrite.Models
 {
     public class Attendee
     {
+        [JsonProperty("profile")]
+
+        public dynamic profile { get; set; }
+
         [JsonProperty("team")]
         public object Team { get; set; }
 
@@ -73,5 +77,7 @@ namespace NetBaires.Api.Services.EventBrite.Models
 
         [JsonProperty("ticket_class_id")]
         public long TicketClassId { get; set; }
+        [JsonProperty("checkIn")]
+        public bool CheckIn { get;  set; }
     }
 }

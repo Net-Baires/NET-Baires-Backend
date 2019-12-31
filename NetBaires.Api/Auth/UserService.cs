@@ -7,10 +7,28 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using NetBaires.Api.Auth.CustomsClaims;
+using NetBaires.Api.Auth.Tokens;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Auth
 {
+    public static class StringExtension
+    {
+        public static string LowercaseFirst(this string s)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return string.Empty;
+            }
+
+            char[] a = s.ToCharArray();
+            a[0] = char.ToLower(a[0]);
+
+            return new string(a);
+        }
+
+    }
     public class UserService : IUserService
     {
         private readonly NetBairesContext _context;
@@ -86,18 +104,16 @@ namespace NetBaires.Api.Auth
                     await _context.SaveChangesAsync();
                 }
             }
-            return new AuthenticateUser(TokenService.Generate(_appSettings.Secret, new List<Claim>
+            return new AuthenticateUser(TokenService.Generate(_appSettings.Secret, new List<CustomClaim>
             {
-                new Claim(ClaimTypes.Name, id.ToString()),
-                new Claim(ClaimTypes.Email, email),
-                new Claim(ClaimTypes.Role, rol.ToString())
+                new CustomClaim(ClaimTypes.Name, id.ToString()),
+                new CustomClaim(ClaimTypes.Email, email),
+                new CustomClaim(ClaimTypes.Role, rol.ToString())
             }, DateTime.UtcNow.AddDays(30)));
         }
         public async Task<AuthenticateUser> AuthenticateOrCreate(string email)
         {
             var user = _context.Members.SingleOrDefault(x => x.Email.ToUpper() == email.ToUpper());
-
-            // return null if user not found
             if (user == null)
             {
                 user = new Member
@@ -108,16 +124,16 @@ namespace NetBaires.Api.Auth
                 await _context.Members.AddAsync(user);
                 await _context.SaveChangesAsync();
             }
-            return new AuthenticateUser(TokenService.Generate(_appSettings.Secret, new List<Claim>
+            return new AuthenticateUser(TokenService.Generate(_appSettings.Secret, new List<CustomClaim>
             {
-                new Claim(ClaimTypes.Name, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role.ToString())
+                new CustomClaim(EnumClaims.UserId.ToString().LowercaseFirst(), user.Id.ToString()),
+                new CustomClaim(EnumClaims.Email.ToString().LowercaseFirst(), user.Email),
+                new CustomClaim(EnumClaims.Role.ToString().LowercaseFirst(), user.Role.ToString())
             }, DateTime.UtcNow.AddDays(30)));
         }
-        public ValidateToken Validate(string tokenToValidate)
+        public LoginToken Validate(string tokenToValidate)
         {
-            return TokenService.Validate(tokenToValidate, _appSettings.Secret);
+            return TokenService.Validate<LoginToken>(_appSettings.Secret, tokenToValidate);
         }
     }
 }

@@ -1,0 +1,4 @@
+{
+  "parallelizeTestCollections": false,
+  "methodDisplay": "classAndMethod"
+}
