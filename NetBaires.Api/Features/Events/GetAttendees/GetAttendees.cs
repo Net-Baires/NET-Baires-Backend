@@ -48,7 +48,7 @@ namespace NetBaires.Api.Features.Events.GetAttendees
             if (attendees == null || !attendees.Any())
                 return HttpResponseCodeHelper.NotContent();
 
-            if (attendees.Count == 1)
+            if (attendees.Count == 1 && request.MemberId != null)
                 return HttpResponseCodeHelper.Ok(_mapper.Map(attendees, new List<AttendantViewModel>()).First());
             else
                 return HttpResponseCodeHelper.Ok(_mapper.Map(attendees, new List<AttendantViewModel>()));

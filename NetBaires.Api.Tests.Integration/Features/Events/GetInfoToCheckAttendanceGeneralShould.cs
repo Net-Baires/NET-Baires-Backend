@@ -25,6 +25,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
                 Title = "Event Test",
                 Description = "Event Description Test"
             };
+            newEvent.EnableGeneralAttendace();
             var newMember = new Member
             {
                 Email = "test@test.com",
