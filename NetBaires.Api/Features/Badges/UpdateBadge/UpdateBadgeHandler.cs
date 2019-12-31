@@ -39,19 +39,22 @@ namespace NetBaires.Api.Features.Badges.UpdateBadge
             {
                 foreach (var item in request.ImageFiles)
                 {
-                    if (item.Headers["BadgeType"] == BadgeImageName.Badge.ToString())
-                    {
-                        var badgeCreateResponse = await badgesServices.ReplaceAsync(item, badge.ImageName);
-                        if (badgeCreateResponse == null)
-                            return new StatusCodeResult(400);
-                        badge.ImageName = badgeCreateResponse.FileDetail.Name;
-                    }
-                    else if (item.Headers["BadgeType"] == BadgeImageName.SimpleBadge.ToString())
+                    if (item.Headers["BadgeType"] == BadgeImageName.SimpleBadge.ToString())
                     {
                         var badgeCreateResponse = await badgesServices.ReplaceAsync(item, badge.SimpleImageName);
                         if (badgeCreateResponse == null)
                             return new StatusCodeResult(400);
                         badge.SimpleImageName = badgeCreateResponse.FileDetail.Name;
+                        badge.SimpleImageUrl = badgeCreateResponse.FileDetail.FileUri.AbsoluteUri;
+                    }
+                    else
+                    //(item.Headers["BadgeType"] == BadgeImageName.Badge.ToString())
+                    {
+                        var badgeCreateResponse = await badgesServices.ReplaceAsync(item, badge.ImageName);
+                        if (badgeCreateResponse == null)
+                            return new StatusCodeResult(400);
+                        badge.ImageName = badgeCreateResponse.FileDetail.Name;
+                        badge.ImageUrl = badgeCreateResponse.FileDetail.FileUri.AbsoluteUri;
                     }
                 }
             }
