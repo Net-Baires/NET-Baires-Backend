@@ -10,6 +10,7 @@ namespace NetBaires.Host.Extensions
         {
             services.Configure<MeetupEndPointOptions>(Configuration.GetSection("MeetupEndPoint"));
             services.Configure<TwitterApiOptions>(Configuration.GetSection("TwitterApi"));
+            
             services.Configure<EventBriteApiOptions>(Configuration.GetSection("EventBriteApi"));
             services.Configure<SlackEndPointOptions>(Configuration.GetSection("SlackEndPoint"));
             services.Configure<AttendanceOptions>(Configuration.GetSection("Attendance"));

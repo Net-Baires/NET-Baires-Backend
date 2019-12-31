@@ -58,8 +58,6 @@ namespace NetBaires.Api.Features.Events
         [SwaggerOperation(Summary = "Retorna el detalle de un evento en vivo")]
         [ApiExplorerSettingsExtend(UserRole.Organizer)]
         [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
-        [ProducesResponseType(typeof(Event), 200)]
-        [ProducesResponseType(404)]
         public async Task<IActionResult> GetEventLiveDetail([FromRoute]int id) =>
                          await _iMediator.Send(new GetEventLiveDetailQuery(id));
 
@@ -102,7 +100,7 @@ namespace NetBaires.Api.Features.Events
         [HttpGet("{eventId:int}/attendees")]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
         [SwaggerOperation(Summary = "Retorna todos los miembros que se encuentran registrados a un evento particular")]
-        [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
+        [AuthorizeRoles(UserRole.Admin)]
         public async Task<IActionResult> GetAttendees([FromRoute]int eventId, [FromQuery]int? memberId) =>
             await _iMediator.Send(new GetAttendeesQuery(eventId, memberId));
 

@@ -33,7 +33,7 @@ namespace NetBaires.Host
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            CorsRegistrationExtensions.UseCors(app.UseSwagger(env))
+            CorsRegistrationExtensions.UseCors(app.UseSwagger(env), Configuration)
                 .UseAuthentication(env)
                 .UseCache(env)
                 .UseSignalRServices(env)
