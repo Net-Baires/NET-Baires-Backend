@@ -25,7 +25,7 @@ namespace NetBaires.Data
         public DateTime? EndLiveTime { get; set; }
         public DateTime Date { get; set; }
         public List<SponsorEvent> Sponsors { get; set; } = new List<SponsorEvent>();
-
+        public List<GroupCode> GroupCodes { get; protected set; } = new List<GroupCode>();
         public DomainResponse AssignBadgeToAttended(Badge badge)
         {
             if (!Done)
@@ -106,6 +106,14 @@ namespace NetBaires.Data
             EndLiveTime = DateTime.Now;
             AddDomainEvent(new EventUnLive(this));
         }
+
+        public GroupCode CreateGroupCode(string detail)
+        {
+            var newGroupCode = new GroupCode(detail);
+            GroupCodes.Add(newGroupCode);
+            return newGroupCode;
+        }
+
         public void Complete()
         {
             Done = true;

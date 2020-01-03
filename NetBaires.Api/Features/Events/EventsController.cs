@@ -158,8 +158,13 @@ namespace NetBaires.Api.Features.Events
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
         public async Task<IActionResult> AssignBadgeToAttendances([FromRoute]AssignBadgeToAttendancesCommand command) =>
-                        await _iMediator.Send(command);
+            await _iMediator.Send(command);
 
-
+        [HttpPost("{eventId:int}/groupcodes")]
+        [SwaggerOperation(Summary = "Crea un GroupCode para un evento especifico")]
+        [AuthorizeRoles(UserRole.Admin)]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
+        public async Task<IActionResult> CreateGroupCode([FromRoute] int eventId, [FromBody]CreateGroupCodeCommand command) =>
+            await _iMediator.Send(new CreateGroupCodeCommand { EventId = eventId, Detail = command.Detail });
     }
 }

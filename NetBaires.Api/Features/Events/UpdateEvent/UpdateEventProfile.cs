@@ -16,6 +16,7 @@ namespace NetBaires.Api.Features.Events.UpdateEvent
                 .ForAllMembers(
                     opt => opt.Condition((src, dest, sourceMember) => sourceMember != null));
 
+
         }
     }
 }
