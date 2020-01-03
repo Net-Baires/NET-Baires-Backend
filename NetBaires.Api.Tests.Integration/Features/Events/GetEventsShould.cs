@@ -136,6 +136,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
             Context.Events.Add(doneEvent);
             Context.Events.Add(doneEvent2);
             Context.Events.Add(new Event());
+
             _event = new Event
             {
                 Live = true

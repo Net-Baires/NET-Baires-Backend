@@ -36,7 +36,7 @@ namespace NetBaires.Api.Features.Events.GetEvents
                                                             &&
                                                             (request.Id != null ? x.Id == request.Id : true))
                                                .OrderByDescending(x => x.Id)
-                                               .Select(x => _mapper.Map<Event, EventDetailViewModel>(x))
+                                               .Select(x => _mapper.Map<EventDetailViewModel>(x))
                                                .AsNoTracking()
                                                .ToListAsync();
             if (!eventToReturn.Any())

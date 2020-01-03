@@ -16,6 +16,9 @@ using NetBaires.Api.Features.Events.SyncWithExternalEvents;
 using NetBaires.Api.Features.Events.UpdateAttendee;
 using NetBaires.Api.Features.Events.UpdateEvent;
 using NetBaires.Api.Features.GroupsCodes.AddMemberToGroupCode;
+using NetBaires.Api.Features.GroupsCodes.DeleteGroupCode;
+using NetBaires.Api.Features.GroupsCodes.GetGroupCode;
+using NetBaires.Api.Features.GroupsCodes.UpdateGroupCode;
 using NetBaires.Api.Handlers.Events;
 using NetBaires.Data;
 using Swashbuckle.AspNetCore.Annotations;
@@ -33,16 +36,28 @@ namespace NetBaires.Api.Features.GroupsCodes
         {
             _iMediator = iMediator;
         }
+        [HttpPut("{groupCodeId:int}")]
+        [AuthorizeRoles(UserRole.Admin)]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
+        public async Task<IActionResult> UpdateGroupCode([FromRoute]int groupCodeId, UpdateGroupCodeCommand command)
+        {
+            command.GroupCodeId = groupCodeId;
+            return await _iMediator.Send(command);
+        }
 
+        [HttpGet("{groupCodeId}")]
+        [AllowAnonymous]
+        [SwaggerOperation(Summary = "Retorna el detalle de un evento en vivo")]
+        [ApiExplorerSettingsExtend(UserRole.Organizer)]
+        [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
+        public async Task<IActionResult> GetGroupCode([FromRoute]GetGroupCodeQuery query) =>
+            await _iMediator.Send(query);
 
-
-        [HttpPost("{groupCodeId:int}/{code}")]
-        [SwaggerOperation(Summary = "Agrega al usuario logueado al group de codigo")]
-        [AuthorizeRoles(UserRole.Member)]
-        [ApiExplorerSettingsExtend(UserRole.Member)]
-        public async Task<IActionResult>
-            AddMemberToGroupCode([FromRoute]int groupCodeId, [FromRoute] string code) =>
-            await _iMediator.Send(new AddMemberToGroupCodeCommand { Code = code, GroupCodeId = groupCodeId });
-
+        [HttpDelete("{groupCodeId}")]
+        [AllowAnonymous]
+        [ApiExplorerSettingsExtend(UserRole.Organizer)]
+        [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
+        public async Task<IActionResult> DeleteGroupCode([FromRoute]DeleteGroupCodeCommand query) =>
+            await _iMediator.Send(query);
     }
 }

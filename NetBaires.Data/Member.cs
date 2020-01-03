@@ -30,7 +30,7 @@ namespace NetBaires.Data
         public UserRole Role { get; set; }
         public IList<BadgeMember> Badges { get; set; }
         public List<Attendance> Events { get; set; }
-        
+        public List<GroupCodeMember> GroupCodes { get; set; }
         public void SetFile(Uri uri, string fileName)
         {
             Picture = uri.AbsoluteUri;

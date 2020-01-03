@@ -5,24 +5,29 @@ namespace NetBaires.Data
 {
     public class GroupCode : Entity
     {
-        public string Code { get; protected set; }
+        public string Code { get; set; }
         public string Detail { get; set; }
-        public bool Open { get; protected set; } = true;
-        public List<Member> Members { get; set; } = new List<Member>();
+        public bool Open { get; set; } = true;
+        public List<GroupCodeMember> Members { get; set; } = new List<GroupCodeMember>();
         public int EventId { get; set; }
 
         public Event Event { get; set; }
 
         public GroupCode(string detail)
         {
+            Open = false;
             Detail = detail;
             Code = RandomHelper.RandomString(8);
         }
 
-        public void AddMember(Member member,string code)
+        public void AddMember(Member member, string code)
         {
-            if (Members.All(x => x.Id != member.Id) && code.ToUpper() == Code.ToUpper())
-                Members.Add(member);
+            if (Members.All(x => x.MemberId != member.Id) && code.ToUpper() == Code.ToUpper())
+                Members.Add(new GroupCodeMember
+                {
+                    Member = member,
+                    GroupCode = this
+                });
         }
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetBaires.Data;
 
 namespace NetBaires.Data.Migrations
 {
     [DbContext(typeof(NetBairesContext))]
-    partial class NetBairesContextModelSnapshot : ModelSnapshot
+    [Migration("20200103154048_Add_GroupCodes")]
+    partial class Add_GroupCodes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -213,28 +215,6 @@ namespace NetBaires.Data.Migrations
                     b.ToTable("GroupCodes");
                 });
 
-            modelBuilder.Entity("NetBaires.Data.GroupCodeMember", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("GroupCodeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MemberId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GroupCodeId");
-
-                    b.HasIndex("MemberId");
-
-                    b.ToTable("GroupCodeMember");
-                });
-
             modelBuilder.Entity("NetBaires.Data.Member", b =>
                 {
                     b.Property<int>("Id")
@@ -262,6 +242,9 @@ namespace NetBaires.Data.Migrations
 
                     b.Property<string>("Github")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("GroupCodeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Instagram")
                         .HasColumnType("nvarchar(max)");
@@ -298,6 +281,8 @@ namespace NetBaires.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GroupCodeId");
 
                     b.ToTable("Members");
                 });
@@ -397,19 +382,11 @@ namespace NetBaires.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("NetBaires.Data.GroupCodeMember", b =>
+            modelBuilder.Entity("NetBaires.Data.Member", b =>
                 {
-                    b.HasOne("NetBaires.Data.GroupCode", "GroupCode")
+                    b.HasOne("NetBaires.Data.GroupCode", null)
                         .WithMany("Members")
-                        .HasForeignKey("GroupCodeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NetBaires.Data.Member", "Member")
-                        .WithMany("GroupCodes")
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GroupCodeId");
                 });
 
             modelBuilder.Entity("NetBaires.Data.SponsorEvent", b =>

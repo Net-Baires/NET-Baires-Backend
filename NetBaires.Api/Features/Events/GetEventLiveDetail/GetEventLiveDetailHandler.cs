@@ -12,7 +12,6 @@ using NetBaires.Data;
 
 namespace NetBaires.Api.Features.Events.GetEventLiveDetail
 {
-
     public class GetEventLiveDetailHandler : IRequestHandler<GetEventLiveDetailQuery, IActionResult>
     {
         private readonly IMapper _mapper;
@@ -35,25 +34,18 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
         public async Task<IActionResult> Handle(GetEventLiveDetailQuery request, CancellationToken cancellationToken)
         {
 
-            var eventToReturn =  _context.Events.Include(x => x.Attendees)
-                                                     .Where(x => x.Id == request.Id
-                                                     &&
-                                                     x.Live)
-                                               .Select(x =>  Tuple.Create(x,new GetEventLiveDetailQuery.Response
-                                               {
-                                                   Id = x.Id,
-                                                   Title = x.Title,
-                                                   Description = x.Description,
-                                                   ImageUrl = x.ImageUrl,
-                                                   Platform = x.Platform,
-                                                   StartLiveTime = x.StartLiveTime,
-                                                   GeneralAttended = x.GeneralAttended,
-                                                   Attended = x.Attendees.Any(a => a.MemberId == _currentUser.User.Id
-                                                                                    &&
-                                                                                    a.Attended)
-                                               }))
-                                               .FirstOrDefault();
+            var eventToReturn = _context.Events.Include(x => x.Attendees)
+                .Include(x=> x.GroupCodes)
+                .ThenInclude(x=> x.Members)
+                .Where(x => x.Id == request.Id
+                            &&
+                            x.Live)
+                .Select(x => Tuple.Create(x, _mapper.Map<GetEventLiveDetailQuery.Response>(x)))
+                .FirstOrDefault();
 
+            //TODO: Refactor
+            if (_currentUser.User.Rol == UserRole.Member)
+                eventToReturn.Item2.GroupCodes = null;
             eventToReturn.Item2.GeneralAttendance = eventToReturn.Item1.GeneralAttended &&
                                                     (_currentUser.User.Rol == UserRole.Admin
                                                      ||
@@ -75,20 +67,12 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
                 TotalMembersRegistered = eventToReturn.Item1.Attendees.Count,
                 TotalMembersAttended = eventToReturn.Item1.Attendees.Count(l => l.Attended)
             };
-            eventToReturn.Item2.MembersDetails.MembersAttended = await _context.Attendances.Include(x=> x.Member).Where(x => x.EventId == eventToReturn.Item2.Id
-                                                                                                &&
-                                                                                                x.Attended)
+            eventToReturn.Item2.MembersDetails.MembersAttended = await _context.Attendances.Include(x => x.Member).Where(x => x.EventId == eventToReturn.Item2.Id
+                                                                                                                              &&
+                                                                                                                              x.Attended)
                 .OrderByDescending(x => x.AttendedTime)
                 .Take(8)
-                .Select(s => new GetEventLiveDetailQuery.Response.MemberDetail
-                {
-                    Id = s.Member.Id,
-                    FirstName = s.Member.FirstName,
-                    LastName = s.Member.LastName,
-                    Picture = s.Member.Picture,
-                    Username = s.Member.Username,
-                    AttendedTime = s.AttendedTime
-                }).ToListAsync();
+                .Select(s => _mapper.Map<GetEventLiveDetailQuery.Response.MemberDetail>(s.Member)).ToListAsync(cancellationToken: cancellationToken);
 
 
             if (request.Id != null)
@@ -96,5 +80,4 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
             return HttpResponseCodeHelper.Ok(eventToReturn.Item2);
         }
     }
-
 }

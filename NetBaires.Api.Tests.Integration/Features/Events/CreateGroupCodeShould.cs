@@ -41,7 +41,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
             var sut = await Context.GroupCodes.FirstOrDefaultAsync();
             sut.Code.Should().Be(responseCreateGroupCode.Code);
             sut.Detail.Should().Be(newGroup.Detail);
-            sut.Open.Should().BeTrue();
+            sut.Open.Should().BeFalse();
         }
         private void FillData()
         {

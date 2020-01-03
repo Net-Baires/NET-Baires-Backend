@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,19 +17,24 @@ namespace NetBaires.Api.Features.GroupsCodes.AddMemberToGroupCode
     {
         private readonly NetBairesContext _context;
         private readonly ICurrentUser _currentUser;
+        private readonly IMapper _mapper;
         private readonly ILogger<AddAttendeeHandler> _logger;
 
         public AddMemberToGroupCodeHandler(NetBairesContext context,
             ICurrentUser currentUser,
+            IMapper mapper,
             ILogger<AddAttendeeHandler> logger)
         {
             _context = context;
             _currentUser = currentUser;
+            _mapper = mapper;
             _logger = logger;
         }
         public async Task<IActionResult> Handle(AddMemberToGroupCodeCommand request, CancellationToken cancellationToken)
         {
-            var groupCode = await _context.GroupCodes.FirstOrDefaultAsync(x => x.Id == request.GroupCodeId);
+            var groupCode = await _context.GroupCodes.FirstOrDefaultAsync(x => x.Event.Id == request.EventId
+                                                                               &&
+                                                                               x.Code.ToUpper() == request.Code.ToUpper());
 
             if (groupCode == null)
                 return HttpResponseCodeHelper.NotFound("El Grupo de codigo no existe");
@@ -52,7 +58,7 @@ namespace NetBaires.Api.Features.GroupsCodes.AddMemberToGroupCode
 
             await _context.SaveChangesAsync();
 
-            return HttpResponseCodeHelper.NotContent();
+            return HttpResponseCodeHelper.Ok(_mapper.Map<AddMemberToGroupCodeCommand.Response>(groupCode));
         }
     }
 }
