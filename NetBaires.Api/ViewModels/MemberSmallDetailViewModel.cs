@@ -15,7 +15,11 @@ namespace NetBaires.Api.ViewModels
         {
             public MemberSmallDetailViewModelProfile()
             {
-                CreateMap<Member, MemberSmallDetailViewModel>();
+                CreateMap<GroupCodeMember, MemberSmallDetailViewModel>()
+                    .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Member.Id))
+                    .ForMember(d => d.FirstName, opt => opt.MapFrom(s => s.Member.FirstName))
+                    .ForMember(d => d.LastName, opt => opt.MapFrom(s => s.Member.LastName))
+                    .ForMember(d => d.Picture, opt => opt.MapFrom(s => s.Member.Picture));
             }
         }
     }
