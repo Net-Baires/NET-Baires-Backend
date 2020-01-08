@@ -46,18 +46,26 @@ namespace NetBaires.Api.Features.GroupsCodes
         }
 
         [HttpGet("{groupCodeId}")]
-        [AllowAnonymous]
-        [SwaggerOperation(Summary = "Retorna el detalle de un evento en vivo")]
-        [ApiExplorerSettingsExtend(UserRole.Organizer)]
-        [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
+        [SwaggerOperation(Summary = "Retorna el detalle de un Group Code")]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
+        [AuthorizeRoles(UserRole.Admin, UserRole.Organizer)]
         public async Task<IActionResult> GetGroupCode([FromRoute]GetGroupCodeQuery query) =>
             await _iMediator.Send(query);
 
         [HttpDelete("{groupCodeId}")]
-        [AllowAnonymous]
-        [ApiExplorerSettingsExtend(UserRole.Organizer)]
-        [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
+        [AuthorizeRoles(UserRole.Admin, UserRole.Organizer)]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
         public async Task<IActionResult> DeleteGroupCode([FromRoute]DeleteGroupCodeCommand query) =>
             await _iMediator.Send(query);
+
+        [HttpPost("{groupCodeId}/badges/{badgeId}")]
+        [AllowAnonymous]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
+        [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
+        public async Task<IActionResult> AssignBadgeToAttendancesInGroupCode([FromRoute]AssignBadgeToAttendancesInGroupCodeCommand command) =>
+            await _iMediator.Send(command);
+
+
+        
     }
 }

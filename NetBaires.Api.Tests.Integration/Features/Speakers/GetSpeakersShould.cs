@@ -34,10 +34,10 @@ namespace NetBaires.Api.Tests.Integration.Features.Speakers
             Context.SaveChanges();
             var memebrs = Context.Members.Include(x => x.Events).ToList();
             var response = await HttpClient.GetAsync("/speakers");
-            var speakers = await response.Content.ReadAsAsync<List<GetSpeakersResponse>>();
+            var speakers = await response.Content.ReadAsAsync<List<GetSpeakerResponse>>();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             speakers.Count.Should().Be(1);
-            speakers.First().CounEventsAsSpeaker.Should().Be(3);
+            speakers.First().CountEventsAsSpeaker.Should().Be(3);
         }
 
     }

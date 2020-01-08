@@ -6,7 +6,7 @@ namespace NetBaires.Api.Features.Events.UpdateAttendee
 {
     public class UpdateAttendeeCommand : IRequest<IActionResult>
     {
-        public string? Status { get; set; }
+        public string Status { get; set; }
         public bool? Organizer { get; set; }
         public bool? Speaker { get; set; }
         [JsonIgnore]

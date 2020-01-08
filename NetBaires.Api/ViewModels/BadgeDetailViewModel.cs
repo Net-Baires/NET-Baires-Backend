@@ -21,8 +21,19 @@ namespace NetBaires.Api.ViewModels
                     .ForAllMembers(
                     opt => opt.Condition((src, dest, sourceMember) => sourceMember != null));
                 CreateMap<Badge, BadgeDetailViewModel>()
-                .ForAllMembers(
-                    opt => opt.Condition((src, dest, sourceMember) => sourceMember != null));
+                    .ForAllMembers(
+                        opt => opt.Condition((src, dest, sourceMember) => sourceMember != null));
+                CreateMap<GroupCodeBadge, BadgeDetailViewModel>()
+                    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Badge.Id))
+                    .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.Badge.ImageUrl))
+                    .ForMember(dest => dest.SimpleImageUrl, opt => opt.MapFrom(src => src.Badge.SimpleImageUrl))
+                    .ForMember(dest => dest.Created, opt => opt.MapFrom(src => src.Badge.Created))
+                    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Badge.Name))
+                    .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Badge.Description))
+
+                    .ForAllMembers(
+                        opt => opt.Condition((src, dest, sourceMember) => sourceMember != null));
+
             }
         }  
     }

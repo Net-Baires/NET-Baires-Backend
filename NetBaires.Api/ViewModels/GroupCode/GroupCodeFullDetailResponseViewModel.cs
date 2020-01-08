@@ -10,11 +10,15 @@ namespace NetBaires.Api.ViewModels.GroupCode
         public string Detail { get; set; }
         public bool Open { get; protected set; }
         public List<MemberSmallDetailViewModel> Members { get; set; }
+        public List<BadgeDetailViewModel> Badges { get; set; }
         public class GetBadgeGroupsProfile : Profile
         {
             public GetBadgeGroupsProfile()
             {
-                CreateMap<Data.GroupCode, GroupCodeFullDetailResponseViewModel>();
+                CreateMap<Data.GroupCode, GroupCodeFullDetailResponseViewModel>()
+                    .ForMember(dest => dest.Badges, opt => opt.MapFrom(src => src.GroupCodeBadges))
+
+                        ;
             }
         }
     }

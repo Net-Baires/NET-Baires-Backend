@@ -8,6 +8,7 @@ namespace NetBaires.Api.Features.Events.GetEvents
         public bool? Done { get; set; }
         public bool? Live { get; set; }
         public int? Id { get; set; }
+        public  int? MemberId { get; set; }
 
         public GetEventsQuery(bool? done, bool? live, int? id)
         {

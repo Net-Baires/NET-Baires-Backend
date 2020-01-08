@@ -42,7 +42,8 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
                             x.Live)
                 .Select(x => Tuple.Create(x, _mapper.Map<GetEventLiveDetailQuery.Response>(x)))
                 .FirstOrDefault();
-
+            if (eventToReturn == null)
+                return HttpResponseCodeHelper.NotFound();
             //TODO: Refactor
             if (_currentUser.User.Rol == UserRole.Member)
                 eventToReturn.Item2.GroupCodes = null;
@@ -65,7 +66,8 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
             eventToReturn.Item2.MembersDetails = new GetEventLiveDetailQuery.Response.Members
             {
                 TotalMembersRegistered = eventToReturn.Item1.Attendees.Count,
-                TotalMembersAttended = eventToReturn.Item1.Attendees.Count(l => l.Attended)
+                TotalMembersAttended = eventToReturn.Item1.Attendees.Count(l => l.Attended),
+                EstimatedAttendancePercentage = eventToReturn.Item1.EstimatedAttendancePercentage
             };
             eventToReturn.Item2.MembersDetails.MembersAttended = await _context.Attendances.Include(x => x.Member).Where(x => x.EventId == eventToReturn.Item2.Id
                                                                                                                               &&

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetBaires.Data;
 
 namespace NetBaires.Data.Migrations
 {
     [DbContext(typeof(NetBairesContext))]
-    partial class NetBairesContextModelSnapshot : ModelSnapshot
+    [Migration("20200108023117_Update_GroupCode_Add_List_Of_Badges")]
+    partial class Update_GroupCode_Add_List_Of_Badges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,9 +27,6 @@ namespace NetBaires.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("EventId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AttendanceRegisterType")
                         .HasColumnType("int");
 
                     b.Property<bool>("Attended")
@@ -156,9 +155,6 @@ namespace NetBaires.Data.Migrations
 
                     b.Property<DateTime?>("EndLiveTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<decimal>("EstimatedAttendancePercentage")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("EventId")
                         .HasColumnType("nvarchar(max)");

@@ -32,7 +32,7 @@ namespace NetBaires.Api.Features.Members.InformAttendances
             if (member == null)
                 return HttpResponseCodeHelper.NotFound();
 
-            var attendance = eventToUpdate.AddAttendance(member);
+            var attendance = eventToUpdate.AddAttendance(member, AttendanceRegisterType.CurrentEvent);
             if (request.Attended)
                 attendance.Attend();
             else

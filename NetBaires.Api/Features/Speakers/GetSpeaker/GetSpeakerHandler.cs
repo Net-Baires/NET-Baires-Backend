@@ -9,17 +9,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Features.Events.UpdateEvent;
 using NetBaires.Api.Helpers;
+using NetBaires.Api.ViewModels;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Features.Speakers.GetSpeakers
 {
 
-    public class GetSpeakersHandler : IRequestHandler<GetSpeakersQuery, IActionResult>
+    public class GetSpeakerHandler : IRequestHandler<GetSpeakerQuery, IActionResult>
     {
         private readonly IMapper _mapper;
         private readonly NetBairesContext _context;
 
-        public GetSpeakersHandler(IMapper mapper,
+        public GetSpeakerHandler(IMapper mapper,
             NetBairesContext context,
             ILogger<UpdateEventHandler> logger)
         {
@@ -28,42 +29,34 @@ namespace NetBaires.Api.Features.Speakers.GetSpeakers
         }
 
 
-        public async Task<IActionResult> Handle(GetSpeakersQuery request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Handle(GetSpeakerQuery request, CancellationToken cancellationToken)
         {
 
-            var eventToReturn = _context.Members
-                                        .Include(x => x.Events)
+            var eventToReturn = await _context.Members
                                         .Where(x =>
-                                            request.Id != null ? x.Id == request.Id : true
+                                             x.Id == request.Id
                                             &&
                                             x.Events.Any(s => s.Speaker))
-                                        .ToList()
                                         .Select(x => new MemberEvents
                                         {
                                             Member = x,
+                                            Events = _context.Events.Where(e=> e.Attendees.Any(a=> a.MemberId == x.Id && a.Speaker)).ToList(),
                                             CountEventsAsSpeaker = x.Events.Count(s => s.Speaker)
                                         })
-                                        .ToList();
-            var returnList = new List<GetSpeakerResponse>();
-
-            foreach (var item in eventToReturn)
-            {
-                var itemToAdd = _mapper.Map<GetSpeakerResponse>(item.Member);
-                itemToAdd.CountEventsAsSpeaker = item.CountEventsAsSpeaker;
-                returnList.Add(itemToAdd);
-            }
-
-
-            if (!eventToReturn.Any())
+                                        .FirstOrDefaultAsync();
+            if (eventToReturn == null)
                 return HttpResponseCodeHelper.NotContent();
 
-            if (request.Id != null)
-                return HttpResponseCodeHelper.Ok(returnList.First());
-            return HttpResponseCodeHelper.Ok(returnList);
+            var toReturn = _mapper.Map<GetSpeakerResponse>(eventToReturn.Member);
+            toReturn.CountEventsAsSpeaker = eventToReturn.CountEventsAsSpeaker;
+            toReturn.Events = _mapper.Map<List<EventDetailViewModel>>(eventToReturn.Events);
+
+            return HttpResponseCodeHelper.Ok(toReturn);
         }
         public class MemberEvents
         {
             public Member Member { get; set; }
+            public List<Event> Events { get; set; }
             public int CountEventsAsSpeaker { get; set; }
         }
     }

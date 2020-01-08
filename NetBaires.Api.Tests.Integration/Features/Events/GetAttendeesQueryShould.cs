@@ -26,7 +26,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
         {
             FillData();
             var currentMember = Context.Members.First();
-            _event.AddAttendance(currentMember);
+            _event.AddAttendance(currentMember, AttendanceRegisterType.CurrentEvent);
             Context.SaveChanges();
             var response = await HttpClient.GetAsync($"/events/{_event.Id}/attendees");
             var eventResult = await response.Content.ReadAsAsync<List<AttendantViewModel>>();
@@ -37,7 +37,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
         {
             FillData();
             var currentMember = Context.Members.First();
-            _event.AddAttendance(currentMember);
+            _event.AddAttendance(currentMember, AttendanceRegisterType.CurrentEvent);
             Context.SaveChanges();
             var response = await HttpClient.GetAsync($"/events/{_event.Id}/attendees?memberId={_event.Attendees[1].MemberId}");
             var eventResult = await response.Content.ReadAsAsync<AttendantViewModel>();

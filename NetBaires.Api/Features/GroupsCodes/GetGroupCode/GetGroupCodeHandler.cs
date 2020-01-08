@@ -29,8 +29,11 @@ namespace NetBaires.Api.Features.GroupsCodes.GetGroupCode
         public async Task<IActionResult> Handle(GetGroupCodeQuery request, CancellationToken cancellationToken)
         {
 
-            var groupCode = await _context.GroupCodes.Include(x => x.Members).ThenInclude(x=> x.Member)
-                .FirstOrDefaultAsync(x => x.Id == request.GroupCodeId);
+            var groupCode = await _context.GroupCodes.Include(x=> x.GroupCodeBadges)
+                                                     .ThenInclude(x=> x.Badge)
+                                                     .Include(x => x.Members)
+                                                     .ThenInclude(x=> x.Member)
+                                                     .FirstOrDefaultAsync(x => x.Id == request.GroupCodeId);
 
             if (groupCode == null)
                 return HttpResponseCodeHelper.NotFound();

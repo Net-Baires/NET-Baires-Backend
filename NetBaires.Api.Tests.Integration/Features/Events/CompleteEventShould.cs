@@ -35,17 +35,17 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
             eventToAdd.AddAttendance(new Member
             {
                 Email = "Test@test.com"
-            }).Attend();
+            }, AttendanceRegisterType.CurrentEvent).Attend();
 
             eventToAdd.AddAttendance(new Member
             {
                 Email = "Test2@test.com"
-            });
+            }, AttendanceRegisterType.CurrentEvent);
 
             eventToAdd.AddAttendance(new Member
             {
                 Email = "Test3@test.com"
-            }).SetDoNotKnow();
+            }, AttendanceRegisterType.CurrentEvent).SetDoNotKnow();
 
             Context.Members.Add(new Member { Email = "Test3@test.com" });
 

@@ -36,20 +36,26 @@ namespace NetBaires.Api.Services.Sync
                 {
                     if (attende.Member.Id != 0)
                     {
-                        var newMember = new Member
-                        {
-                            MeetupId = attende.Member.Id,
-                            FirstName = attende.Member.Name,
-                            Picture = attende.Member.Photo?.HighresLink?.AbsolutePath == null ? "" :
-                            attende.Member.Photo?.HighresLink?.AbsoluteUri,
-                            Biography = attende.Member.Bio
-                        };
+                        var newMember = await _context.Members.Where(x => x.MeetupId == attende.Member.Id).FirstOrDefaultAsync();
+                        if (newMember == null)
+                            newMember = new Member
+                            {
+                                MeetupId = attende.Member.Id,
+                                FirstName = attende.Member.Name,
+                                Picture = attende.Member.Photo?.HighresLink?.AbsolutePath == null ? "" :
+                               attende.Member.Photo?.HighresLink?.AbsoluteUri,
+                                Biography = attende.Member.Bio
+                            };
                         if ((attende.Status != null
                              &&
                              attende.Status == "attended"))
-                            currentMember = new Attendance(newMember, eventToSync, true);
+                            currentMember = new Attendance(newMember, eventToSync, true, AttendanceRegisterType.ExternalPage);
                         else
-                            currentMember = new Attendance(newMember, eventToSync,false);
+                        {
+                            currentMember = new Attendance(newMember, eventToSync, AttendanceRegisterType.ExternalPage);
+                            currentMember.SetDoNotKnow();
+                        }
+
                         await _context.Attendances.AddAsync(currentMember);
                     }
                 }
@@ -66,6 +72,11 @@ namespace NetBaires.Api.Services.Sync
                 }
 
             }
+            var percent = _context.Members.Count(x => meetupAttendeesIds.Contains(x.MeetupId)
+                                                      &&
+                                                      (x.Events.Any(a => !a.DoNotKnow) && x.Events.Count(s => s.Attended) * 100 /
+                                                       x.Events.Count(a => !a.DoNotKnow) > 60));
+            eventToSync.EstimatedAttendancePercentage = (decimal)(((decimal)percent * 100) / meetupAttendeesIds.Count());
             await _context.SaveChangesAsync();
         }
     }

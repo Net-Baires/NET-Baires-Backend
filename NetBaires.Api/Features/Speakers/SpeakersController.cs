@@ -24,7 +24,13 @@ namespace NetBaires.Api.Features.Speakers
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
         [SwaggerOperation(Summary = "Retorna todos los miemebros que son/fueron speakers en la comunidad")]
         public async Task<IActionResult> Get() =>
-               await mediator.Send(new GetSpeakersQuery());
+            await mediator.Send(new GetSpeakersQuery());
+        [HttpGet("{id}")]
+        [AllowAnonymous]
+        [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
+        [SwaggerOperation(Summary = "Retorna todos los miemebros que son/fueron speakers en la comunidad")]
+        public async Task<IActionResult> GetById([FromRoute]int id) =>
+            await mediator.Send(new GetSpeakerQuery(id));
 
     }
 }

@@ -97,7 +97,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
         public async Task Set_Attende_Like_No_Organizer()
         {
             FillData();
-            _newEvent.Attended(_newMember);
+            _newEvent.Attended(_newMember, AttendanceRegisterType.CurrentEvent);
             Context.SaveChanges();
             var update = new UpdateAttendeeCommand
             {
@@ -198,7 +198,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
                 LastName = "LastName",
                 Linkedin = "Linkedin"
             };
-            _attendance = _newEvent.AddAttendance(_newMember);
+            _attendance = _newEvent.AddAttendance(_newMember, AttendanceRegisterType.CurrentEvent);
             Context.Events.Add(_newEvent);
             Context.SaveChanges();
         }

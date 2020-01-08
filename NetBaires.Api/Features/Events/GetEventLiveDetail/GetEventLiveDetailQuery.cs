@@ -39,6 +39,7 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
             {
                 public int TotalMembersRegistered { get; set; }
                 public int TotalMembersAttended { get; set; }
+                public decimal EstimatedAttendancePercentage { get; set; }
                 public List<MemberDetail> MembersAttended { get; set; }
             }
             public class MemberDetail

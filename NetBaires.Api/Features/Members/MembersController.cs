@@ -79,6 +79,7 @@ namespace NetBaires.Api.Features.Members
         public async Task<IActionResult> GetBadgesFromEmailAsync([FromQuery] string email)
             => await _mediator.Send(new GetBadgesFromMemberQuery(email));
 
+
         [HttpGet("{id:int}/badges")]
         [SwaggerOperation(Summary = "Retorna todos los badges recibidos por el miembro")]
         [AllowAnonymous]

@@ -45,7 +45,7 @@ namespace NetBaires.Api.Tests.Integration.Features.GroupCodes
         [Fact]
         public async Task Add_Member_To_Group_Code()
         {
-            _eventToAdd.AddAttendance(_member);
+            _eventToAdd.AddAttendance(_member, AttendanceRegisterType.CurrentEvent);
             await Context.SaveChangesAsync();
             var response = await HttpClient.PostAsync($"/groupcodes/{_groupCode.Id}/{_groupCode.Code}", null);
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
