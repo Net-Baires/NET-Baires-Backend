@@ -34,7 +34,7 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
         public async Task<IActionResult> Handle(GetEventLiveDetailQuery request, CancellationToken cancellationToken)
         {
 
-            var eventToReturn = _context.Events.Include(x => x.Attendees)
+            var eventToReturn = _context.Events
                 .Include(x=> x.GroupCodes)
                 .ThenInclude(x=> x.Members)
                 .Where(x => x.Id == request.Id
@@ -63,10 +63,19 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
 
             if (eventToReturn.Item1 == null)
                 return HttpResponseCodeHelper.NotContent();
+            var countAttended = _context.Events.Where(x => x.Id == request.Id)
+                .Select(s => Tuple.Create(s.Attendees.Count, s.Attendees.Count(k => k.Attended)))
+                .FirstOrDefault();
+
+            eventToReturn.Item2.Attended = await _context.Attendances.AnyAsync(a => a.EventId == request.Id
+                                                                               &&
+                                                                               a.MemberId == _currentUser.User.Id
+                                                                               &&
+                                                                               a.Attended);
             eventToReturn.Item2.MembersDetails = new GetEventLiveDetailQuery.Response.Members
             {
-                TotalMembersRegistered = eventToReturn.Item1.Attendees.Count,
-                TotalMembersAttended = eventToReturn.Item1.Attendees.Count(l => l.Attended),
+                TotalMembersRegistered = countAttended.Item1,
+                TotalMembersAttended = countAttended.Item2,
                 EstimatedAttendancePercentage = eventToReturn.Item1.EstimatedAttendancePercentage
             };
             eventToReturn.Item2.MembersDetails.MembersAttended = await _context.Attendances.Include(x => x.Member).Where(x => x.EventId == eventToReturn.Item2.Id

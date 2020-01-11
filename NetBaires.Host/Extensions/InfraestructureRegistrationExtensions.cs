@@ -36,6 +36,7 @@ namespace NetBaires.Host.Extensions
               .AddFeatureFolders();
 
             services.AddAutoMapper(typeof(DeleteBadgeHandler));
+
             services.AddMediatR(typeof(DeleteBadgeHandler));
 
             services.AddHttpClient("");

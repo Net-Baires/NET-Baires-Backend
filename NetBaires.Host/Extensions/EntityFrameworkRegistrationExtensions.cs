@@ -10,7 +10,11 @@ namespace NetBaires.Host.Extensions
         public static IServiceCollection AddContext(this IServiceCollection services, IConfiguration Configuration)
         {
             services.AddDbContext<NetBairesContext>(options =>
-              options.UseSqlServer(Configuration.GetConnectionString("NetBairesContext"), b => b.MigrationsAssembly("NetBaires.Data")));
+              options
+                  
+                  .UseSqlServer(Configuration.GetConnectionString("NetBairesContext"),
+                      b=> b.MigrationsAssembly("NetBaires.Data")
+                                            .EnableRetryOnFailure()));
             return services;
         }
     }

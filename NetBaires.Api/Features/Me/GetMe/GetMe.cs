@@ -34,7 +34,7 @@ namespace NetBaires.Api.Features.Me.GetMe
         public async Task<IActionResult> Handle(GetMeQuery request, CancellationToken cancellationToken)
         {
             var currentMemberId = currentUser.User.Id;
-            var member = await _context.Members.FirstOrDefaultAsync(x => x.Id == currentMemberId);
+            var member = await _context.Members.Include(x=> x.Events).FirstOrDefaultAsync(x => x.Id == currentMemberId);
 
             var memberToResponse = _mapper.Map(member, new MemberDetailViewModel());
 
