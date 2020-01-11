@@ -32,7 +32,7 @@ namespace NetBaires.Api.Features.Events.AddAttendee
             if (member == null)
                 return HttpResponseCodeHelper.Error("El miembro indicado no existe");
 
-            @event.AddAttendance(member);
+            @event.AddAttendance(member, AttendanceRegisterType.CurrentEvent);
 
             await _context.SaveChangesAsync();
 

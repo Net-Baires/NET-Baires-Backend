@@ -27,11 +27,12 @@ namespace NetBaires.Api.Services.Sync.Process
         public async Task Process()
         {
             var eventsToAdd = await _meetupServices.GetAllEvents();
-            var mines = _context.Events.Where(x => x.Platform == EventPlatform.Meetup).Select(x => x.EventId).ToList();
+            var mines = _context.Events.Where(x => x.Platform == EventPlatform.Meetup).ToList();
             var eventMeetupProcesseds = new List<Event>();
             foreach (var eventToAdd in eventsToAdd)
             {
-                if (!mines.Any(x => x == eventToAdd.Id.ToString()))
+                var eventToCheck = mines.FirstOrDefault(x => x.EventId == eventToAdd.Id.ToString());
+                if (eventToCheck == null)
                 {
                     eventMeetupProcesseds.Add(new Event
                     {
@@ -45,10 +46,14 @@ namespace NetBaires.Api.Services.Sync.Process
                     });
                     _logger.LogInformation($"Created new event from Meetup : {eventToAdd.Id.ToString()}");
                 }
+                else if (!eventToCheck.Done)
+                {
+                    eventMeetupProcesseds.Add(eventToCheck);
+                }
             }
 
             if (eventMeetupProcesseds.Any())
-                _context.Events.AddRange(eventMeetupProcesseds);
+                _context.Events.AddRange(eventMeetupProcesseds.Where(x=> x.Id == 0));
             await _context.SaveChangesAsync();
 
             foreach (var eventMeetupProcessed in eventMeetupProcesseds)

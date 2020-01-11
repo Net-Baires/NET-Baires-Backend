@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using NetBaires.Api.ViewModels.GroupCode;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Features.Events.GetEventLiveDetail
@@ -25,9 +26,10 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
             public Members MembersDetails { get; set; }
             public DateTime? StartLiveTime { get; internal set; }
             public bool GeneralAttended { get; internal set; }
-            public bool? Attended { get; internal set; }
-            public string? TokenToReportMyAttendance { get; set; }
-
+            public bool Attended { get; set; }
+            public string TokenToReportMyAttendance { get; set; }
+            public bool HasGroupCodeOpen { get; set; }
+            public List<GroupCodeResponseViewModel> GroupCodes { get; set; }
             public class ReportGeneralAttendance
             {
                 public string TokenToReportGeneralAttendance { get; set; }
@@ -37,6 +39,7 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
             {
                 public int TotalMembersRegistered { get; set; }
                 public int TotalMembersAttended { get; set; }
+                public decimal EstimatedAttendancePercentage { get; set; }
                 public List<MemberDetail> MembersAttended { get; set; }
             }
             public class MemberDetail
@@ -46,7 +49,7 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
                 public string LastName { get; set; }
                 public string Username { get; set; }
                 public string Picture { get; set; }
-                public DateTime AttendedTime { get;  set; }
+                public DateTime AttendedTime { get; set; }
             }
         }
     }

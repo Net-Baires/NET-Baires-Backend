@@ -42,15 +42,16 @@ namespace NetBaires.Api.Features.Events.PutCheckAttendanceByCode
                                                        &&
                                                        x.GeneralAttendedCode == request.Code);
             if (!eventToCheck)
-                return  HttpResponseCodeHelper.NotFound();
+                return HttpResponseCodeHelper.NotFound();
 
             var memberId = _currentUser.User.Id;
 
-            var eventToAdd = _context.Attendances.FirstOrDefault(x => x.EventId == request.EventId 
-                                                                      && 
+            var eventToAdd = _context.Attendances.FirstOrDefault(x => x.EventId == request.EventId
+                                                                      &&
                                                                       x.MemberId == memberId);
-            if (eventToAdd == null) { 
-                eventToAdd = new Attendance(memberId, request.EventId);
+            if (eventToAdd == null)
+            {
+                eventToAdd = new Attendance(memberId, request.EventId, AttendanceRegisterType.CurrentEvent);
                 await _context.Attendances.AddAsync(eventToAdd);
             }
             eventToAdd.Attend();

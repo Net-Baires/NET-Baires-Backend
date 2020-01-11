@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
                 Picture = "PictureTest",
                 Username = "FirstUserName"
             };
-            var SecondAttended = new Member
+            var secondAttended = new Member
             {
                 FirstName = "Second Member Attended",
                 LastName = "Second Member Last Name",
@@ -49,7 +50,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
                             Attended= true,
                     },
                      new Attendance{
-                            Member= SecondAttended ,
+                            Member= secondAttended ,
                             AttendedTime=DateTime.Now,
                             Attended= true,
                     },
@@ -62,6 +63,12 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
                     }
                 }
             };
+            var groupCode = newEventLive.CreateGroupCode("Detail");
+            var groupCode2 = newEventLive.CreateGroupCode("Detail2");
+            groupCode.AddMember(firstAttended, groupCode.Code);
+            groupCode2.AddMember(secondAttended, groupCode2.Code);
+            groupCode2.AddMember(firstAttended, groupCode2.Code);
+
             Context.Events.Add(newEventLive);
             Context.SaveChanges();
             var response = await HttpClient.GetAsync($"/events/{newEventLive.Id}/Live/Detail");
@@ -75,15 +82,28 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
             eventDetail.MembersDetails.TotalMembersAttended.Should().Be(2);
             eventDetail.MembersDetails.TotalMembersRegistered.Should().Be(3);
             eventDetail.MembersDetails.MembersAttended.Count.Should().Be(2);
+            eventDetail.GroupCodes.Count.Should().Be(2);
+            eventDetail.GroupCodes.First().Code.Should().Be(groupCode.Code);
+            eventDetail.GroupCodes.First().Detail.Should().Be(groupCode.Detail);
+            eventDetail.GroupCodes.First().Id.Should().Be(groupCode.Id);
+            eventDetail.GroupCodes.First().MembersCount.Should().Be(groupCode.Members.Count);
+
+            eventDetail.GroupCodes[1].Code.Should().Be(groupCode2.Code);
+            eventDetail.GroupCodes[1].Detail.Should().Be(groupCode2.Detail);
+            eventDetail.GroupCodes[1].Id.Should().Be(groupCode2.Id);
+            eventDetail.GroupCodes[1].MembersCount.Should().Be(groupCode2.Members.Count);
+
+
+
             eventDetail.MembersDetails.MembersAttended[1].FirstName.Should().Be(firstAttended.FirstName);
             eventDetail.MembersDetails.MembersAttended[1].LastName.Should().Be(firstAttended.LastName);
             eventDetail.MembersDetails.MembersAttended[1].Picture.Should().Be(firstAttended.Picture);
             eventDetail.MembersDetails.MembersAttended[1].Username.Should().Be(firstAttended.Username);
 
-            eventDetail.MembersDetails.MembersAttended[0].FirstName.Should().Be(SecondAttended.FirstName);
-            eventDetail.MembersDetails.MembersAttended[0].LastName.Should().Be(SecondAttended.LastName);
-            eventDetail.MembersDetails.MembersAttended[0].Picture.Should().Be(SecondAttended.Picture);
-            eventDetail.MembersDetails.MembersAttended[0].Username.Should().Be(SecondAttended.Username);
+            eventDetail.MembersDetails.MembersAttended[0].FirstName.Should().Be(secondAttended.FirstName);
+            eventDetail.MembersDetails.MembersAttended[0].LastName.Should().Be(secondAttended.LastName);
+            eventDetail.MembersDetails.MembersAttended[0].Picture.Should().Be(secondAttended.Picture);
+            eventDetail.MembersDetails.MembersAttended[0].Username.Should().Be(secondAttended.Username);
 
         }
 

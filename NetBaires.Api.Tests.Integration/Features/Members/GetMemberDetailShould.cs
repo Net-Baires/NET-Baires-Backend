@@ -1,8 +1,10 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using FluentAssertions;
 using NetBaires.Data;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using NetBaires.Api.ViewModels;
 using NetBaires.Host;
 using Xunit;
@@ -24,7 +26,19 @@ namespace NetBaires.Api.Tests.Integration.Features.Members
                 Email = "Test@test.com",
                 Github = "Github Test"
             };
+            
             await Context.Members.AddAsync(member);
+            await Context.SaveChangesAsync();
+            var newEventOne = new Event();
+            var newEventTwo = new Event();
+            var newEventThree = new Event();
+            await Context.Events.AddAsync(newEventOne);
+            await Context.Events.AddAsync(newEventTwo);
+            await Context.Events.AddAsync(newEventThree);
+            await Context.SaveChangesAsync();
+            newEventOne.AddAttendance(member, AttendanceRegisterType.CurrentEvent).Attend();
+            newEventTwo.AddAttendance(member, AttendanceRegisterType.CurrentEvent).Attend();
+            newEventThree.AddAttendance(member, AttendanceRegisterType.CurrentEvent).NoAttend();
             await Context.SaveChangesAsync();
 
             var response = await HttpClient.GetAsync($"/members/{member.Id}");
@@ -34,6 +48,10 @@ namespace NetBaires.Api.Tests.Integration.Features.Members
             memberResponse.Should().NotBeNull();
             memberResponse.Email.Should().Be(member.Email);
             memberResponse.Github.Should().Be(member.Github);
+            RefreshContext();
+            var memberToCheck = await Context.Members.Include(x => x.Events).Where(x => x.Id == member.Id)
+                .FirstOrDefaultAsync();
+            memberResponse.AverageAttendance.Should().Be((memberToCheck.Events.Count(e => e.Attended) * 100) / memberToCheck.Events.Count);
         }
 
         [Fact]

@@ -36,6 +36,7 @@ namespace NetBaires.Host.Extensions
               .AddFeatureFolders();
 
             services.AddAutoMapper(typeof(DeleteBadgeHandler));
+
             services.AddMediatR(typeof(DeleteBadgeHandler));
 
             services.AddHttpClient("");
@@ -47,7 +48,7 @@ namespace NetBaires.Host.Extensions
         {
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>

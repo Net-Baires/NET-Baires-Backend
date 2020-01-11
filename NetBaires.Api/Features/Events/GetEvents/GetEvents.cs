@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,15 +30,13 @@ namespace NetBaires.Api.Features.Events.GetEvents
         {
 
             var eventToReturn = await _context.Events.Include(x => x.Attendees)
-                                                     .Include(x=> x.Sponsors)
+                                                     .Include(x => x.Sponsors)
                                                      .Where(x => (request.Done != null ? x.Done == request.Done : true)
                                                             &&
                                                             (request.Live != null ? x.Live == request.Live : true)
                                                             &&
                                                             (request.Id != null ? x.Id == request.Id : true))
-                                               .OrderByDescending(x => x.Id)
-                                               .Select(x => _mapper.Map<Event, EventDetailViewModel>(x))
-                                               .AsNoTracking()
+                                               .ProjectTo<EventDetailViewModel>(_mapper.ConfigurationProvider)
                                                .ToListAsync();
             if (!eventToReturn.Any())
                 return HttpResponseCodeHelper.NotContent();

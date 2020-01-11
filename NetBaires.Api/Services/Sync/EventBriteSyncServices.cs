@@ -38,9 +38,9 @@ namespace NetBaires.Api.Services.Sync
                         Email = attendees.profile.Email,
                     };
                     if ((attendees.CheckIn))
-                        currentMember = new Attendance(newMember, eventToSync, true);
+                        currentMember = new Attendance(newMember, eventToSync, true, AttendanceRegisterType.ExternalPage);
                     else
-                        currentMember = new Attendance(newMember, eventToSync, false);
+                        currentMember = new Attendance(newMember, eventToSync, false, AttendanceRegisterType.ExternalPage);
                     await _context.Attendances.AddAsync(currentMember);
                 }
                 else

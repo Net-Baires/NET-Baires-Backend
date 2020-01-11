@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using NetBaires.Api.Auth;
+using NetBaires.Api.ViewModels.GroupCode;
 using NetBaires.Data;
 
 namespace NetBaires.Api.ViewModels
@@ -25,6 +26,7 @@ namespace NetBaires.Api.ViewModels
         public int DidNotAttend { get; set; }
         public int Registered { get; set; }
         public List<SponsorEventViewModel> Sponsors { get; set; }
+    
         public class SponsorEventViewModel
         {
             public int SponsorId { get; set; }
@@ -32,10 +34,11 @@ namespace NetBaires.Api.ViewModels
         }
         public class EventDetailViewModelProfile : Profile
         {
+            
             public EventDetailViewModelProfile()
             {
                 CreateMap<Event, EventDetailViewModel>()
-                     .ForMember(dest => dest.IsUserRegistered, o => o.MapFrom<RegisteredCurrentUserInEventResolver>())
+                     //.ForMember(dest => dest.IsUserRegistered, o => o.MapFrom<RegisteredCurrentUserInEventResolver>())
                      .ForMember(dest => dest.Attended, o => o.MapFrom(s => s.Attendees.Count(c => c.Attended)))
                      .ForMember(dest => dest.DidNotAttend, o => o.MapFrom(s => s.Attendees.Count(c => c.DidNotAttend)))
                      .ForMember(dest => dest.Registered, o => o.MapFrom(s => s.Attendees.Count()));

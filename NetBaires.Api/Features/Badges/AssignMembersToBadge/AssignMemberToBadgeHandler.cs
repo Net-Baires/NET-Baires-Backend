@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Features.Badges.UpdateBadge;
+using NetBaires.Api.Helpers;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Features.Badges.AssignMembersToBadge
@@ -28,7 +29,13 @@ namespace NetBaires.Api.Features.Badges.AssignMembersToBadge
                 return new ObjectResult("El miembro que esta intentando asignar ya tiene ese Badge") { StatusCode = 409 }; ;
 
             var badge = await _context.Badges.FirstOrDefaultAsync(x => x.Id == request.BadgeId);
-            var member = await _context.Members.FirstOrDefaultAsync(x => x.Id == request.MemberId);
+            if (badge == null)
+                return HttpResponseCodeHelper.NotFound("No se encontro el Badge");
+            var member = await _context.Members.FirstOrDefaultAsync(x => x.Id == request.MemberId
+                                                                                    &&
+                                                                                    !x.Badges.Any(b => b.BadgeId == request.BadgeId));
+            if (member == null)
+                return HttpResponseCodeHelper.NotFound("No se encontro el miembro");
 
             _context.BadgeMembers.Add(new BadgeMember
             {

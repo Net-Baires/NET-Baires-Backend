@@ -50,15 +50,15 @@ namespace NetBaires.Api.Services
         }
         public string GenerateDetailUrl(Badge badge)
         {
-            return $"{commonOptions.SiteUrl}{badgesOptions.DetailUrl.Replace("{id}", badge.Id.ToString())}";
+            return $"{commonOptions.SiteUrl}/{badgesOptions.DetailUrl.Replace("{id}", badge.Id.ToString())}";
         }
         public string GenerateDetailUrl(int badgeId)
         {
-            return $"{commonOptions.SiteUrl}{badgesOptions.DetailUrl.Replace("{id}", badgeId.ToString())}";
+            return $"{commonOptions.SiteUrl}/{badgesOptions.DetailUrl.Replace("{id}", badgeId.ToString())}";
         }
         public string GeneratePublicMemberUrl(Badge badge, Member member)
         {
-            return $"{commonOptions.SiteUrl}{badgesOptions.PublicUrl.Replace("{badgeId}", badge.Id.ToString()).Replace("{memberId}", member.Id.ToString())}";
+            return $"{commonOptions.SiteUrl}/{badgesOptions.PublicUrl.Replace("{badgeId}", badge.Id.ToString()).Replace("{memberId}", member.Id.ToString())}";
         }
         public string GenerateImageUrl(int badgeId)
         {

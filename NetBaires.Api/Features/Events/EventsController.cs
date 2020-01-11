@@ -16,6 +16,7 @@ using NetBaires.Api.Features.Events.SyncEvent;
 using NetBaires.Api.Features.Events.SyncWithExternalEvents;
 using NetBaires.Api.Features.Events.UpdateAttendee;
 using NetBaires.Api.Features.Events.UpdateEvent;
+using NetBaires.Api.Features.GroupsCodes.AddMemberToGroupCode;
 using NetBaires.Api.Handlers.Events;
 using NetBaires.Data;
 using Swashbuckle.AspNetCore.Annotations;
@@ -125,8 +126,8 @@ namespace NetBaires.Api.Features.Events
 
         [HttpPut("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
-        [ApiExplorerSettings(GroupName = "Admin")]
-        public async Task<IActionResult> Put(int id, UpdateEventCommand command)
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
+        public async Task<IActionResult> UpdateEvent(int id, UpdateEventCommand command)
         {
             command.Id = id;
             return await _iMediator.Send(command);
@@ -158,8 +159,21 @@ namespace NetBaires.Api.Features.Events
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
         public async Task<IActionResult> AssignBadgeToAttendances([FromRoute]AssignBadgeToAttendancesCommand command) =>
-                        await _iMediator.Send(command);
+            await _iMediator.Send(command);
 
+        [HttpPost("{eventId:int}/groupcodes")]
+        [SwaggerOperation(Summary = "Crea un GroupCode para un evento especifico")]
+        [AuthorizeRoles(UserRole.Admin)]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
+        public async Task<IActionResult> CreateGroupCode([FromRoute] int eventId, [FromBody]CreateGroupCodeCommand command) =>
+            await _iMediator.Send(new CreateGroupCodeCommand { EventId = eventId, Detail = command.Detail });
 
+        [HttpPost("{eventId:int}/groupcodes/{code}")]
+        [SwaggerOperation(Summary = "Agrega al usuario logueado al group de codigo")]
+        [AuthorizeRoles(UserRole.Member)]
+        [ApiExplorerSettingsExtend(UserRole.Member)]
+        public async Task<IActionResult>
+            AddMemberToGroupCode([FromRoute]int eventId, [FromRoute] string code) =>
+            await _iMediator.Send(new AddMemberToGroupCodeCommand { Code = code, EventId = eventId });
     }
 }

@@ -33,7 +33,10 @@ namespace NetBaires.Api.Features.Speakers.GetSpeakers
 
             var eventToReturn = _context.Members
                                         .Include(x => x.Events)
-                                        .Where(x => x.Events.Any(s => s.Speaker))
+                                        .Where(x =>
+                                            request.Id != null ? x.Id == request.Id : true
+                                            &&
+                                            x.Events.Any(s => s.Speaker))
                                         .ToList()
                                         .Select(x => new MemberEvents
                                         {
@@ -41,12 +44,12 @@ namespace NetBaires.Api.Features.Speakers.GetSpeakers
                                             CountEventsAsSpeaker = x.Events.Count(s => s.Speaker)
                                         })
                                         .ToList();
-            var returnList = new List<GetSpeakersResponse>();
+            var returnList = new List<GetSpeakerResponse>();
 
             foreach (var item in eventToReturn)
             {
-                var itemToAdd = _mapper.Map<GetSpeakersResponse>(item.Member);
-                itemToAdd.CounEventsAsSpeaker = item.CountEventsAsSpeaker;
+                var itemToAdd = _mapper.Map<GetSpeakerResponse>(item.Member);
+                itemToAdd.CountEventsAsSpeaker = item.CountEventsAsSpeaker;
                 returnList.Add(itemToAdd);
             }
 
@@ -54,6 +57,8 @@ namespace NetBaires.Api.Features.Speakers.GetSpeakers
             if (!eventToReturn.Any())
                 return HttpResponseCodeHelper.NotContent();
 
+            if (request.Id != null)
+                return HttpResponseCodeHelper.Ok(returnList.First());
             return HttpResponseCodeHelper.Ok(returnList);
         }
         public class MemberEvents

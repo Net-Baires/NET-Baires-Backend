@@ -27,6 +27,9 @@ namespace NetBaires.Data.Migrations
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
+                    b.Property<int>("AttendanceRegisterType")
+                        .HasColumnType("int");
+
                     b.Property<bool>("Attended")
                         .HasColumnType("bit");
 
@@ -154,6 +157,9 @@ namespace NetBaires.Data.Migrations
                     b.Property<DateTime?>("EndLiveTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal>("EstimatedAttendancePercentage")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("EventId")
                         .HasColumnType("nvarchar(max)");
 
@@ -185,6 +191,79 @@ namespace NetBaires.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("NetBaires.Data.GroupCode", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Detail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Open")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("GroupCodes");
+                });
+
+            modelBuilder.Entity("NetBaires.Data.GroupCodeBadge", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("BadgeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("GroupCodeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BadgeId");
+
+                    b.HasIndex("GroupCodeId");
+
+                    b.ToTable("GroupCodeBadge");
+                });
+
+            modelBuilder.Entity("NetBaires.Data.GroupCodeMember", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("GroupCodeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MemberId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupCodeId");
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("GroupCodeMember");
                 });
 
             modelBuilder.Entity("NetBaires.Data.Member", b =>
@@ -234,6 +313,9 @@ namespace NetBaires.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PictureName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PushNotificationId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Role")
@@ -335,6 +417,41 @@ namespace NetBaires.Data.Migrations
 
                     b.HasOne("NetBaires.Data.Member", "Member")
                         .WithMany("Badges")
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("NetBaires.Data.GroupCode", b =>
+                {
+                    b.HasOne("NetBaires.Data.Event", "Event")
+                        .WithMany("GroupCodes")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("NetBaires.Data.GroupCodeBadge", b =>
+                {
+                    b.HasOne("NetBaires.Data.Badge", "Badge")
+                        .WithMany()
+                        .HasForeignKey("BadgeId");
+
+                    b.HasOne("NetBaires.Data.GroupCode", "GroupCode")
+                        .WithMany("GroupCodeBadges")
+                        .HasForeignKey("GroupCodeId");
+                });
+
+            modelBuilder.Entity("NetBaires.Data.GroupCodeMember", b =>
+                {
+                    b.HasOne("NetBaires.Data.GroupCode", "GroupCode")
+                        .WithMany("Members")
+                        .HasForeignKey("GroupCodeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NetBaires.Data.Member", "Member")
+                        .WithMany("GroupCodes")
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

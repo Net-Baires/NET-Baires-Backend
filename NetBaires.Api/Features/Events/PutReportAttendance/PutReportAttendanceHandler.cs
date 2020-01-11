@@ -32,7 +32,7 @@ namespace NetBaires.Api.Features.Events.PutReportAttendance
             var response = attendanceService.ValidateTokenToReportMyAttendance(request.Token);
             var eventToAdd = _context.Events.Include(x => x.Attendees).FirstOrDefault(x => x.Id == response.EventId);
             var member = _context.Members.FirstOrDefault(x => x.Id == response.UserId);
-            eventToAdd.Attended(member);
+            eventToAdd.Attended(member, AttendanceRegisterType.CurrentEvent);
             await _context.SaveChangesAsync();
             return HttpResponseCodeHelper.Ok(new PutReportAttendanceCommand.Response(eventToAdd.Id, member.Id));
         }

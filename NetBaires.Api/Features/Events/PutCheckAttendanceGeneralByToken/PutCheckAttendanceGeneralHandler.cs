@@ -51,7 +51,7 @@ namespace NetBaires.Api.Features.Events.PutCheckAttendanceGeneral
                                                                       && 
                                                                       x.MemberId == memberId);
             if (eventToAdd == null) { 
-                eventToAdd = new Attendance(memberId, response.EventId);
+                eventToAdd = new Attendance(memberId, response.EventId, AttendanceRegisterType.CurrentEvent);
                 await _context.Attendances.AddAsync(eventToAdd);
                 }
             eventToAdd.Attend();

@@ -32,9 +32,9 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
                 LastName = "LastName",
                 Linkedin = "Linkedin"
             };
-            newEvent.AddAttendance(newMember);
-            newEvent.AddAttendance(new Member());
-            newEvent.AddAttendance(new Member());
+            newEvent.AddAttendance(newMember, AttendanceRegisterType.CurrentEvent);
+            newEvent.AddAttendance(new Member(), AttendanceRegisterType.CurrentEvent);
+            newEvent.AddAttendance(new Member(), AttendanceRegisterType.CurrentEvent);
             Context.Events.Add(newEvent);
             Context.SaveChanges();
             var response = await HttpClient.GetAsync($"/events/{newEvent.Id}/attendees");

@@ -37,7 +37,7 @@ namespace NetBaires.Api.Features.Events.UpdateAttendee
                                                                   &&
                                                                   x.MemberId == request.MemberId);
             if (attendee == null){ 
-                attendee = new Attendance(request.MemberId, request.EventId);
+                attendee = new Attendance(request.MemberId, request.EventId, AttendanceRegisterType.CurrentEvent);
                 _context.Attendances.Add(attendee);
             }
             if (request?.Attended == true)

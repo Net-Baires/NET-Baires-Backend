@@ -53,7 +53,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
         {
             FillData();
             var currentMember = Context.Members.First();
-            _event.AddAttendance(currentMember);
+            _event.AddAttendance(currentMember, AttendanceRegisterType.CurrentEvent);
             Context.SaveChanges();
             var response = await HttpClient.GetAsync("/events");
             var events = await response.Content.ReadAsAsync<List<EventDetailViewModel>>();
@@ -67,7 +67,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
         {
             FillData();
             var currentMember = Context.Members.First();
-            _event.AddAttendance(currentMember);
+            _event.AddAttendance(currentMember, AttendanceRegisterType.CurrentEvent);
             Context.SaveChanges();
             var response = await HttpClient.GetAsync($"/events/{_event.Id}");
             var eventResult = await response.Content.ReadAsAsync<EventDetailViewModel>();
@@ -136,6 +136,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
             Context.Events.Add(doneEvent);
             Context.Events.Add(doneEvent2);
             Context.Events.Add(new Event());
+
             _event = new Event
             {
                 Live = true

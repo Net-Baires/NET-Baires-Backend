@@ -79,6 +79,7 @@ namespace NetBaires.Api.Features.Members
         public async Task<IActionResult> GetBadgesFromEmailAsync([FromQuery] string email)
             => await _mediator.Send(new GetBadgesFromMemberQuery(email));
 
+
         [HttpGet("{id:int}/badges")]
         [SwaggerOperation(Summary = "Retorna todos los badges recibidos por el miembro")]
         [AllowAnonymous]
@@ -91,7 +92,9 @@ namespace NetBaires.Api.Features.Members
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
         public async Task<IActionResult> Post(AddMemberCommand command)
-                      => await _mediator.Send(command);
+            => await _mediator.Send(command);
+
+
 
         [HttpPut("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
@@ -108,6 +111,13 @@ namespace NetBaires.Api.Features.Members
 
             return Ok(member);
         }
+
+        [HttpPut("information")]
+        [AuthorizeRoles(UserRole.Admin, UserRole.Organizer, UserRole.Member)]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
+        public async Task<IActionResult> AddPushNotificationId(UpdateInformationCommand command) =>
+            await _mediator.Send(command);
+
         [HttpPut("{id}/Events/{eventId}/Attendances/{attended}")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]

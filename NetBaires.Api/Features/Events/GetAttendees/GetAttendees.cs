@@ -32,26 +32,28 @@ namespace NetBaires.Api.Features.Events.GetAttendees
 
         public async Task<IActionResult> Handle(GetAttendeesQuery request, CancellationToken cancellationToken)
         {
-            var attendees = new List<Attendance>();
+            var attendees = new List<AttendantViewModel>();
             if (request.MemberId != null)
                 attendees = await _context.Attendances
-                                           .Include(x => x.Member)
-                                           .Where(x => x.EventId == request.EventId
-                                                       &&
-                                                       request.MemberId.Value == x.MemberId)
-                                           .ToListAsync();
-            else attendees = await _context.Attendances
-                            .Include(x => x.Member)
-                            .Where(x => x.EventId == request.EventId)
-                            .ToListAsync();
-
+                    .Include(x => x.Member)
+                    .ThenInclude(s => s.Events)
+                    .Where(x => x.EventId == request.EventId
+                                &&
+                                request.MemberId.Value == x.MemberId)
+                    .Select(s => _mapper.Map<AttendantViewModel>(s))
+                    .ToListAsync();
+            else
+                attendees = await _context.Attendances
+                    .Include(x => x.Member)
+                    .ThenInclude(s=> s.Events)
+                    .Where(x => x.EventId == request.EventId)
+                    .Select(s => _mapper.Map<AttendantViewModel>(s)).ToListAsync();
             if (attendees == null || !attendees.Any())
                 return HttpResponseCodeHelper.NotContent();
 
             if (attendees.Count == 1 && request.MemberId != null)
-                return HttpResponseCodeHelper.Ok(_mapper.Map(attendees, new List<AttendantViewModel>()).First());
-            else
-                return HttpResponseCodeHelper.Ok(_mapper.Map(attendees, new List<AttendantViewModel>()));
+                return HttpResponseCodeHelper.Ok(attendees.First());
+            return HttpResponseCodeHelper.Ok(attendees);
         }
 
     }
