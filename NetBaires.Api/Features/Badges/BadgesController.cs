@@ -105,13 +105,13 @@ namespace NetBaires.Api.Features.Badges
         [HttpPost]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> Post([FromForm]NewBadgeCommand badge)=>
+        public async Task<IActionResult> NewBadge([FromForm]NewBadgeCommand badge)=>
             await _mediator.Send(badge);
 
         [HttpPut("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> Put([FromRoute]int id, [FromForm]UpdateBadgeCommand badge)
+        public async Task<IActionResult> UpdateBadge([FromRoute]int id, [FromForm]UpdateBadgeCommand badge)
         {
             badge.Id = id;
             return await _mediator.Send(badge);

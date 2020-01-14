@@ -6,11 +6,8 @@ using Newtonsoft.Json;
 
 namespace NetBaires.Data
 {
-    public class Sponsor
+    public class Sponsor : Entity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [JsonIgnore]
-        public int Id { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]

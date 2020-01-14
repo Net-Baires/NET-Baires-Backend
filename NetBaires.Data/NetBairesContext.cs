@@ -22,6 +22,7 @@ namespace NetBaires.Data
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<SponsorEvent> SponsorEvents { get; set; }
         public DbSet<GroupCode> GroupCodes { get; set; }
+
         public static readonly Microsoft.Extensions.Logging.LoggerFactory _myLoggerFactory =
             new LoggerFactory(new[] {
                 new Microsoft.Extensions.Logging.Debug.DebugLoggerProvider()
@@ -29,7 +30,7 @@ namespace NetBaires.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.EnableSensitiveDataLogging();
-            optionsBuilder.UseLoggerFactory(_myLoggerFactory);
+            //optionsBuilder.UseLoggerFactory(_myLoggerFactory);
             base.OnConfiguring(optionsBuilder);
 
         }

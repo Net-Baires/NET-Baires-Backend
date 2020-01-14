@@ -19,7 +19,7 @@ namespace NetBaires.Data
 
         public GroupCodeBadge()
         {
-            
+
         }
     }
 
@@ -48,6 +48,20 @@ namespace NetBaires.Data
                     Member = member,
                     GroupCode = this
                 });
+        }
+        public void AddMember(Member member)
+        {
+            if (!Members.Any(x => x.MemberId == member.Id))
+                Members.Add(new GroupCodeMember
+                {
+                    Member = member,
+                    GroupCode = this
+                });
+        }
+        public void RemoveMember(Member member)
+        {
+            if (Members.Any(x => x.MemberId == member.Id))
+                Members.RemoveAll(x => x.MemberId == member.Id);
         }
 
         public DomainResponse AssignBadge(Badge badge)

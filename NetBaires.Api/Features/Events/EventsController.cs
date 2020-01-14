@@ -3,8 +3,10 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetBaires.Api.Features.Events.AddAttendee;
+using NetBaires.Api.Features.Events.AddMemberToGroupCode;
 using NetBaires.Api.Features.Events.AssignBadgeToAttendances;
 using NetBaires.Api.Features.Events.CompleteEvent;
+using NetBaires.Api.Features.Events.DeleteMemberToGroupCode;
 using NetBaires.Api.Features.Events.GetAttendees;
 using NetBaires.Api.Features.Events.GetDataToReportAttendanceToEvent;
 using NetBaires.Api.Features.Events.GetEventLiveDetail;
@@ -102,15 +104,17 @@ namespace NetBaires.Api.Features.Events
         [ApiExplorerSettingsExtend(UserRole.Admin)]
         [SwaggerOperation(Summary = "Retorna todos los miembros que se encuentran registrados a un evento particular")]
         [AuthorizeRoles(UserRole.Admin)]
-        public async Task<IActionResult> GetAttendees([FromRoute]int eventId, [FromQuery]int? memberId) =>
-            await _iMediator.Send(new GetAttendeesQuery(eventId, memberId));
+        public async Task<IActionResult> GetAttendees([FromRoute]int eventId, [FromQuery]int? memberId ,[FromQuery]string query)
+        {
+            return await _iMediator.Send(new GetAttendeesQuery(eventId,memberId,query));
+        }
 
         [HttpPost("{idEvent:int}/Members/{idMember}/attende")]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
         [SwaggerOperation(Summary = "Informo que un usuario se registro en un evento")]
         [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
         public async Task<IActionResult> AddAttendees([FromRoute]AddAttendeeCommand command) =>
-            await _iMediator.Send(command);
+                await _iMediator.Send(command);
 
         [HttpPut("{id:int}/Members/{idMember}/attende")]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
@@ -173,7 +177,24 @@ namespace NetBaires.Api.Features.Events
         [AuthorizeRoles(UserRole.Member)]
         [ApiExplorerSettingsExtend(UserRole.Member)]
         public async Task<IActionResult>
-            AddMemberToGroupCode([FromRoute]int eventId, [FromRoute] string code) =>
-            await _iMediator.Send(new AddMemberToGroupCodeCommand { Code = code, EventId = eventId });
+            AddCurrentUserToGroupCode([FromRoute]int eventId, [FromRoute] string code) =>
+            await _iMediator.Send(new AddCurrentUserToGroupCodeCommand { Code = code, EventId = eventId });
+
+        [HttpPost("{eventId:int}/groupcodes/{groupCodeId}/members/{memberId}")]
+        [SwaggerOperation(Summary = "Agrega un miembro al grupo de código.")]
+        [AuthorizeRoles(UserRole.Admin, UserRole.Organizer)]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
+        public async Task<IActionResult>
+            AddMemberToGroupCode([FromRoute]AddMemberToGroupCodeCommand command) =>
+            await _iMediator.Send(command);
+
+        [HttpDelete("{eventId:int}/groupcodes/{groupCodeId}/members/{memberId}")]
+        [SwaggerOperation(Summary = "Remueve un miembro de un groupo de código")]
+        [AuthorizeRoles(UserRole.Admin, UserRole.Organizer)]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
+        public async Task<IActionResult>
+            DeleteMemberToGroupCode([FromRoute]DeleteMemberToGroupCodeCommand command) =>
+            await _iMediator.Send(command);
+
     }
 }

@@ -29,7 +29,7 @@ namespace NetBaires.Api.Features.Sponsors
         [HttpGet]
         [AllowAnonymous]
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
-        public async Task<IActionResult> Get() =>
+        public async Task<IActionResult> GetSponsors() =>
         await _mediator.Send(new GetSponsorsQuery());
 
         [HttpGet("{id}")]
@@ -41,13 +41,13 @@ namespace NetBaires.Api.Features.Sponsors
         [HttpPost]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> Post([FromForm]NewSponsorCommand command) =>
+        public async Task<IActionResult> NewSponsor([FromForm]NewSponsorCommand command) =>
              await _mediator.Send(command);
 
         [HttpPut("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> Put([FromForm]UpdateSponsorCommand command, [FromRoute]int id)
+        public async Task<IActionResult> UpdateSponsor([FromForm]UpdateSponsorCommand command, [FromRoute]int id)
         {
             command.Id = id;
             return await _mediator.Send(command);
@@ -56,7 +56,7 @@ namespace NetBaires.Api.Features.Sponsors
         [HttpDelete("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> Delete([FromRoute]DeleteSponsorCommand command) =>
+        public async Task<IActionResult> DeleteSponsor([FromRoute]DeleteSponsorCommand command) =>
             await _mediator.Send(command);
     }
 }

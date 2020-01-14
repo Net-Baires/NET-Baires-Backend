@@ -65,7 +65,14 @@ namespace NetBaires.Api.Features.GroupsCodes
         public async Task<IActionResult> AssignBadgeToAttendancesInGroupCode([FromRoute]AssignBadgeToAttendancesInGroupCodeCommand command) =>
             await _iMediator.Send(command);
 
+        [HttpPost("{groupCodeId}/raffle")]
+        [AllowAnonymous]
+        [ApiExplorerSettingsExtend(UserRole.Admin)]
+        [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
+        public async Task<IActionResult> MakeRaffle([FromBody]MakeRaffleCommand command) =>
+             await _iMediator.Send(command);
 
-        
+
+
     }
 }
