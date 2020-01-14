@@ -1,15 +1,13 @@
-﻿using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
 using NetBaires.Api.Features.GroupsCodes.AddMemberToGroupCode;
 using NetBaires.Data;
 using NetBaires.Host;
 using Xunit;
 
-namespace NetBaires.Api.Tests.Integration.Features.GroupCodes
+namespace NetBaires.Api.Tests.Integration.Features.Events
 {
     public class AddCurrentUserToGroupCodeShould : IntegrationTestsBase
     {
