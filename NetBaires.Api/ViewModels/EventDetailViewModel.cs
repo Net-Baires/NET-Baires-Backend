@@ -38,10 +38,10 @@ namespace NetBaires.Api.ViewModels
             public EventDetailViewModelProfile()
             {
                 CreateMap<Event, EventDetailViewModel>()
-                     //.ForMember(dest => dest.IsUserRegistered, o => o.MapFrom<RegisteredCurrentUserInEventResolver>())
+                     .ForMember(dest => dest.IsUserRegistered, o => o.MapFrom<RegisteredCurrentUserInEventResolver>())
                      .ForMember(dest => dest.Attended, o => o.MapFrom(s => s.Attendees.Count(c => c.Attended)))
                      .ForMember(dest => dest.DidNotAttend, o => o.MapFrom(s => s.Attendees.Count(c => c.DidNotAttend)))
-                     .ForMember(dest => dest.Registered, o => o.MapFrom(s => s.Attendees.Count()));
+                     .ForMember(dest => dest.Registered, o => o.MapFrom(s => s.Attendees.Count));
                 CreateMap<SponsorEvent, SponsorEventViewModel>();
 
             }

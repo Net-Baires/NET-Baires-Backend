@@ -49,7 +49,7 @@ namespace NetBaires.Api.Features.Speakers.GetSpeakers
 
             var toReturn = _mapper.Map<GetSpeakerResponse>(eventToReturn.Member);
             toReturn.CountEventsAsSpeaker = eventToReturn.CountEventsAsSpeaker;
-            toReturn.Events = _mapper.Map<List<EventDetailViewModel>>(eventToReturn.Events);
+            toReturn.Events = _mapper.Map<List<AttendantViewModel>>(eventToReturn.Events);
 
             return HttpResponseCodeHelper.Ok(toReturn);
         }

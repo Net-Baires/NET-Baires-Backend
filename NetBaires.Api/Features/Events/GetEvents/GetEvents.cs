@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -36,14 +37,13 @@ namespace NetBaires.Api.Features.Events.GetEvents
                                                             (request.Live != null ? x.Live == request.Live : true)
                                                             &&
                                                             (request.Id != null ? x.Id == request.Id : true))
-                                               .ProjectTo<EventDetailViewModel>(_mapper.ConfigurationProvider)
                                                .ToListAsync();
             if (!eventToReturn.Any())
                 return HttpResponseCodeHelper.NotContent();
 
             if (request.Id != null)
-                return HttpResponseCodeHelper.Ok(eventToReturn.First());
-            return HttpResponseCodeHelper.Ok(eventToReturn);
+                return HttpResponseCodeHelper.Ok(_mapper.Map<EventDetailViewModel>(eventToReturn.First()));
+            return HttpResponseCodeHelper.Ok(_mapper.Map<List<EventDetailViewModel>>(eventToReturn));
         }
     }
 

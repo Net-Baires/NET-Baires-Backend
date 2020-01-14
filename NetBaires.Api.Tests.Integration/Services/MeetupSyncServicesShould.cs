@@ -43,6 +43,7 @@ namespace NetBaires.Api.Tests.Integration.Services
             FillData(0000);
 
             await SyncServices.SyncEvent(_event.Id);
+            RefreshContext();
             var attendees = Context.Attendances.Include(x => x.Member).Where(x => x.EventId == _event.Id).ToList();
 
             var noAttended = attendees.FirstOrDefault(x => x.Member.MeetupId == 1234567);

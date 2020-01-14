@@ -40,7 +40,7 @@ namespace NetBaires.Data
                         BadgeId = badge.Id,
                         MemberId = item.MemberId
                     });
-                    AddDomainEvent(new AssignedBadgeToAttendance(item.Member, badge));
+                    AddDomainEvent(new AssignedBadgeToAttendance(item.MemberId, badge));
                 }
             return DomainResponse.Ok();
         }
@@ -60,7 +60,7 @@ namespace NetBaires.Data
                 BadgeId = badge.Id,
                 MemberId = member.Id
             });
-            AddDomainEvent(new AssignedBadgeToAttendance(member, badge));
+            AddDomainEvent(new AssignedBadgeToAttendance(member.Id, badge));
             return DomainResponse.Ok();
         }
 
