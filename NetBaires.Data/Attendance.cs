@@ -7,7 +7,9 @@ namespace NetBaires.Data
         //El usuario se registro en el sitio de Meetup o EventBrite y fue sincronizado
         ExternalPage,
         //EL usuario no estaba registrado en otro sitio y llego al evento directo.
-        CurrentEvent
+        CurrentEvent,
+        //El usuario se registro al evento mediante la app de NET-Baires
+        InApp
     }
 
     public class Attendance

@@ -12,7 +12,7 @@ namespace NetBaires.Api.Features.Events.UpdateEvent
                 .ForMember(x=> x.GeneralAttended, opt=> opt.Ignore())
                 .ForAllMembers(
                 opt => opt.Condition((src, dest, sourceMember) => sourceMember != null));
-            CreateMap<UpdateEventCommand.SponsorEvent, SponsorEvent>()
+            CreateMap<SponsorEventViewModel, SponsorEventViewModel>()
                 .ForAllMembers(
                     opt => opt.Condition((src, dest, sourceMember) => sourceMember != null));
 

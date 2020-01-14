@@ -32,22 +32,28 @@ namespace NetBaires.Api.Features.Events.GetAttendees
 
         public async Task<IActionResult> Handle(GetAttendeesQuery request, CancellationToken cancellationToken)
         {
-            var attendees = new List<AttendantViewModel>();
+            var query = _context.Attendances
+                .Include(x => x.Member)
+                .ThenInclude(s => s.Events)
+                .Where(x => x.EventId == request.EventId);
+            
             if (request.MemberId != null)
-                attendees = await _context.Attendances
-                    .Include(x => x.Member)
-                    .ThenInclude(s => s.Events)
-                    .Where(x => x.EventId == request.EventId
-                                &&
-                                request.MemberId.Value == x.MemberId)
-                    .Select(s => _mapper.Map<AttendantViewModel>(s))
-                    .ToListAsync();
-            else
-                attendees = await _context.Attendances
-                    .Include(x => x.Member)
-                    .ThenInclude(s=> s.Events)
-                    .Where(x => x.EventId == request.EventId)
-                    .Select(s => _mapper.Map<AttendantViewModel>(s)).ToListAsync();
+                query = query.Where(x => request.MemberId.Value == x.MemberId);
+
+            if (!string.IsNullOrWhiteSpace(request.Query))
+                query = query.Where(x => x.Member.Email.Contains(request.Query)
+                                         ||
+                                         x.Member.FirstName.Contains(request.Query)
+                                         ||
+                                         x.Member.LastName.Contains(request.Query)
+                                         ||
+                                         x.Member.MeetupId.ToString().Contains(request.Query));
+
+            var attendees = await query.Select(s => _mapper.Map<AttendantViewModel>(s))
+                .ToListAsync(cancellationToken: cancellationToken);
+
+
+
             if (attendees == null || !attendees.Any())
                 return HttpResponseCodeHelper.NotContent();
 

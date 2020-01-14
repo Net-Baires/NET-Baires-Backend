@@ -14,10 +14,12 @@ namespace NetBaires.Api.Features.Events.UpdateEvent
         public bool? Live { get; set; }
         public bool? Done { get; set; }
         public bool? GeneralAttended { get; set; }
-        public List<SponsorEvent> Sponsors { get; set; }
-        public class SponsorEvent {
-            public int SponsorId { get; set; }
-            public string Detail { get; set; }
-        }
+        public List<SponsorEventViewModel> Sponsors { get; set; }
+       
+    }
+    public class SponsorEventViewModel
+    {
+        public int SponsorId { get; set; }
+        public string Detail { get; set; }
     }
 }

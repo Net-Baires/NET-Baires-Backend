@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using NetBaires.Api.Features.GroupsCodes.AddMemberToGroupCode;
-using NetBaires.Api.ViewModels;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Features.Events.GetEventLiveDetail
@@ -9,7 +8,7 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
     {
         public AddMemberToGroupCodeProfile()
         {
-            CreateMap<GroupCode, AddMemberToGroupCodeCommand.Response>();
+            CreateMap<GroupCode, AddCurrentUserToGroupCodeCommand.Response>();
         }
     }
 }

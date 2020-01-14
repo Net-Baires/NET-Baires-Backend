@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace NetBaires.Api.Features.Events.AddMemberToGroupCode
+namespace NetBaires.Api.Features.Events.DeleteMemberToGroupCode
 {
-    public class AddMemberToGroupCodeCommand : IRequest<IActionResult>
+    public class DeleteMemberToGroupCodeCommand : IRequest<IActionResult>
     {
         public int EventId { get; set; }
         public int MemberId{ get; set; }

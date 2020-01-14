@@ -1,13 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using NetBaires.Api.ViewModels.GroupCode;
 
-namespace NetBaires.Api.Features.Events.AddMemberToGroupCode
+namespace NetBaires.Api.Features.GroupsCodes.AddMemberToGroupCode
 {
-    public class AddMemberToGroupCodeCommand : IRequest<IActionResult>
+    public class AddCurrentUserToGroupCodeCommand : IRequest<IActionResult>
     {
         public int EventId { get; set; }
-        public int MemberId{ get; set; }
-        public int GroupCodeId { get; set; }
+        public string Code { get; set; }
 
         public class Response
         {

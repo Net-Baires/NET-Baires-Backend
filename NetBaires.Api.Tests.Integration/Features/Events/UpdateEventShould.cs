@@ -65,9 +65,9 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
 
             var update = new UpdateEventCommand
             {
-                Sponsors = new List<UpdateEventCommand.SponsorEvent>
+                Sponsors = new List<SponsorEventViewModel>
                 {
-                    new UpdateEventCommand.SponsorEvent{ SponsorId=2, Detail="Detail test"}
+                    new SponsorEventViewModel{ SponsorId=2, Detail="Detail test"}
                 }
             };
 
@@ -89,7 +89,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
             Context.SaveChanges();
             var update = new UpdateEventCommand
             {
-                Sponsors = new List<UpdateEventCommand.SponsorEvent>()
+                Sponsors = new List<SponsorEventViewModel>()
             };
 
             var response = await HttpClient.PutAsync($"/events/{_newEvent.Id}",
@@ -109,7 +109,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
             Context.SaveChanges();
             var update = new UpdateEventCommand
             {
-                Sponsors = new List<UpdateEventCommand.SponsorEvent> { new UpdateEventCommand.SponsorEvent { SponsorId = _secondSponsor.Id, Detail = "Yeahh" } }
+                Sponsors = new List<SponsorEventViewModel> { new SponsorEventViewModel { SponsorId = _secondSponsor.Id, Detail = "Yeahh" } }
             };
 
             var response = await HttpClient.PutAsync($"/events/{_newEvent.Id}",
