@@ -68,11 +68,12 @@ namespace NetBaires.Api.Features.GroupsCodes
         [HttpPost("{groupCodeId}/raffle")]
         [AllowAnonymous]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        [AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
-        public async Task<IActionResult> MakeRaffle([FromBody]MakeRaffleCommand command) =>
-             await _iMediator.Send(command);
-
-
-
+        [AuthorizeRoles(new UserRole[2] {UserRole.Organizer, UserRole.Admin})]
+        public async Task<IActionResult> MakeRaffle([FromRoute] int groupCodeId, [FromBody] MakeRaffleCommand command)
+        {
+            command.GroupCodeId = groupCodeId;
+            return await _iMediator.Send(command);
+        }
+        
     }
 }

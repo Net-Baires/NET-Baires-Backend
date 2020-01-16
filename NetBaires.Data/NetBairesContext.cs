@@ -28,6 +28,7 @@ namespace NetBaires.Data
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<SponsorEvent> SponsorEvents { get; set; }
         public DbSet<GroupCode> GroupCodes { get; set; }
+        public DbSet<GroupCodeMember> GroupCodeMembers { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

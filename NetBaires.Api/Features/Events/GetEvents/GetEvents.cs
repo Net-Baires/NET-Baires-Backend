@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using EFSecondLevelCache.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +38,8 @@ namespace NetBaires.Api.Features.Events.GetEvents
                                                             (request.Live != null ? x.Live == request.Live : true)
                                                             &&
                                                             (request.Id != null ? x.Id == request.Id : true))
-                                               .ToListAsync();
+                                                     .Cacheable()
+                                               .ToListAsync(cancellationToken: cancellationToken);
             if (!eventToReturn.Any())
                 return HttpResponseCodeHelper.NotContent();
 

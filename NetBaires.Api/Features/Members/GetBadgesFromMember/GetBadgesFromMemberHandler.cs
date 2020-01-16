@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using EFSecondLevelCache.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,7 @@ namespace NetBaires.Api.Features.Members.GetBadgesFromMember
                     (request.Email != "" ? x.Member.Email.ToUpper() == request.Email.ToUpper() : true)
                     &&
                     (request.Id != null ? x.MemberId == request.Id : true))
+                .Cacheable()
                 .ProjectTo<BadgeMemberViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken: cancellationToken);
 

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using EFSecondLevelCache.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,7 @@ namespace NetBaires.Api.Features.Sponsors.GetSponsors
 
         public async Task<IActionResult> Handle(GetSponsorsQuery request, CancellationToken cancellationToken)
         {
-            var sponsor = await _context.Sponsors.Where(x => (request.Id != null ? x.Id == request.Id : true)).ToListAsync();
+            var sponsor = await _context.Sponsors.Where(x => (request.Id != null ? x.Id == request.Id : true)).Cacheable().ToListAsync(cancellationToken: cancellationToken);
 
             if (sponsor == null)
                 return new StatusCodeResult(204);

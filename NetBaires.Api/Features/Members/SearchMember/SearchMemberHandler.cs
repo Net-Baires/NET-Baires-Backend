@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using EFSecondLevelCache.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +37,7 @@ namespace NetBaires.Api.Features.Members.SearchMember
                                                                         x.LastName.Contains(request.Query)
                                                                        ||
                                                                         x.MeetupId.ToString().Contains(request.Query))
+                                               .Cacheable()
                                                .Take(10)
                                                .AsNoTracking();
 

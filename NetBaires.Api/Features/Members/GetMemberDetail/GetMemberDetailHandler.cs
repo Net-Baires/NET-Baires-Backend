@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using EFSecondLevelCache.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,7 @@ namespace NetBaires.Api.Features.Members.GetMemberDetail
 
         public async Task<IActionResult> Handle(GetMemberDetailQuery request, CancellationToken cancellationToken)
         {
-            var member = await _context.Members.Include(x=> x.Events).FirstOrDefaultAsync(x => x.Id == request.Id);
+            var member = await _context.Members.Include(x=> x.Events).Cacheable().FirstOrDefaultAsync(x => x.Id == request.Id);
 
             if (member == null)
                 return HttpResponseCodeHelper.NotFound();

@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using EFSecondLevelCache.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +34,7 @@ namespace NetBaires.Api.Features.GroupsCodes.GetGroupCode
                                                      .ThenInclude(x=> x.Badge)
                                                      .Include(x => x.Members)
                                                      .ThenInclude(x=> x.Member)
+                                                     .Cacheable()
                                                      .FirstOrDefaultAsync(x => x.Id == request.GroupCodeId);
 
             if (groupCode == null)

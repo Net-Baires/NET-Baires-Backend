@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using EFSecondLevelCache.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,7 @@ namespace NetBaires.Api.Features.Badges.GetMembersInBadge
 
         public async Task<IActionResult> Handle(GetMembersInBadgeQuery request, CancellationToken cancellationToken)
         {
-            var members = await _context.BadgeMembers.Where(x => x.BadgeId == request.BadgeId).Select(x=> x.Member).ToListAsync();
+            var members = await _context.BadgeMembers.Where(x => x.BadgeId == request.BadgeId).Cacheable().Select(x=> x.Member).ToListAsync();
             if (!members.Any())
                 return new StatusCodeResult(204);
 

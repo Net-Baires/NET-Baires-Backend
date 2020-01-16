@@ -9,7 +9,8 @@ namespace NetBaires.Api.ViewModels
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Username { get; set; }
-       
+        public bool Winner { get; set; }
+        public int WinnerPosition { get; set; }
         public string Picture { get; set; }
         public class MemberSmallDetailViewModelProfile : Profile
         {
@@ -19,6 +20,7 @@ namespace NetBaires.Api.ViewModels
                     .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Member.Id))
                     .ForMember(d => d.FirstName, opt => opt.MapFrom(s => s.Member.FirstName))
                     .ForMember(d => d.LastName, opt => opt.MapFrom(s => s.Member.LastName))
+                    
                     .ForMember(d => d.Picture, opt => opt.MapFrom(s => s.Member.Picture));
             }
         }

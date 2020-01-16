@@ -52,6 +52,35 @@ namespace NetBaires.Api.Tests.Integration.Features.GroupCodes
         }
 
         [Fact]
+        public async Task Return_Second_group_Of_Winners_With_The_Next_WinnerPosition()
+        {
+            FillData();
+            var command = new MakeRaffleCommand { CountOfWinners = 2, GroupCodeId = _newGroupCode.Id, RepeatWinners = false };
+            await HttpClient.PostAsync($"/groupcodes/{_newGroupCode.Id}/raffle",
+                  new StringContent(JsonConvert.SerializeObject(command), Encoding.UTF8, "application/json"));
+
+            var response = await HttpClient.PostAsync($"/groupcodes/{_newGroupCode.Id}/raffle",
+                new StringContent(JsonConvert.SerializeObject(command), Encoding.UTF8, "application/json"));
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            var result = await response.Content.ReadAsAsync<List<MemberDetailViewModel>>();
+            RefreshContext();
+
+            var winners = Context.GroupCodes
+                .Include(x => x.Members)
+                .Where(x => x.Id == _newGroupCode.Id)
+                .FirstOrDefault()
+                .Members
+                .Where(s => result.Select(g => g.Id)
+                    .Contains(s.MemberId))
+                .ToList();
+
+            foreach (var winner in winners)
+            {
+                winner.Winner.Should().BeTrue();
+                winner.WinnerPosition.Should().BeGreaterThan(2);
+            }
+        }
+        [Fact]
         public async Task Return_Differents_Winners_In_Multiples_Requests()
         {
             FillData();
