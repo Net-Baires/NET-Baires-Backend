@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using NetBaires.Api.ViewModels;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Features.Events.GetEventLiveDetail

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using EFSecondLevelCache.Core;
@@ -7,7 +6,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NetBaires.Api.Helpers;
-using NetBaires.Api.ViewModels;
 using NetBaires.Api.ViewModels.GroupCode;
 using NetBaires.Data;
 

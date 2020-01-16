@@ -1,7 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using NetBaires.Api.Features.Events.UpdateEvent;
-using NetBaires.Api.Services.EventBrite.Models;
 using NetBaires.Data;
 using Newtonsoft.Json;
 using Profile = AutoMapper.Profile;

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -8,10 +7,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NetBaires.Api.Features.Events.AssignBadgeToAttendances;
-using NetBaires.Api.Features.Events.UpdateEvent;
-using NetBaires.Api.Features.GroupsCodes.UpdateGroupCode;
 using NetBaires.Api.ViewModels;
-using NetBaires.Api.ViewModels.GroupCode;
 using NetBaires.Data;
 using NetBaires.Host;
 using Newtonsoft.Json;

@@ -1,11 +1,8 @@
 ﻿using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using NetBaires.Api.Features.Events.AddMemberToGroupCode;
-using NetBaires.Api.Features.Events.DeleteMemberToGroupCode;
 using NetBaires.Data;
 using NetBaires.Host;
 using Xunit;

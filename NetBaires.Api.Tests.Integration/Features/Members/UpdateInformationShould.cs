@@ -1,12 +1,10 @@
 ﻿using FluentAssertions;
-using NetBaires.Data;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using NetBaires.Api.Features.Members.AddMember;
 using NetBaires.Api.Features.Members.SearchMember;
 using NetBaires.Host;
 using Xunit;

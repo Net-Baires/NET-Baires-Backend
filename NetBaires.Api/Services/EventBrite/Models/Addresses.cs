@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-
-namespace NetBaires.Api.Services.EventBrite.Models
+﻿namespace NetBaires.Api.Services.EventBrite.Models
 {
     //public class AttendeesResponse
     //{

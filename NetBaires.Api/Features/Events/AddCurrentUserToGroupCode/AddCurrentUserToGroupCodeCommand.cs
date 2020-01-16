@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using NetBaires.Api.ViewModels.GroupCode;
 
 namespace NetBaires.Api.Features.GroupsCodes.AddMemberToGroupCode
 {
