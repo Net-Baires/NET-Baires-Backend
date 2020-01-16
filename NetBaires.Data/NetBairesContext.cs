@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using EFSecondLevelCache.Core;
+using EFSecondLevelCache.Core.Contracts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
 
@@ -33,15 +38,41 @@ namespace NetBaires.Data
             base.OnConfiguring(optionsBuilder);
 
         }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            var changedEntityNames = this.GetChangedEntityNames();
+
+            this.ChangeTracker.AutoDetectChangesEnabled = false; // for performance reasons, to avoid calling DetectChanges() again.
+            var result = await base.SaveChangesAsync(cancellationToken); ;
+            this.ChangeTracker.AutoDetectChangesEnabled = true;
+
+            this.GetService<IEFCacheServiceProvider>().InvalidateCacheDependencies(changedEntityNames);
+
+            return result;
+        }
+
+        public override int SaveChanges()
+        {
+            var changedEntityNames = this.GetChangedEntityNames();
+
+            this.ChangeTracker.AutoDetectChangesEnabled = false; // for performance reasons, to avoid calling DetectChanges() again.
+            var result = base.SaveChanges();
+            this.ChangeTracker.AutoDetectChangesEnabled = true;
+
+            this.GetService<IEFCacheServiceProvider>().InvalidateCacheDependencies(changedEntityNames);
+
+            return result;
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            var cascadeFKs = modelBuilder.Model.GetEntityTypes()
-                .SelectMany(t => t.GetForeignKeys())
-                .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
+            //var cascadeFKs = modelBuilder.Model.GetEntityTypes()
+            //    .SelectMany(t => t.GetForeignKeys())
+            //    .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
 
-            foreach (var fk in cascadeFKs)
-                fk.DeleteBehavior = DeleteBehavior.Restrict;
+            //foreach (var fk in cascadeFKs)
+            //    fk.DeleteBehavior = DeleteBehavior.Restrict;
 
             modelBuilder
                 .Entity<Member>()
@@ -52,6 +83,14 @@ namespace NetBaires.Data
                 .HasOne<Badge>(sc => sc.Badge)
                 .WithMany(s => s.Members)
                 .HasForeignKey(sc => sc.BadgeId);
+
+
+            //modelBuilder.Entity<GroupCodeMember>().HasKey(sc => new { UserId = sc.MemberId, sc.GroupCodeId });
+            //modelBuilder.Entity<GroupCodeMember>()
+            //    .HasOne<Member>(sc => sc.Member)
+            //    .WithMany(s => s.GroupCodes)
+            //    .HasForeignKey(sc => sc.GroupCode)
+            //    .OnDelete(DeleteBehavior.Cascade); 
 
 
             modelBuilder.Entity<BadgeMember>()

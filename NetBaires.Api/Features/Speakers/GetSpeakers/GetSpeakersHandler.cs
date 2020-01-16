@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Features.Events.UpdateEvent;
 using NetBaires.Api.Helpers;
+using NetBaires.Api.ViewModels;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Features.Speakers.GetSpeakers
@@ -38,28 +39,20 @@ namespace NetBaires.Api.Features.Speakers.GetSpeakers
                                             &&
                                             x.Events.Any(s => s.Speaker))
                                         .ToList()
-                                        .Select(x => new MemberEvents
+                                        .Select(x => new GetSpeakerResponse
                                         {
-                                            Member = x,
+                                            Member = _mapper.Map<MemberDetailViewModel>(x),
                                             CountEventsAsSpeaker = x.Events.Count(s => s.Speaker)
                                         })
                                         .ToList();
-            var returnList = new List<GetSpeakerResponse>();
-
-            foreach (var item in eventToReturn)
-            {
-                var itemToAdd = _mapper.Map<GetSpeakerResponse>(item.Member);
-                itemToAdd.CountEventsAsSpeaker = item.CountEventsAsSpeaker;
-                returnList.Add(itemToAdd);
-            }
-
+     
 
             if (!eventToReturn.Any())
                 return HttpResponseCodeHelper.NotContent();
 
             if (request.Id != null)
-                return HttpResponseCodeHelper.Ok(returnList.First());
-            return HttpResponseCodeHelper.Ok(returnList);
+                return HttpResponseCodeHelper.Ok(eventToReturn.First());
+            return HttpResponseCodeHelper.Ok(eventToReturn);
         }
         public class MemberEvents
         {

@@ -5,11 +5,8 @@ using Newtonsoft.Json;
 
 namespace NetBaires.Data
 {
-    public class Member
+    public class Member : Entity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [JsonIgnore]
-        public int Id { get; set; }
         public string Email { get; set; }
         public string PushNotificationId { get; set; }
         public long MeetupId { get; set; }

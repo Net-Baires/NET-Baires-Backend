@@ -1,3 +1,5 @@
+using CacheManager.Core;
+using EFSecondLevelCache.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +21,7 @@ namespace NetBaires.Host
         public void ConfigureServices(IServiceCollection services)
         {
             services
+                .AddCacheEF(Configuration)
                 .AddInfraestructure()
                 .AddOptions(Configuration)
                 .AddAuthentication(Configuration)
