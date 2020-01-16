@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using NetBaires.Api.Auth;
 using NetBaires.Api.Features.Badges.AssignMembersToBadge;
 using NetBaires.Api.Features.Members.AddMember;
+using NetBaires.Api.Features.Members.GetBadgeFromMember;
 using NetBaires.Api.Features.Members.GetBadgesFromMember;
 using NetBaires.Api.Features.Members.GetMemberDetail;
 using NetBaires.Api.Features.Members.InformAttendances;
@@ -78,6 +79,14 @@ namespace NetBaires.Api.Features.Members
         [ProducesResponseType(typeof(List<BadgeDetailViewModel>), 200)]
         public async Task<IActionResult> GetBadgesFromEmailAsync([FromQuery] string email)
             => await _mediator.Send(new GetBadgesFromMemberQuery(email));
+
+        [HttpGet("{id:int}/badges/{badgeId:int}")]
+        [SwaggerOperation(Summary = "Retorna todos los badges recibidos por el miembro")]
+        [AllowAnonymous]
+        [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
+        [ProducesResponseType(typeof(List<BadgeDetailViewModel>), 200)]
+        public async Task<IActionResult> GetBadgeFromMember([FromRoute]GetBadgeFromMemberQuery query)
+            => await _mediator.Send(query);
 
 
         [HttpGet("{id:int}/badges")]

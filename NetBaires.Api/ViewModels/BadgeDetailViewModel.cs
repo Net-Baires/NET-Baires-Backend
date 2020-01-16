@@ -4,6 +4,11 @@ using NetBaires.Data;
 
 namespace NetBaires.Api.ViewModels
 {
+    public class BadgeMemberViewModel
+    {
+        public BadgeDetailViewModel Badge { get; set; }
+        public DateTime AssignmentDate { get; set; }
+    }
 
     public class BadgeDetailViewModel
     {
@@ -17,7 +22,8 @@ namespace NetBaires.Api.ViewModels
         {
             public BadgeDetailViewModelProfile()
             {
-                CreateMap<BadgeMember, BadgeDetailViewModel>()
+                CreateMap<BadgeMember, BadgeMemberViewModel>()
+                    .ForMember(dest => dest.Badge, opt => opt.MapFrom(src => src.Badge))
                     .ForAllMembers(
                     opt => opt.Condition((src, dest, sourceMember) => sourceMember != null));
                 CreateMap<Badge, BadgeDetailViewModel>()

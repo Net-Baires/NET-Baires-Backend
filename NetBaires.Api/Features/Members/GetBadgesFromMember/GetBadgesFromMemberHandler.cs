@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,16 +28,18 @@ namespace NetBaires.Api.Features.Members.GetBadgesFromMember
 
         public async Task<IActionResult> Handle(GetBadgesFromMemberQuery request, CancellationToken cancellationToken)
         {
-            var badges = _context.BadgeMembers.Include(x => x.Badge).Where(x => (request.Email != "" ?
-                                                             x.Member.Email.ToUpper() == request.Email.ToUpper() :
-                                                             true)
-                                                            &&
-                                                            (request.Id != null ? x.MemberId == request.Id : true))
-                .Select(x => _mapper.Map<BadgeDetailViewModel>(x.Badge));
+            var badges = await _context.BadgeMembers.Include(x => x.Badge).Where(x =>
+                    (request.Email != "" ? x.Member.Email.ToUpper() == request.Email.ToUpper() : true)
+                    &&
+                    (request.Id != null ? x.MemberId == request.Id : true))
+                .ProjectTo<BadgeMemberViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken: cancellationToken);
+
             if (!badges.Any())
                 return HttpResponseCodeHelper.NotContent();
 
             return HttpResponseCodeHelper.Ok(badges);
+
         }
     }
 }

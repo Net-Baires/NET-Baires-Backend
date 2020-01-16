@@ -3,10 +3,11 @@ using NetBaires.Api.ViewModels;
 
 namespace NetBaires.Api.Features.Speakers.GetSpeakers
 {
-    public class GetSpeakerResponse : MemberDetailViewModel
+    public class GetSpeakerResponse 
     {
+        public MemberDetailViewModel Member { get; set; }
         public int CountEventsAsSpeaker { get; set; }
-        public List<AttendantViewModel> Events { get; set; }
+        public List<EventDetailViewModel> Events { get; set; }
 
         public GetSpeakerResponse()
         {

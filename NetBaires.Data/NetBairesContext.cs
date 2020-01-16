@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
@@ -23,19 +24,25 @@ namespace NetBaires.Data
         public DbSet<SponsorEvent> SponsorEvents { get; set; }
         public DbSet<GroupCode> GroupCodes { get; set; }
 
-        public static readonly Microsoft.Extensions.Logging.LoggerFactory _myLoggerFactory =
-            new LoggerFactory(new[] {
-                new Microsoft.Extensions.Logging.Debug.DebugLoggerProvider()
-            });
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.EnableSensitiveDataLogging();
+
+            //optionsBuilder.EnableSensitiveDataLogging();
             //optionsBuilder.UseLoggerFactory(_myLoggerFactory);
             base.OnConfiguring(optionsBuilder);
 
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            var cascadeFKs = modelBuilder.Model.GetEntityTypes()
+                .SelectMany(t => t.GetForeignKeys())
+                .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
+
+            foreach (var fk in cascadeFKs)
+                fk.DeleteBehavior = DeleteBehavior.Restrict;
+
             modelBuilder
                 .Entity<Member>()
                 .Property(e => e.Role)

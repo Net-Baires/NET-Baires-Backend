@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -47,11 +48,9 @@ namespace NetBaires.Api.Features.Speakers.GetSpeakers
             if (eventToReturn == null)
                 return HttpResponseCodeHelper.NotContent();
 
-            var toReturn = _mapper.Map<GetSpeakerResponse>(eventToReturn.Member);
-            toReturn.CountEventsAsSpeaker = eventToReturn.CountEventsAsSpeaker;
-            toReturn.Events = _mapper.Map<List<AttendantViewModel>>(eventToReturn.Events);
 
-            return HttpResponseCodeHelper.Ok(toReturn);
+
+            return HttpResponseCodeHelper.Ok(_mapper.Map<GetSpeakerResponse>(eventToReturn));
         }
         public class MemberEvents
         {

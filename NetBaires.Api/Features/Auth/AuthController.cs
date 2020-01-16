@@ -50,7 +50,6 @@ namespace NetBaires.Api.Features.Auth
             {
                 var response = await result.Content.ReadAsAsync<MeetupSelf>();
                 var user = await _userService.AuthenticateOrCreate(response.email);
-                //var user = await _userService.AuthenticateOrCreate("german.kuber@outlook.com");
 
                 return Ok(user);
             }

@@ -12,7 +12,7 @@ namespace NetBaires.Api.Tests.Integration.Services
         {
             return Task.FromResult(new List<Attendee> {
                 new Attendee {
-                    profile = new Profile{
+                    Profile = new Profile{
                         Email="Asisto@Asistio.com",
                         FirstName="Asistio",
                         LastName="Asistio"
@@ -20,7 +20,7 @@ namespace NetBaires.Api.Tests.Integration.Services
                     CheckIn = true
                 },
                 new Attendee {
-                    profile = new Profile{
+                    Profile = new Profile{
                         Email="NoAsisto@NoAsistio.com",
                         FirstName="No Asistio",
                         LastName="No Asistio"

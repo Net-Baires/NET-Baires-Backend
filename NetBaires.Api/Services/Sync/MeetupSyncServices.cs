@@ -9,6 +9,7 @@ using Member = NetBaires.Data.Member;
 
 namespace NetBaires.Api.Services.Sync
 {
+
     public class MeetupSyncServices : IExternalsSyncServices
     {
         private readonly IMeetupServices _meetupServices;
@@ -35,8 +36,8 @@ namespace NetBaires.Api.Services.Sync
                 meetupAttendeesIds.Contains(x.Member.MeetupId)).ToListAsync();
             foreach (var attende in meetupAttendees)
             {
-                var currentMember = attendeesToEach?.FirstOrDefault(x => x.Member.MeetupId == attende.Member.Id);
-                if (currentMember == null)
+                var attendace = attendeesToEach?.FirstOrDefault(x => x.Member.MeetupId == attende.Member.Id);
+                if (attendace == null)
                 {
                     if (attende.Member.Id != 0)
                     {
@@ -48,17 +49,18 @@ namespace NetBaires.Api.Services.Sync
                                 FirstName = attende.Member.Name,
                                 Picture = attende.Member.Photo?.HighresLink?.AbsolutePath == null ? "" :
                                attende.Member.Photo?.HighresLink?.AbsoluteUri,
+                                Role =  UserRole.Member,
                                 Biography = attende.Member.Bio
                             };
-                        currentMember = SetState(attende,
+                        attendace = SetState(attende,
                             new Attendance(newMember, eventToSync, AttendanceRegisterType.ExternalPage));
 
-                        await _context.Attendances.AddAsync(currentMember);
+                        await _context.Attendances.AddAsync(attendace);
                     }
                 }
                 else
                 {
-                    currentMember = SetState(attende, currentMember);
+                    attendace = SetState(attende, attendace);
                 }
             }
             await _context.SaveChangesAsync();
