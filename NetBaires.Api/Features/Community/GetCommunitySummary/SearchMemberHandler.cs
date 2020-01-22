@@ -42,9 +42,13 @@ namespace NetBaires.Api.Features.Community.GetCommunitySummary
                                      .Cacheable()
                                      .AsNoTracking();
             var organizers = _context.Members
-                                    .Where(x => x.Organized)
-                                    .Cacheable()
-                                    .AsNoTracking();
+                .Where(x => x.Organized)
+                .Cacheable()
+                .AsNoTracking();
+            var eventsLive = await _context.Events
+                .Where(x => x.Live)
+                .Cacheable()
+                .AnyAsync();
             var response = new GetCommunitySummaryQuery.Response
             {
                 Sponsors = _mapper.Map<List<SponsorDetailViewModel>>(sponsors),
@@ -55,7 +59,8 @@ namespace NetBaires.Api.Features.Community.GetCommunitySummary
                 TotalUsersMeetup = _context.Members.Count(),
                 TotalUsersSlack = 970,
                 TotalSpeakers = _context.Members
-                                    .Where(x => x.Events.Any(s => s.Speaker)).Count()
+                                    .Where(x => x.Events.Any(s => s.Speaker)).Count(),
+                EventsLive = eventsLive
             };
             return HttpResponseCodeHelper.Ok(response);
         }

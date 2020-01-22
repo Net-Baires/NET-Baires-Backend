@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NetBaires.Data
 {
+    public class PushNotificationInformation : Entity
+    {
+        public string PushNotificationId { get; set; }
+    }
+
     public class Member : Entity
     {
         public string Email { get; set; }
-        public string PushNotificationId { get; set; }
+        public List<PushNotificationInformation> PushNotifications { get; set; } = new List<PushNotificationInformation>();
         public long MeetupId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -33,6 +39,10 @@ namespace NetBaires.Data
             PictureName = fileName;
         }
 
-
+        public void AddPushNotification(string pushNotificationId)
+        {
+            if (!PushNotifications.Any(a => a.PushNotificationId == pushNotificationId))
+                PushNotifications.Add(new PushNotificationInformation { PushNotificationId = pushNotificationId });
+        }
     }
 }

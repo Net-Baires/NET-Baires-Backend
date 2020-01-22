@@ -30,10 +30,12 @@ namespace NetBaires.Api.Features.Members.SearchMember
 
         public async Task<IActionResult> Handle(UpdateInformationCommand request, CancellationToken cancellationToken)
         {
-            var member = await _context.Members.FirstOrDefaultAsync(x => x.Id == _currentUser.User.Id);
+            var member = await _context.Members.Include(x=> x.PushNotifications).FirstOrDefaultAsync(x => x.Id == _currentUser.User.Id);
             if (member == null)
                 return HttpResponseCodeHelper.NotFound();
-            member.PushNotificationId = request.PushNotificationId;
+
+
+            member.AddPushNotification(request.PushNotificationId);
             await _context.SaveChangesAsync();
             return HttpResponseCodeHelper.NotContent();
         }

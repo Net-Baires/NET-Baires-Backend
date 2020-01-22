@@ -18,6 +18,7 @@ namespace NetBaires.Api.Features.Community.GetCommunitySummary
             public int TotalUsersMeetup { get; set; }
             public int TotalSpeakers { get; set; }
             public int TotalUsersSlack { get; set; }
+            public bool EventsLive { get; set; }
         }
     }
 }
