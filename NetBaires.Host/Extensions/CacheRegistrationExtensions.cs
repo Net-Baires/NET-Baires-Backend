@@ -12,17 +12,17 @@ namespace NetBaires.Host.Extensions
         {
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
-            services.AddResponseCaching(options =>
-            {
-                options.MaximumBodySize = 1024;
-                options.UseCaseSensitivePaths = true;
-            });
+            //services.AddResponseCaching(options =>
+            //{
+            //    options.MaximumBodySize = 1024;
+            //    options.UseCaseSensitivePaths = true;
+            //});
 
             return services;
         }
         public static IApplicationBuilder UseCache(this IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseResponseCaching();
+            //app.UseResponseCaching();
             return app;
         }
     }
