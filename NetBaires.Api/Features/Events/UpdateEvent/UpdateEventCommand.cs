@@ -13,6 +13,8 @@ namespace NetBaires.Api.Features.Events.UpdateEvent
         public string Url { get; set; }
         public bool? Live { get; set; }
         public bool? Done { get; set; }
+        public bool? Online { get; set; }
+        public string OnlineLink { get; set; }
         public bool? GeneralAttended { get; set; }
         public List<SponsorEventViewModel> Sponsors { get; set; }
        

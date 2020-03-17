@@ -18,6 +18,9 @@ namespace NetBaires.Api.ViewModels
         public string EventId { get; set; }
         public bool Done { get; set; }
         public bool Live { get; set; }
+        public bool Online { get; set; }
+        public string OnlineLink { get; set; }
+
         public DateTime Date { get; set; }
         public bool IsUserRegistered { get; set; }
         public bool GeneralAttended { get; set; }
