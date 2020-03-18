@@ -20,6 +20,8 @@ namespace NetBaires.Data
         public decimal EstimatedAttendancePercentage { get; set; }
         public bool Done { get; protected set; } = false;
         public bool Live { get; set; } = false;
+        public bool Online { get; set; } = false;
+        public string OnlineLink { get; set; }
         public bool GeneralAttended { get; set; } = false;
         public string GeneralAttendedCode { get; set; }
         public DateTime? StartLiveTime { get; set; }

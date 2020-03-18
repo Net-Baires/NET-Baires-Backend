@@ -15,7 +15,10 @@ namespace NetBaires.Data
             : base(options)
         {
         }
+        public NetBairesContext()
+        {
 
+        }
 
         public DbSet<Sponsor> Sponsors { get; set; }
         public DbSet<Member> Members { get; set; }
