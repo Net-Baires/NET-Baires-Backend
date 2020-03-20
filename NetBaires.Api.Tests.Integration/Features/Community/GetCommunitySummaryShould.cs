@@ -40,7 +40,8 @@ namespace NetBaires.Api.Tests.Integration.Features.Community
                         Member = speaker,
                         Speaker = true
                     }
-              }
+              },
+                Online = true
             });
             await Context.Events.AddAsync(new Event
             {
@@ -66,6 +67,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Community
             memberResponse.TotalSpeakers.Should().Be(2);
             memberResponse.EventsLive.Should().Be(true);
             memberResponse.TotalUsersMeetup.Should().Be(8);
+            memberResponse.OnlineEvent.Should().BeTrue();
         }
 
     }

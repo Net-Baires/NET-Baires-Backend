@@ -7,7 +7,6 @@ namespace NetBaires.Api.Features.Community.GetCommunitySummary
 {
     public class GetCommunitySummaryQuery : IRequest<IActionResult>
     {
-
         public class Response
         {
             public List<MemberDetailViewModel> Organizers { get; set; }
@@ -19,6 +18,7 @@ namespace NetBaires.Api.Features.Community.GetCommunitySummary
             public int TotalSpeakers { get; set; }
             public int TotalUsersSlack { get; set; }
             public bool EventsLive { get; set; }
+            public bool OnlineEvent { get; set; }
         }
     }
 }

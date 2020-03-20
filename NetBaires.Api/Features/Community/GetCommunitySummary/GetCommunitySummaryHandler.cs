@@ -13,7 +13,6 @@ using NetBaires.Data;
 
 namespace NetBaires.Api.Features.Community.GetCommunitySummary
 {
-
     public class GetCommunitySummaryHandler : IRequestHandler<GetCommunitySummaryQuery, IActionResult>
     {
         private readonly NetBairesContext _context;
@@ -26,7 +25,6 @@ namespace NetBaires.Api.Features.Community.GetCommunitySummary
             _context = context;
             _mapper = mapper;
         }
-
 
         public async Task<IActionResult> Handle(GetCommunitySummaryQuery request, CancellationToken cancellationToken)
         {
@@ -49,6 +47,13 @@ namespace NetBaires.Api.Features.Community.GetCommunitySummary
                 .Where(x => x.Live)
                 .Cacheable()
                 .AnyAsync();
+            var onlineEvent = await _context.Events
+                .Where(x => x.Live
+                            &&
+                            x.Online)
+                .Cacheable()
+                .AnyAsync();
+
             var response = new GetCommunitySummaryQuery.Response
             {
                 Sponsors = _mapper.Map<List<SponsorDetailViewModel>>(sponsors),
@@ -60,7 +65,8 @@ namespace NetBaires.Api.Features.Community.GetCommunitySummary
                 TotalUsersSlack = 970,
                 TotalSpeakers = _context.Members
                                     .Where(x => x.Events.Any(s => s.Speaker)).Count(),
-                EventsLive = eventsLive
+                EventsLive = eventsLive,
+                OnlineEvent = onlineEvent
             };
             return HttpResponseCodeHelper.Ok(response);
         }
