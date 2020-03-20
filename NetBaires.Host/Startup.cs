@@ -19,6 +19,7 @@ namespace NetBaires.Host
         public void ConfigureServices(IServiceCollection services)
         {
             services
+                .AddCacheEF(Configuration)
                 .AddInfraestructure()
                 .AddOptions(Configuration)
                 .AddAuthentication(Configuration)

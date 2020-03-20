@@ -2,10 +2,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using NetBaires.Api.Auth;
-using NetBaires.Api.Features.Slack;
 using NetBaires.Api.Features.Sponsors.DeleteSponsor;
 using NetBaires.Api.Features.Sponsors.GetSponsors;
 using NetBaires.Api.Features.Sponsors.NewSponsor;

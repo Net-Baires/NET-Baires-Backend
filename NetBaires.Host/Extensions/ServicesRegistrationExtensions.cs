@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using NetBaires.Api.Auth;
 using NetBaires.Api.Services;
 using NetBaires.Api.Services.BadGr;

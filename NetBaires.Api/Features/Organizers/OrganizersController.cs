@@ -1,12 +1,8 @@
 ﻿using System.Threading.Tasks;
-using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using NetBaires.Api.Auth;
 using NetBaires.Api.Features.Organizers.GetOrganizers;
-using NetBaires.Api.Features.Slack;
 using NetBaires.Data;
 using Swashbuckle.AspNetCore.Annotations;
 

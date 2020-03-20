@@ -6,16 +6,12 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Features.BadgeGroups.AssignBadgeToBadgeGroup;
 using NetBaires.Api.Features.BadgeGroups.GetBadgeGroup;
 using NetBaires.Api.Features.BadgeGroups.GetBadgeGroups;
 using NetBaires.Api.Features.BadgeGroups.NewBadgeGroups;
 using NetBaires.Api.Features.Badges;
-using NetBaires.Api.Features.Badges.DeleteBadge;
-using NetBaires.Api.Features.Badges.NewBadge;
-using NetBaires.Api.Features.Badges.UpdateBadge;
 using NetBaires.Data;
 using Swashbuckle.AspNetCore.Annotations;
 

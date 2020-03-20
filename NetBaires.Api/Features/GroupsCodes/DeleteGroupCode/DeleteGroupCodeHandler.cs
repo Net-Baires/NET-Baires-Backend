@@ -5,7 +5,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NetBaires.Api.Helpers;
-using NetBaires.Api.ViewModels.GroupCode;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Features.GroupsCodes.DeleteGroupCode

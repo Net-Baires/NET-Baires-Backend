@@ -65,11 +65,14 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
             };
             var groupCode = newEventLive.CreateGroupCode("Detail");
             var groupCode2 = newEventLive.CreateGroupCode("Detail2");
+            Context.Events.Add(newEventLive);
+
+            Context.SaveChanges();
+
             groupCode.AddMember(firstAttended, groupCode.Code);
             groupCode2.AddMember(secondAttended, groupCode2.Code);
             groupCode2.AddMember(firstAttended, groupCode2.Code);
 
-            Context.Events.Add(newEventLive);
             Context.SaveChanges();
             var response = await HttpClient.GetAsync($"/events/{newEventLive.Id}/Live/Detail");
             var eventDetail = await response.Content.ReadAsAsync<GetEventLiveDetailQuery.Response>();

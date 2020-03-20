@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
@@ -8,14 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Auth;
-using NetBaires.Api.Features.Badges.AssignMembersToBadge;
 using NetBaires.Api.Features.Members.AddMember;
+using NetBaires.Api.Features.Members.GetBadgeFromMember;
 using NetBaires.Api.Features.Members.GetBadgesFromMember;
 using NetBaires.Api.Features.Members.GetMemberDetail;
 using NetBaires.Api.Features.Members.InformAttendances;
 using NetBaires.Api.Features.Members.SearchMember;
 using NetBaires.Api.Features.Slack;
-using NetBaires.Api.Models;
 using NetBaires.Api.ViewModels;
 using NetBaires.Data;
 using Swashbuckle.AspNetCore.Annotations;
@@ -78,6 +76,14 @@ namespace NetBaires.Api.Features.Members
         [ProducesResponseType(typeof(List<BadgeDetailViewModel>), 200)]
         public async Task<IActionResult> GetBadgesFromEmailAsync([FromQuery] string email)
             => await _mediator.Send(new GetBadgesFromMemberQuery(email));
+
+        [HttpGet("{id:int}/badges/{badgeId:int}")]
+        [SwaggerOperation(Summary = "Retorna todos los badges recibidos por el miembro")]
+        [AllowAnonymous]
+        [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
+        [ProducesResponseType(typeof(List<BadgeDetailViewModel>), 200)]
+        public async Task<IActionResult> GetBadgeFromMember([FromRoute]GetBadgeFromMemberQuery query)
+            => await _mediator.Send(query);
 
 
         [HttpGet("{id:int}/badges")]

@@ -15,7 +15,7 @@ namespace NetBaires.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.0")
+                .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -128,8 +128,8 @@ namespace NetBaires.Data.Migrations
                     b.Property<int>("BadgeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("BadgeUrl")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("AssignmentDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("MemberId", "BadgeId");
 
@@ -174,6 +174,12 @@ namespace NetBaires.Data.Migrations
 
                     b.Property<bool>("Live")
                         .HasColumnType("bit");
+
+                    b.Property<bool>("Online")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OnlineLink")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Platform")
                         .IsRequired()
@@ -269,7 +275,7 @@ namespace NetBaires.Data.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("GroupCodeMember");
+                    b.ToTable("GroupCodeMembers");
                 });
 
             modelBuilder.Entity("NetBaires.Data.Member", b =>
@@ -321,9 +327,6 @@ namespace NetBaires.Data.Migrations
                     b.Property<string>("PictureName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PushNotificationId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -340,6 +343,26 @@ namespace NetBaires.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Members");
+                });
+
+            modelBuilder.Entity("NetBaires.Data.PushNotificationInformation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("MemberId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PushNotificationId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("PushNotificationInformation");
                 });
 
             modelBuilder.Entity("NetBaires.Data.Sponsor", b =>
@@ -461,6 +484,13 @@ namespace NetBaires.Data.Migrations
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("NetBaires.Data.PushNotificationInformation", b =>
+                {
+                    b.HasOne("NetBaires.Data.Member", null)
+                        .WithMany("PushNotifications")
+                        .HasForeignKey("MemberId");
                 });
 
             modelBuilder.Entity("NetBaires.Data.SponsorEvent", b =>

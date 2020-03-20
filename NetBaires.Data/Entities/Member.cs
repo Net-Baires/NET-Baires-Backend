@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using Newtonsoft.Json;
+using System.Linq;
 
 namespace NetBaires.Data
 {
-    public class Member
+    public class PushNotificationInformation : Entity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [JsonIgnore]
-        public int Id { get; set; }
-        public string Email { get; set; }
         public string PushNotificationId { get; set; }
+    }
+
+    public class Member : Entity
+    {
+        public string Email { get; set; }
+        public List<PushNotificationInformation> PushNotifications { get; set; } = new List<PushNotificationInformation>();
         public long MeetupId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -28,7 +29,7 @@ namespace NetBaires.Data
         public bool Organized { get; set; } = false;
         public bool Colaborator { get; set; } = false;
         public DateTime FirstLogin { get; protected set; } = DateTime.Now;
-        public UserRole Role { get; set; }
+        public UserRole Role { get; set; } = UserRole.Member;
         public IList<BadgeMember> Badges { get; set; }
         public List<Attendance> Events { get; set; }
         public List<GroupCodeMember> GroupCodes { get; set; }
@@ -38,6 +39,10 @@ namespace NetBaires.Data
             PictureName = fileName;
         }
 
-
+        public void AddPushNotification(string pushNotificationId)
+        {
+            if (!PushNotifications.Any(a => a.PushNotificationId == pushNotificationId))
+                PushNotifications.Add(new PushNotificationInformation { PushNotificationId = pushNotificationId });
+        }
     }
 }

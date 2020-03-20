@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using EFSecondLevelCache.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +35,7 @@ namespace NetBaires.Api.Features.Me.GetMe
         public async Task<IActionResult> Handle(GetMeQuery request, CancellationToken cancellationToken)
         {
             var currentMemberId = currentUser.User.Id;
-            var member = await _context.Members.Include(x=> x.Events).FirstOrDefaultAsync(x => x.Id == currentMemberId);
+            var member = await _context.Members.Include(x=> x.Events).Cacheable().FirstOrDefaultAsync(x => x.Id == currentMemberId);
 
             var memberToResponse = _mapper.Map(member, new MemberDetailViewModel());
 

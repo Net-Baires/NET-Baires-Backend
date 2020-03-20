@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Services.EventBrite;
 using NetBaires.Data;
@@ -28,25 +29,27 @@ namespace NetBaires.Api.Services.Sync
             var meetupAttendees = await _eventBriteServices.GetAttendees(eventToSync.EventId);
             foreach (var attendees in meetupAttendees)
             {
-                var currentMember = eventToSync.Attendees.FirstOrDefault(x => x.Member.Email == attendees.profile.Email);
-                if (currentMember == null)
+                var attendace = eventToSync.Attendees.FirstOrDefault(x => x.Member.Email == attendees.Profile.Email);
+                if (attendace == null)
                 {
-                    var newMember = new Member
-                    {
-                        FirstName = attendees.profile.FirstName,
-                        LastName = attendees.profile.LastName,
-                        Email = attendees.profile.Email,
-                    };
+                    var member = await _context.Members.FirstOrDefaultAsync(x => x.Email.ToUpper() == attendees.Profile.Email.ToUpper());
+                    if (member == null)
+                        member = new Member
+                        {
+                            FirstName = attendees.Profile.FirstName,
+                            LastName = attendees.Profile.LastName,
+                            Email = attendees.Profile.Email,
+                        };
                     if ((attendees.CheckIn))
-                        currentMember = new Attendance(newMember, eventToSync, true, AttendanceRegisterType.ExternalPage);
+                        attendace = new Attendance(member, eventToSync, true, AttendanceRegisterType.ExternalPage);
                     else
-                        currentMember = new Attendance(newMember, eventToSync, false, AttendanceRegisterType.ExternalPage);
-                    await _context.Attendances.AddAsync(currentMember);
+                        attendace = new Attendance(member, eventToSync, false, AttendanceRegisterType.ExternalPage);
+                    await _context.Attendances.AddAsync(attendace);
                 }
                 else
                 {
                     if ((attendees.CheckIn))
-                        currentMember.Attend();
+                        attendace.Attend();
                 }
             }
             await _context.SaveChangesAsync();

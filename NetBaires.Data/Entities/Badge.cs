@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NetBaires.Data
 {
-    public class Badge
+    public class Badge : Entity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
         public string ImageName { get; set; }
         public string ImageUrl { get; set; }
         public string SimpleImageName { get; set; }

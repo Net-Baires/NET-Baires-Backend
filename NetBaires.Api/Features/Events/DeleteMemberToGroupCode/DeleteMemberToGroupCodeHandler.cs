@@ -48,7 +48,7 @@ namespace NetBaires.Api.Features.Events.DeleteMemberToGroupCode
                                                                         a.MemberId == request.MemberId), cancellationToken: cancellationToken);
 
             if (!memberInEvent)
-                return HttpResponseCodeHelper.Error("El miembro que intenta agregar código");
+                return HttpResponseCodeHelper.Error("El miembro que intenta eliminar del código no existe");
 
             var member = await _context.Members.FirstOrDefaultAsync(x => x.Id == request.MemberId, cancellationToken: cancellationToken);
 
@@ -56,7 +56,7 @@ namespace NetBaires.Api.Features.Events.DeleteMemberToGroupCode
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return HttpResponseCodeHelper.Ok(_mapper.Map<DeleteMemberToGroupCodeCommand.Response>(groupCode));
+            return HttpResponseCodeHelper.NotContent();
         }
     }
 }

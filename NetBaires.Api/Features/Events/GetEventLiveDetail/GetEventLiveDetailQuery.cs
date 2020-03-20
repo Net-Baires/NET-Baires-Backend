@@ -27,6 +27,8 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
             public DateTime? StartLiveTime { get; internal set; }
             public bool GeneralAttended { get; internal set; }
             public bool Attended { get; set; }
+            public bool Online { get; set; }
+            public string OnlineLink { get; set; }
             public string TokenToReportMyAttendance { get; set; }
             public bool HasGroupCodeOpen { get; set; }
             public List<GroupCodeResponseViewModel> GroupCodes { get; set; }

@@ -40,7 +40,9 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
                 ImageUrl = "ImageUrl 2",
                 Url = "Url 2",
                 Done = true,
-                GeneralAttended = true
+                GeneralAttended = true,
+                Online = true,
+                OnlineLink = "https://randomlink.com"
             };
 
             var response = await HttpClient.PutAsync($"/events/{_newEvent.Id}",
@@ -50,7 +52,9 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
             var eventToCheck = Context.Events.First();
             eventToCheck.Description.Should().Be(update.Description);
             eventToCheck.Title.Should().Be(update.Title);
+            eventToCheck.Online.Should().BeTrue();
             eventToCheck.ImageUrl.Should().Be(update.ImageUrl);
+            eventToCheck.OnlineLink.Should().Be(update.OnlineLink);
             eventToCheck.Url.Should().Be(update.Url);
             eventToCheck.GeneralAttended.Should().Be(update.GeneralAttended.Value);
             eventToCheck.Done.Should().BeTrue();

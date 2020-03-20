@@ -28,6 +28,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Community
             await Context.Members.AddAsync(new Member { Organized = true });
             await Context.Events.AddAsync(new Event
             {
+                Live = true,
                 Attendees = new List<Attendance> {
                 new Attendance {
                         Member = new Member(),
@@ -39,7 +40,8 @@ namespace NetBaires.Api.Tests.Integration.Features.Community
                         Member = speaker,
                         Speaker = true
                     }
-              }
+              },
+                Online = true
             });
             await Context.Events.AddAsync(new Event
             {
@@ -63,7 +65,9 @@ namespace NetBaires.Api.Tests.Integration.Features.Community
             memberResponse.Sponsors.Count.Should().Be(2);
             memberResponse.TotalEvents.Should().Be(2);
             memberResponse.TotalSpeakers.Should().Be(2);
+            memberResponse.EventsLive.Should().Be(true);
             memberResponse.TotalUsersMeetup.Should().Be(8);
+            memberResponse.OnlineEvent.Should().BeTrue();
         }
 
     }

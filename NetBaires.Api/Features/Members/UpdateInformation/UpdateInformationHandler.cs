@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
@@ -8,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NetBaires.Api.Auth;
 using NetBaires.Api.Helpers;
-using NetBaires.Api.ViewModels;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Features.Members.SearchMember
@@ -33,9 +30,12 @@ namespace NetBaires.Api.Features.Members.SearchMember
 
         public async Task<IActionResult> Handle(UpdateInformationCommand request, CancellationToken cancellationToken)
         {
-            var member = await _context.Members.FirstOrDefaultAsync(x => x.Id == _currentUser.User.Id);
+            var member = await _context.Members.Include(x=> x.PushNotifications).FirstOrDefaultAsync(x => x.Id == _currentUser.User.Id);
+            if (member == null)
+                return HttpResponseCodeHelper.NotFound();
 
-            member.PushNotificationId = request.PushNotificationId;
+
+            member.AddPushNotification(request.PushNotificationId);
             await _context.SaveChangesAsync();
             return HttpResponseCodeHelper.NotContent();
         }

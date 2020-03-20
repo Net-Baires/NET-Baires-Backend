@@ -5,9 +5,6 @@ namespace NetBaires.Api.Services.EventBrite.Models
 {
     public class Attendee
     {
-        [JsonProperty("profile")]
-
-        public dynamic profile { get; set; }
 
         [JsonProperty("team")]
         public object Team { get; set; }

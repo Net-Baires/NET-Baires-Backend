@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace NetBaires.Data.DomainEvents
 {
     public class AssignedBadgeToAttendance : IDomainEvents
     {
-        public Member Member { get; }
+        public int MemberId { get; }
         public Badge Badge { get; }
 
-        public AssignedBadgeToAttendance(Member member, Badge badge)
+        public AssignedBadgeToAttendance(int memberId, Badge badge)
         {
-            Member = member ?? throw new ArgumentNullException(nameof(member));
+            MemberId = memberId;
             Badge = badge ?? throw new ArgumentNullException(nameof(badge));
         }
     }

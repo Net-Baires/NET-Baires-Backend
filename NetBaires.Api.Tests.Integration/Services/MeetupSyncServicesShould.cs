@@ -43,13 +43,17 @@ namespace NetBaires.Api.Tests.Integration.Services
             FillData(0000);
 
             await SyncServices.SyncEvent(_event.Id);
+            RefreshContext();
             var attendees = Context.Attendances.Include(x => x.Member).Where(x => x.EventId == _event.Id).ToList();
 
             var noAttended = attendees.FirstOrDefault(x => x.Member.MeetupId == 1234567);
             var attended = attendees.FirstOrDefault(x => x.Member.MeetupId== 123456);
             attendees.Count.Should().Be(4);
             noAttended.DidNotAttend.Should().BeTrue();
-
+            noAttended.Member.Role.Should().Be(UserRole.Member);
+            attended.Member.Role.Should().Be(UserRole.Member);
+            attendees[2].Member.Role.Should().Be(UserRole.Member);
+            attendees[3].Member.Role.Should().Be(UserRole.Member);
             attended.DidNotAttend.Should().BeFalse();
             attended.Attended.Should().BeTrue();
         }

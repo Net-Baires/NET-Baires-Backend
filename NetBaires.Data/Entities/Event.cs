@@ -20,6 +20,8 @@ namespace NetBaires.Data
         public decimal EstimatedAttendancePercentage { get; set; }
         public bool Done { get; protected set; } = false;
         public bool Live { get; set; } = false;
+        public bool Online { get; set; } = false;
+        public string OnlineLink { get; set; }
         public bool GeneralAttended { get; set; } = false;
         public string GeneralAttendedCode { get; set; }
         public DateTime? StartLiveTime { get; set; }
@@ -40,7 +42,7 @@ namespace NetBaires.Data
                         BadgeId = badge.Id,
                         MemberId = item.MemberId
                     });
-                    AddDomainEvent(new AssignedBadgeToAttendance(item.Member, badge));
+                    AddDomainEvent(new AssignedBadgeToAttendance(item.MemberId, badge));
                 }
             return DomainResponse.Ok();
         }
@@ -60,7 +62,7 @@ namespace NetBaires.Data
                 BadgeId = badge.Id,
                 MemberId = member.Id
             });
-            AddDomainEvent(new AssignedBadgeToAttendance(member, badge));
+            AddDomainEvent(new AssignedBadgeToAttendance(member.Id, badge));
             return DomainResponse.Ok();
         }
 

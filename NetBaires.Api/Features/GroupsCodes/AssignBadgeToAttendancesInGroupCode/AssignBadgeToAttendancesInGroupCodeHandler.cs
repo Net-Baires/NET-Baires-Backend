@@ -30,12 +30,8 @@ namespace NetBaires.Api.Features.Events.AssignBadgeToAttendances
             if (badge == null)
                 return HttpResponseCodeHelper.NotFound("El badge que esta intentando asignar no se encuentra en el sistema");
 
-            var groupCode = await _context.GroupCodes.Include(s => s.Event)
-                                                         .Include(c => c.Members)
-                                                         .ThenInclude(x => x.Member)
-                                                         .Where(x => x.Id == request.GroupCodeId
-                                                                     &&
-                                                                     !x.GroupCodeBadges.Any(s => s.Badge.Id == badge.Id))
+            var groupCode = await _context.GroupCodes.Include(s => s.Members)
+                                                         .Where(x => x.Id == request.GroupCodeId)
                                                          .FirstOrDefaultAsync();
             if (groupCode == null)
                 return HttpResponseCodeHelper.NotFound("El badge que esta intentando asignar no se encuentra en el sistema");

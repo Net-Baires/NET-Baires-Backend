@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using EFSecondLevelCache.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -33,52 +34,56 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
 
         public async Task<IActionResult> Handle(GetEventLiveDetailQuery request, CancellationToken cancellationToken)
         {
-
             var eventToReturn = _context.Events
-                .Include(x=> x.GroupCodes)
-                .ThenInclude(x=> x.Members)
+                .Include(x => x.GroupCodes)
+                .ThenInclude(x => x.Members)
                 .Where(x => x.Id == request.Id
                             &&
                             x.Live)
-                .Select(x => Tuple.Create(x, _mapper.Map<GetEventLiveDetailQuery.Response>(x)))
+                .Cacheable()
                 .FirstOrDefault();
+
+            if (eventToReturn == null)
+                return HttpResponseCodeHelper.NotFound();
+
+            var eventViewModel = _mapper.Map<GetEventLiveDetailQuery.Response>(eventToReturn);
             if (eventToReturn == null)
                 return HttpResponseCodeHelper.NotFound();
             //TODO: Refactor
             if (_currentUser.User.Rol == UserRole.Member)
-                eventToReturn.Item2.GroupCodes = null;
-            eventToReturn.Item2.GeneralAttendance = eventToReturn.Item1.GeneralAttended &&
+                eventViewModel.GroupCodes = null;
+            eventViewModel.GeneralAttendance = eventToReturn.GeneralAttended &&
                                                     (_currentUser.User.Rol == UserRole.Admin
                                                      ||
                                                      _currentUser.User.Rol == UserRole.Organizer)
                 ? new GetEventLiveDetailQuery.Response.ReportGeneralAttendance
                 {
                     TokenToReportGeneralAttendance =
-                        _attendanceService.GetTokenToReportGeneralAttendance(eventToReturn.Item1),
-                    GeneralAttendedCode = eventToReturn.Item1.GeneralAttendedCode
+                        _attendanceService.GetTokenToReportGeneralAttendance(eventToReturn),
+                    GeneralAttendedCode = eventToReturn.GeneralAttendedCode
                 }
                 : new GetEventLiveDetailQuery.Response.ReportGeneralAttendance();
-            eventToReturn.Item2.TokenToReportMyAttendance = _attendanceService.GetTokenToReportMyAttendance(eventToReturn.Item1);
+            eventViewModel.TokenToReportMyAttendance = _attendanceService.GetTokenToReportMyAttendance(eventToReturn);
 
 
-            if (eventToReturn.Item1 == null)
+            if (eventToReturn == null)
                 return HttpResponseCodeHelper.NotContent();
             var countAttended = _context.Events.Where(x => x.Id == request.Id)
                 .Select(s => Tuple.Create(s.Attendees.Count, s.Attendees.Count(k => k.Attended)))
                 .FirstOrDefault();
 
-            eventToReturn.Item2.Attended = await _context.Attendances.AnyAsync(a => a.EventId == request.Id
+            eventViewModel.Attended = await _context.Attendances.AnyAsync(a => a.EventId == request.Id
                                                                                &&
                                                                                a.MemberId == _currentUser.User.Id
                                                                                &&
                                                                                a.Attended);
-            eventToReturn.Item2.MembersDetails = new GetEventLiveDetailQuery.Response.Members
+            eventViewModel.MembersDetails = new GetEventLiveDetailQuery.Response.Members
             {
                 TotalMembersRegistered = countAttended.Item1,
                 TotalMembersAttended = countAttended.Item2,
-                EstimatedAttendancePercentage = eventToReturn.Item1.EstimatedAttendancePercentage
+                EstimatedAttendancePercentage = eventToReturn.EstimatedAttendancePercentage
             };
-            eventToReturn.Item2.MembersDetails.MembersAttended = await _context.Attendances.Include(x => x.Member).Where(x => x.EventId == eventToReturn.Item2.Id
+            eventViewModel.MembersDetails.MembersAttended = await _context.Attendances.Include(x => x.Member).Where(x => x.EventId == eventViewModel.Id
                                                                                                                               &&
                                                                                                                               x.Attended)
                 .OrderByDescending(x => x.AttendedTime)
@@ -87,8 +92,8 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
 
 
             if (request.Id != null)
-                return HttpResponseCodeHelper.Ok(eventToReturn.Item2);
-            return HttpResponseCodeHelper.Ok(eventToReturn.Item2);
+                return HttpResponseCodeHelper.Ok(eventViewModel);
+            return HttpResponseCodeHelper.Ok(eventViewModel);
         }
     }
 }

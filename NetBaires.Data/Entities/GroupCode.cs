@@ -73,7 +73,7 @@ namespace NetBaires.Data
                     BadgeId = badge.Id,
                     MemberId = groupCodeMember.MemberId
                 });
-                AddDomainEvent(new AssignedBadgeToAttendance(groupCodeMember.Member, badge));
+                AddDomainEvent(new AssignedBadgeToAttendance(groupCodeMember.MemberId, badge));
             }
             GroupCodeBadges.Add(new GroupCodeBadge(this, badge));
             return DomainResponse.Ok();

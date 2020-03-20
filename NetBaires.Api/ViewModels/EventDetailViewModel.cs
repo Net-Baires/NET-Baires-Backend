@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using NetBaires.Api.Auth;
-using NetBaires.Api.ViewModels.GroupCode;
 using NetBaires.Data;
 
 namespace NetBaires.Api.ViewModels
@@ -19,6 +18,9 @@ namespace NetBaires.Api.ViewModels
         public string EventId { get; set; }
         public bool Done { get; set; }
         public bool Live { get; set; }
+        public bool Online { get; set; }
+        public string OnlineLink { get; set; }
+
         public DateTime Date { get; set; }
         public bool IsUserRegistered { get; set; }
         public bool GeneralAttended { get; set; }
@@ -38,10 +40,10 @@ namespace NetBaires.Api.ViewModels
             public EventDetailViewModelProfile()
             {
                 CreateMap<Event, EventDetailViewModel>()
-                     //.ForMember(dest => dest.IsUserRegistered, o => o.MapFrom<RegisteredCurrentUserInEventResolver>())
+                     .ForMember(dest => dest.IsUserRegistered, o => o.MapFrom<RegisteredCurrentUserInEventResolver>())
                      .ForMember(dest => dest.Attended, o => o.MapFrom(s => s.Attendees.Count(c => c.Attended)))
                      .ForMember(dest => dest.DidNotAttend, o => o.MapFrom(s => s.Attendees.Count(c => c.DidNotAttend)))
-                     .ForMember(dest => dest.Registered, o => o.MapFrom(s => s.Attendees.Count()));
+                     .ForMember(dest => dest.Registered, o => o.MapFrom(s => s.Attendees.Count));
                 CreateMap<SponsorEvent, SponsorEventViewModel>();
 
             }

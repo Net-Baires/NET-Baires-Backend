@@ -33,16 +33,20 @@ namespace NetBaires.Api.Features.Events.AssignBadgeToAttendances
 
         public async Task<IActionResult> Handle(MakeRaffleCommand request, CancellationToken cancellationToken)
         {
-            var members = await _context.GroupCodes.Include(s=> s.Members).ThenInclude(s=> s.Member).Where(x => x.Id == request.GroupCodeId)
-                                                   .SelectMany(x => x.Members.Where(s =>
-                                                   request.RepeatWinners ? s.Winner : !s.Winner))
-                                                   .OrderBy(s => new Random().Next())
-                                                   .Take(request.CountOfWinners)
-                                                   .ToListAsync();
-            var a = await _context.GroupCodes.Include(s => s.Members).ThenInclude(s => s.Member).ToListAsync();
+            var members = _context.GroupCodes.Include(s => s.Members).ThenInclude(s => s.Member)
+                .Where(x => x.Id == request.GroupCodeId)
+                .SelectMany(x => x.Members.Where(s =>
+                    request.RepeatWinners ? s.Winner : !s.Winner))
+                .ToList()
+                .OrderBy(s => new Random().Next())
+                .Take(request.CountOfWinners)
+                .ToList();
+            var maxWinnerPisition = await _context.GroupCodeMembers.OrderByDescending(x=> x.WinnerPosition).Take(1).Select(x=> x.WinnerPosition).FirstOrDefaultAsync(cancellationToken: cancellationToken);
 
-            for (int i = 0; i < request.CountOfWinners; i++)
-                members[i].SetAsWinner(i + 1);
+            var count = request.CountOfWinners > members.Count ? members.Count : request.CountOfWinners;
+
+            for (int i = 0; i < count; i++)
+                members[i].SetAsWinner(++maxWinnerPisition);
 
             await _context.SaveChangesAsync();
 

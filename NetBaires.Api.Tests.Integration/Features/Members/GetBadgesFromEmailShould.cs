@@ -45,10 +45,10 @@ namespace NetBaires.Api.Tests.Integration.Features.Members
             var response = await HttpClient.GetAsync($"/members/badges?email={member.Email}");
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var badges = await response.Content.ReadAsAsync<List<BadgeDetailViewModel>>();
+            var badges = await response.Content.ReadAsAsync<List<BadgeMemberViewModel>>();
             badges.Count.Should().Be(2);
-            badges.First().Name.Should().Be("Test Badge");
-            badges[1].Name.Should().Be("Test Badge 2");
+            badges.First().Badge.Name.Should().Be("Test Badge");
+            badges[1].Badge.Name.Should().Be("Test Badge 2");
         }
 
         [Fact]
@@ -78,10 +78,10 @@ namespace NetBaires.Api.Tests.Integration.Features.Members
             var response = await HttpClient.GetAsync($"/members/{member.Id}/badges");
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var badges = await response.Content.ReadAsAsync<List<BadgeDetailViewModel>>();
+            var badges = await response.Content.ReadAsAsync<List<BadgeMemberViewModel>>();
             badges.Count.Should().Be(2);
-            badges.First().Name.Should().Be("Test Badge");
-            badges[1].Name.Should().Be("Test Badge 2");
+            badges.First().Badge.Name.Should().Be("Test Badge");
+            badges[1].Badge.Name.Should().Be("Test Badge 2");
         }
 
         [Fact]

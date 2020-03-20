@@ -31,11 +31,30 @@ namespace NetBaires.Api.Tests.Integration.Services
                         },
                         Attended = false
                     }
+                   
                 }
 
             };
             Context.Events.Add(_event);
             Context.SaveChanges();
+        }
+
+        [Fact]
+        public async Task Not_Add_Member_With_The_Same_Email()
+        {
+            FillData("primero@primero.com");
+            _event.Attendees.Add(new Attendance
+            {
+                Member = new Member
+                {
+                    Email = "Asisto@Asistio.com"
+                },
+                Attended = false
+            });
+            Context.SaveChanges();
+            await SyncServices.SyncEvent(_event.Id);
+            var attendees = Context.Attendances.Include(x => x.Member).Where(x => x.EventId == _event.Id).ToList();
+            attendees.Count.Should().Be(3);
         }
         [Fact]
         public async Task Add_Two_New_Attendees_One_Attended_One_No_Attended()

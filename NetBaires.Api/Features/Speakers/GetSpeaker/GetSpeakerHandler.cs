@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Features.Events.UpdateEvent;
 using NetBaires.Api.Helpers;
-using NetBaires.Api.ViewModels;
 using NetBaires.Data;
 
 namespace NetBaires.Api.Features.Speakers.GetSpeakers
@@ -47,11 +46,9 @@ namespace NetBaires.Api.Features.Speakers.GetSpeakers
             if (eventToReturn == null)
                 return HttpResponseCodeHelper.NotContent();
 
-            var toReturn = _mapper.Map<GetSpeakerResponse>(eventToReturn.Member);
-            toReturn.CountEventsAsSpeaker = eventToReturn.CountEventsAsSpeaker;
-            toReturn.Events = _mapper.Map<List<EventDetailViewModel>>(eventToReturn.Events);
 
-            return HttpResponseCodeHelper.Ok(toReturn);
+
+            return HttpResponseCodeHelper.Ok(_mapper.Map<GetSpeakerResponse>(eventToReturn));
         }
         public class MemberEvents
         {

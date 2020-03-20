@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using EFSecondLevelCache.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,6 @@ using NetBaires.Data;
 
 namespace NetBaires.Api.Features.Community.GetCommunitySummary
 {
-
     public class GetCommunitySummaryHandler : IRequestHandler<GetCommunitySummaryQuery, IActionResult>
     {
         private readonly NetBairesContext _context;
@@ -26,21 +26,34 @@ namespace NetBaires.Api.Features.Community.GetCommunitySummary
             _mapper = mapper;
         }
 
-
         public async Task<IActionResult> Handle(GetCommunitySummaryQuery request, CancellationToken cancellationToken)
         {
-            var sponsors = _context.Sponsors.AsNoTracking();
+            var sponsors = _context.Sponsors.Cacheable().AsNoTracking();
             var speakers = _context.Members
                                     .Where(x => x.Events.Any(s => s.Speaker))
                                     .Take(10)
+                                    .Cacheable()
                                     .AsNoTracking();
             var lastEvents = _context.Events
                                      .OrderByDescending(x => x.Date)
                                      .Take(5)
+                                     .Cacheable()
                                      .AsNoTracking();
             var organizers = _context.Members
-                                    .Where(x => x.Organized)
-                                    .AsNoTracking();
+                .Where(x => x.Organized)
+                .Cacheable()
+                .AsNoTracking();
+            var eventsLive = await _context.Events
+                .Where(x => x.Live)
+                .Cacheable()
+                .AnyAsync();
+            var onlineEvent = await _context.Events
+                .Where(x => x.Live
+                            &&
+                            x.Online)
+                .Cacheable()
+                .AnyAsync();
+
             var response = new GetCommunitySummaryQuery.Response
             {
                 Sponsors = _mapper.Map<List<SponsorDetailViewModel>>(sponsors),
@@ -51,7 +64,9 @@ namespace NetBaires.Api.Features.Community.GetCommunitySummary
                 TotalUsersMeetup = _context.Members.Count(),
                 TotalUsersSlack = 970,
                 TotalSpeakers = _context.Members
-                                    .Where(x => x.Events.Any(s => s.Speaker)).Count()
+                                    .Where(x => x.Events.Any(s => s.Speaker)).Count(),
+                EventsLive = eventsLive,
+                OnlineEvent = onlineEvent
             };
             return HttpResponseCodeHelper.Ok(response);
         }
