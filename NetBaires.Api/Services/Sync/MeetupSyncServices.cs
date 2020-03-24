@@ -49,7 +49,7 @@ namespace NetBaires.Api.Services.Sync
                                 FirstName = attende.Member.Name,
                                 Picture = attende.Member.Photo?.HighresLink?.AbsolutePath == null ? "" :
                                attende.Member.Photo?.HighresLink?.AbsoluteUri,
-                                Role =  UserRole.Member,
+                                Role = UserRole.Member,
                                 Biography = attende.Member.Bio
                             };
                         attendace = SetState(attende,
@@ -68,7 +68,9 @@ namespace NetBaires.Api.Services.Sync
                                                       &&
                                                       (x.Events.Any(a => !a.DoNotKnow) && x.Events.Count(s => s.Attended) * 100 /
                                                        x.Events.Count(a => !a.DoNotKnow) > 60));
-            eventToSync.EstimatedAttendancePercentage = (decimal)(((decimal)percent * 100) / meetupAttendeesIds.Count());
+
+            if (meetupAttendeesIds.Any())
+                eventToSync.EstimatedAttendancePercentage = ((decimal)percent * 100) / meetupAttendeesIds.Count();
             await _context.SaveChangesAsync();
         }
 
