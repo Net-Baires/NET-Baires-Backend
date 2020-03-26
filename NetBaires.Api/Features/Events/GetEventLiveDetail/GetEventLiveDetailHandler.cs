@@ -49,48 +49,50 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
             var eventViewModel = _mapper.Map<GetEventLiveDetailQuery.Response>(eventToReturn);
             if (eventToReturn == null)
                 return HttpResponseCodeHelper.NotFound();
-            //TODO: Refactor
-            if (_currentUser.User.Rol == UserRole.Member)
-                eventViewModel.GroupCodes = null;
-            eventViewModel.GeneralAttendance = eventToReturn.GeneralAttended &&
-                                                    (_currentUser.User.Rol == UserRole.Admin
-                                                     ||
-                                                     _currentUser.User.Rol == UserRole.Organizer)
-                ? new GetEventLiveDetailQuery.Response.ReportGeneralAttendance
-                {
-                    TokenToReportGeneralAttendance =
-                        _attendanceService.GetTokenToReportGeneralAttendance(eventToReturn),
-                    GeneralAttendedCode = eventToReturn.GeneralAttendedCode
-                }
-                : new GetEventLiveDetailQuery.Response.ReportGeneralAttendance();
-            eventViewModel.TokenToReportMyAttendance = _attendanceService.GetTokenToReportMyAttendance(eventToReturn);
-
-
-            if (eventToReturn == null)
-                return HttpResponseCodeHelper.NotContent();
-            var countAttended = _context.Events.Where(x => x.Id == request.Id)
-                .Select(s => Tuple.Create(s.Attendees.Count, s.Attendees.Count(k => k.Attended)))
-                .FirstOrDefault();
-
-            eventViewModel.Attended = await _context.Attendances.AnyAsync(a => a.EventId == request.Id
-                                                                               &&
-                                                                               a.MemberId == _currentUser.User.Id
-                                                                               &&
-                                                                               a.Attended);
-            eventViewModel.MembersDetails = new GetEventLiveDetailQuery.Response.Members
+            if (_currentUser.IsLoggued)
             {
-                TotalMembersRegistered = countAttended.Item1,
-                TotalMembersAttended = countAttended.Item2,
-                EstimatedAttendancePercentage = eventToReturn.EstimatedAttendancePercentage
-            };
-            eventViewModel.MembersDetails.MembersAttended = await _context.Attendances.Include(x => x.Member).Where(x => x.EventId == eventViewModel.Id
-                                                                                                                              &&
-                                                                                                                              x.Attended)
-                .OrderByDescending(x => x.AttendedTime)
-                .Take(8)
-                .Select(s => _mapper.Map<GetEventLiveDetailQuery.Response.MemberDetail>(s.Member)).ToListAsync(cancellationToken: cancellationToken);
+                //TODO: Refactor
+                if (_currentUser.User.Rol == UserRole.Member)
+                    eventViewModel.GroupCodes = null;
+                eventViewModel.GeneralAttendance = eventToReturn.GeneralAttended &&
+                                                        (_currentUser.User.Rol == UserRole.Admin
+                                                         ||
+                                                         _currentUser.User.Rol == UserRole.Organizer)
+                    ? new GetEventLiveDetailQuery.Response.ReportGeneralAttendance
+                    {
+                        TokenToReportGeneralAttendance =
+                            _attendanceService.GetTokenToReportGeneralAttendance(eventToReturn),
+                        GeneralAttendedCode = eventToReturn.GeneralAttendedCode
+                    }
+                    : new GetEventLiveDetailQuery.Response.ReportGeneralAttendance();
+                eventViewModel.TokenToReportMyAttendance = _attendanceService.GetTokenToReportMyAttendance(eventToReturn);
 
 
+                if (eventToReturn == null)
+                    return HttpResponseCodeHelper.NotContent();
+                var countAttended = _context.Events.Where(x => x.Id == request.Id)
+                    .Select(s => Tuple.Create(s.Attendees.Count, s.Attendees.Count(k => k.Attended)))
+                    .FirstOrDefault();
+
+                eventViewModel.Attended = await _context.Attendances.AnyAsync(a => a.EventId == request.Id
+                                                                                   &&
+                                                                                   a.MemberId == _currentUser.User.Id
+                                                                                   &&
+                                                                                   a.Attended);
+                eventViewModel.MembersDetails = new GetEventLiveDetailQuery.Response.Members
+                {
+                    TotalMembersRegistered = countAttended.Item1,
+                    TotalMembersAttended = countAttended.Item2,
+                    EstimatedAttendancePercentage = eventToReturn.EstimatedAttendancePercentage
+                };
+                eventViewModel.MembersDetails.MembersAttended = await _context.Attendances.Include(x => x.Member).Where(x => x.EventId == eventViewModel.Id
+                                                                                                                                  &&
+                                                                                                                                  x.Attended)
+                    .OrderByDescending(x => x.AttendedTime)
+                    .Take(8)
+                    .Select(s => _mapper.Map<GetEventLiveDetailQuery.Response.MemberDetail>(s.Member)).ToListAsync(cancellationToken: cancellationToken);
+
+            }
             if (request.Id != null)
                 return HttpResponseCodeHelper.Ok(eventViewModel);
             return HttpResponseCodeHelper.Ok(eventViewModel);
