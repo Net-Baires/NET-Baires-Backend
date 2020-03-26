@@ -120,7 +120,7 @@ namespace NetBaires.Api.Services.EventBrite.Models
         public string OrganizerId { get; set; }
 
         [JsonProperty("venue_id")]
-        public long VenueId { get; set; }
+        public long? VenueId { get; set; }
 
         [JsonProperty("category_id")]
         public long? CategoryId { get; set; }
