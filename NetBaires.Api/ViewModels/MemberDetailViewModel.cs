@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using NetBaires.Data;
@@ -23,6 +24,7 @@ namespace NetBaires.Api.ViewModels
         public bool Blocked { get; set; }
         public bool Organized { get; set; }
         public bool Colaborator { get; set; }
+        public List<int> FollowedMembers { get; set; }
         public decimal AverageAttendance { get; set; }
         public decimal EventsRegistered { get; set; }
         public decimal EventsAttended { get; set; }

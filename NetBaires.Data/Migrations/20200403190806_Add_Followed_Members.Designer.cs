@@ -10,7 +10,7 @@ using NetBaires.Data;
 namespace NetBaires.Data.Migrations
 {
     [DbContext(typeof(NetBairesContext))]
-    [Migration("20200403185012_Add_Followed_Members")]
+    [Migration("20200403190806_Add_Followed_Members")]
     partial class Add_Followed_Members
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using EFSecondLevelCache.Core;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Auth;
+using NetBaires.Api.Helpers;
 using NetBaires.Api.ViewModels;
 using NetBaires.Data;
 
@@ -35,11 +37,17 @@ namespace NetBaires.Api.Features.Me.GetMe
         public async Task<IActionResult> Handle(GetMeQuery request, CancellationToken cancellationToken)
         {
             var currentMemberId = currentUser.User.Id;
-            var member = await _context.Members.Include(x=> x.Events).Cacheable().FirstOrDefaultAsync(x => x.Id == currentMemberId);
+            var member = await _context.Members.Cacheable()
+                                               .FirstOrDefaultAsync(x => x.Id == currentMemberId);
 
             var memberToResponse = _mapper.Map(member, new MemberDetailViewModel());
 
-            return new ObjectResult(memberToResponse) { StatusCode = 200 };
+            memberToResponse.FollowedMembers = await _context.FollowedMembers.Cacheable()
+                                                        .Where(x => x.MemberId == currentMemberId)
+                                                        .Select(x => x.Followed.Id)
+                                                        .ToListAsync(cancellationToken: cancellationToken);
+
+            return HttpResponseCodeHelper.Ok(memberToResponse);
         }
     }
 }

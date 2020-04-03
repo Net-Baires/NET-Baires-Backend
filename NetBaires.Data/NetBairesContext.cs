@@ -10,6 +10,7 @@ using NetBaires.Data.Entities;
 
 namespace NetBaires.Data
 {
+ 
     public class NetBairesContext : DbContext
     {
         public NetBairesContext(DbContextOptions<NetBairesContext> options)
