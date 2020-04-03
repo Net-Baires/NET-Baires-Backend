@@ -8,16 +8,16 @@ using NetBaires.Api.Auth;
 using NetBaires.Api.Helpers;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Features.Members.UpdateInformation
+namespace NetBaires.Api.Features.Members.FollowMember
 {
 
-    public class UpdateInformationHandler : IRequestHandler<UpdateInformationCommand, IActionResult>
+    public class FollowMemberHandler : IRequestHandler<FollowMemberCommand, IActionResult>
     {
         private readonly NetBairesContext _context;
         private readonly ICurrentUser _currentUser;
         private readonly IMapper _mapper;
 
-        public UpdateInformationHandler(
+        public FollowMemberHandler(
             NetBairesContext context,
             ICurrentUser currentUser,
             IMapper mapper)
@@ -28,15 +28,15 @@ namespace NetBaires.Api.Features.Members.UpdateInformation
         }
 
 
-        public async Task<IActionResult> Handle(UpdateInformationCommand request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Handle(FollowMemberCommand request, CancellationToken cancellationToken)
         {
-            var member = await _context.Members.Include(x=> x.PushNotifications).FirstOrDefaultAsync(x => x.Id == _currentUser.User.Id);
+            var me = await _context.Members.FirstOrDefaultAsync(x => x.Id == _currentUser.User.Id, cancellationToken: cancellationToken);
+            var member = await _context.Members.FirstOrDefaultAsync(x => x.Id == request.MemberId, cancellationToken: cancellationToken);
             if (member == null)
                 return HttpResponseCodeHelper.NotFound();
+            me.Follow(member);
+            await _context.SaveChangesAsync(cancellationToken);
 
-
-            member.AddPushNotification(request.PushNotificationId);
-            await _context.SaveChangesAsync();
             return HttpResponseCodeHelper.NotContent();
         }
     }
