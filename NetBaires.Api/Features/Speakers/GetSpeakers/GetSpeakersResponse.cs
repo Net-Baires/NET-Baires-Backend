@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using NetBaires.Api.ViewModels;
+﻿using NetBaires.Api.ViewModels;
 
 namespace NetBaires.Api.Features.Speakers.GetSpeakers
 {

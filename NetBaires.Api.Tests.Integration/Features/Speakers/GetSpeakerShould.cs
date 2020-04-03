@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NetBaires.Api.Features.Speakers.GetSpeaker;
-using NetBaires.Api.Features.Speakers.GetSpeakers;
 using NetBaires.Data;
 using NetBaires.Host;
 using Xunit;
