@@ -25,6 +25,7 @@ namespace NetBaires.Api.Features.Me
         [SwaggerOperation(Summary = "Retorna toda la información de perfil del usuario autenticado")]
         [ProducesResponseType(typeof(MemberDetailViewModel), 200)]
         [AuthorizeRoles(UserRole.Organizer, UserRole.Admin, UserRole.Member)]
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Get() =>
          await _iMediator.Send(new GetMeQuery());
 

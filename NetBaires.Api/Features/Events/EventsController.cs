@@ -12,6 +12,7 @@ using NetBaires.Api.Features.Events.GetDataToReportAttendanceToEvent;
 using NetBaires.Api.Features.Events.GetEventLiveDetail;
 using NetBaires.Api.Features.Events.GetEvents;
 using NetBaires.Api.Features.Events.GetInfoToCheckAttendanceGeneral;
+using NetBaires.Api.Features.Events.GetLinkEventLive;
 using NetBaires.Api.Features.Events.PutCheckAttendanceByCode;
 using NetBaires.Api.Features.Events.PutReportAttendance;
 using NetBaires.Api.Features.Events.SyncEvent;
@@ -61,8 +62,20 @@ namespace NetBaires.Api.Features.Events
         [SwaggerOperation(Summary = "Retorna el detalle de un evento en vivo")]
         [ApiExplorerSettingsExtend(UserRole.Organizer)]
         //[AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
+        [ResponseCache(Duration = 60)]
         public async Task<IActionResult> GetEventLiveDetail([FromRoute]int id) =>
-                         await _iMediator.Send(new GetEventLiveDetailQuery(id));
+            await _iMediator.Send(new GetEventLiveDetailQuery(id));
+
+
+        [HttpGet("Live/Link")]
+        [AllowAnonymous]
+        [SwaggerOperation(Summary = "Retorna el link de la transmisión en vivo")]
+        [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
+        [ResponseCache(Duration = 60)]
+        public async Task<IActionResult> GetEventLiveLink() =>
+            await _iMediator.Send(new GetLinkEventLiveQuery());
+
+
 
         [HttpGet("{id}/Attendance")]
         [SwaggerOperation(Summary = "Retorna toda la información requerida por el miembro de la comunidad para reportar su asistencia a un evento particular")]

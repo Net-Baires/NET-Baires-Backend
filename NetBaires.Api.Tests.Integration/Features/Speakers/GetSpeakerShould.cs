@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using NetBaires.Api.Features.Speakers.GetSpeaker;
 using NetBaires.Api.Features.Speakers.GetSpeakers;
 using NetBaires.Data;
 using NetBaires.Host;
@@ -12,15 +13,15 @@ using Xunit;
 
 namespace NetBaires.Api.Tests.Integration.Features.Speakers
 {
-    public class GetSpeakersShould : IntegrationTestsBase
+    public class GetSpeakerShould : IntegrationTestsBase
     {
-        public GetSpeakersShould(CustomWebApplicationFactory<Startup> factory) : base(factory)
+        public GetSpeakerShould(CustomWebApplicationFactory<Startup> factory) : base(factory)
         {
             AuthenticateAdminAsync().GetAwaiter().GetResult(); ;
         }
 
         [Fact]
-        public async Task Return_One_Speaker_With_3_Events()
+        public async Task Return_One_Speaker_Detail_With_3_Events()
         {
             var member = new Member();
             var event1 = new Event();
@@ -33,11 +34,12 @@ namespace NetBaires.Api.Tests.Integration.Features.Speakers
             Context.Events.AddRange(new List<Event> { event1, event2, event3, event4 });
             Context.SaveChanges();
             var memebrs = Context.Members.Include(x => x.Events).ToList();
-            var response = await HttpClient.GetAsync("/speakers");
-            var speakers = await response.Content.ReadAsAsync<List<GetSpeakersResponse>>();
+            var response = await HttpClient.GetAsync($"/speakers/{member.Id}");
+            var speakers = await response.Content.ReadAsAsync<GetSpeakerResponse>();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            speakers.Count.Should().Be(1);
-            speakers.First().CountEventsAsSpeaker.Should().Be(3);
+            speakers.CountEventsAsSpeaker.Should().Be(3);
+            speakers.Events.Count.Should().Be(3);
+            speakers.Events.Any(x => x.Id == event1.Id);
         }
 
     }
