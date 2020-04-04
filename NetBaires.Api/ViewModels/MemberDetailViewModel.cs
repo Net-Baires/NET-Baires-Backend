@@ -29,6 +29,7 @@ namespace NetBaires.Api.ViewModels
         public decimal EventsRegistered { get; set; }
         public decimal EventsAttended { get; set; }
         public decimal EventsNoAttended { get; set; }
+        public bool Following { get; set; }
 
         public class MemberDetailViewModelProfile : Profile
         {

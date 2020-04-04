@@ -26,7 +26,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Members
                 Email = "Test@test.com",
                 Github = "Github Test"
             };
-            
+
             await Context.Members.AddAsync(member);
             await Context.SaveChangesAsync();
             var newEventOne = new Event();
@@ -52,6 +52,25 @@ namespace NetBaires.Api.Tests.Integration.Features.Members
             var memberToCheck = await Context.Members.Include(x => x.Events).Where(x => x.Id == member.Id)
                 .FirstOrDefaultAsync();
             memberResponse.AverageAttendance.Should().Be((memberToCheck.Events.Count(e => e.Attended) * 100) / memberToCheck.Events.Count);
+        }
+
+        [Fact]
+        public async Task Return_True_Current_User_Follow_Member()
+        {
+            var memberToFollow = new Data.Member();
+            Context.Members.Add(memberToFollow);
+            Context.SaveChanges();
+            var memberLogged = Context.Members.Include(x => x.FollowingMembers)
+                .ThenInclude(x => x.Following)
+                .First(x => x.Email == "admin@admin.com");
+            memberToFollow.Follow(memberLogged);
+            Context.SaveChanges();
+
+            var response = await HttpClient.GetAsync($"/members/{memberToFollow.Id}");
+
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            var memberResponse = await response.Content.ReadAsAsync<MemberDetailViewModel>();
+            memberResponse.Following.Should().BeTrue();
         }
 
         [Fact]
