@@ -112,11 +112,13 @@ namespace NetBaires.Api.Features.Members
 
         [HttpPost("{id}/Follow")]
         [ApiExplorerSettingsExtend(UserRole.Member)]
+        [AuthorizeRoles(UserRole.Organizer, UserRole.Admin, UserRole.Member)]
         public async Task<IActionResult> FollowMember([FromRoute]int id)
             => await _mediator.Send(new FollowMemberCommand(id));
 
         [HttpDelete("{id}/UnFollow")]
         [ApiExplorerSettingsExtend(UserRole.Member)]
+        [AuthorizeRoles(UserRole.Organizer, UserRole.Admin, UserRole.Member)]
         public async Task<IActionResult> UnFollowMember([FromRoute]int id)
             => await _mediator.Send(new UnFollowMemberCommand(id));
 
