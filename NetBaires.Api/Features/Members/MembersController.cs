@@ -11,6 +11,7 @@ using NetBaires.Api.Features.Members.AddMember;
 using NetBaires.Api.Features.Members.FollowMember;
 using NetBaires.Api.Features.Members.GetBadgeFromMember;
 using NetBaires.Api.Features.Members.GetBadgesFromMember;
+using NetBaires.Api.Features.Members.GetFollowingsFromMember;
 using NetBaires.Api.Features.Members.GetMemberDetail;
 using NetBaires.Api.Features.Members.InformAttendances;
 using NetBaires.Api.Features.Members.SearchMember;
@@ -63,7 +64,13 @@ namespace NetBaires.Api.Features.Members
         [AllowAnonymous]
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
         public async Task<IActionResult> GetById([FromRoute]GetMemberDetailQuery query) =>
-                     await _mediator.Send(query);
+            await _mediator.Send(query);
+
+        [HttpGet("{id:int}/followings")]
+        [AllowAnonymous]
+        [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
+        public async Task<IActionResult> GetById([FromRoute]GetFollowingsFromMemberQuery query) =>
+            await _mediator.Send(query);
 
         [HttpGet("{query}")]
         [AllowAnonymous]

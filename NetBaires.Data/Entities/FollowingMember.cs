@@ -2,20 +2,20 @@
 
 namespace NetBaires.Data.Entities
 {
-    public class FollowedMember : Entity
+    public class FollowingMember : Entity
     {
         public int MemberId { get; set; }
         public Member Member { get; set; }
-        public Member Followed { get; set; }
+        public Member Following { get; set; }
         public DateTime FollowingDate { get; set; }
 
-        public FollowedMember(Member member, DateTime followedMember)
+        public FollowingMember(Member member, DateTime followingMember)
         {
-            Followed = member;
-            FollowingDate = followedMember;
+            Following = member;
+            FollowingDate = followingMember;
         }
 
-        public FollowedMember()
+        public FollowingMember()
         {
 
         }

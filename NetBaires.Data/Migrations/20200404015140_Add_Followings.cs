@@ -3,31 +3,31 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NetBaires.Data.Migrations
 {
-    public partial class Add_Followed_Members : Migration
+    public partial class Add_Followings : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "FollowedMembers",
+                name: "FollowingMembers",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MemberId = table.Column<int>(nullable: false),
-                    FollowedId = table.Column<int>(nullable: true),
+                    FollowingId = table.Column<int>(nullable: true),
                     FollowingDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FollowedMembers", x => x.Id);
+                    table.PrimaryKey("PK_FollowingMembers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FollowedMembers_Members_FollowedId",
-                        column: x => x.FollowedId,
+                        name: "FK_FollowingMembers_Members_FollowingId",
+                        column: x => x.FollowingId,
                         principalTable: "Members",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_FollowedMembers_Members_MemberId",
+                        name: "FK_FollowingMembers_Members_MemberId",
                         column: x => x.MemberId,
                         principalTable: "Members",
                         principalColumn: "Id",
@@ -35,20 +35,20 @@ namespace NetBaires.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_FollowedMembers_FollowedId",
-                table: "FollowedMembers",
-                column: "FollowedId");
+                name: "IX_FollowingMembers_FollowingId",
+                table: "FollowingMembers",
+                column: "FollowingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FollowedMembers_MemberId",
-                table: "FollowedMembers",
+                name: "IX_FollowingMembers_MemberId",
+                table: "FollowingMembers",
                 column: "MemberId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "FollowedMembers");
+                name: "FollowingMembers");
         }
     }
 }

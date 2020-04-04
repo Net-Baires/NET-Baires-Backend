@@ -8,7 +8,7 @@ namespace NetBaires.Data
     public class Member : Entity
     {
         public string Email { get; set; }
-        public List<FollowedMember> FollowingMembers { get; set; } = new List<FollowedMember>();
+        public List<FollowingMember> FollowingMembers { get; set; } = new List<FollowingMember>();
         public List<PushNotificationInformation> PushNotifications { get; set; } = new List<PushNotificationInformation>();
         public long MeetupId { get; set; }
         public string FirstName { get; set; }
@@ -39,9 +39,9 @@ namespace NetBaires.Data
         public void Follow(Member member)
         {
             if (!FollowingMembers.Any(x => x.Member == member))
-                FollowingMembers.Add(new FollowedMember(member, DateTime.Now));
+                FollowingMembers.Add(new FollowingMember(member, DateTime.Now));
         }
-        public void UnFollow(FollowedMember followingMember)
+        public void UnFollow(FollowingMember followingMember)
         {
             FollowingMembers.Remove(followingMember);
         }

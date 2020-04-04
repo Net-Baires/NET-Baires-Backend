@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -82,6 +83,33 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
             var events = await response.Content.ReadAsAsync<List<EventDetailViewModel>>();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             events.Count.Should().Be(2);
+        }
+
+
+        [Fact]
+        public async Task Return_Upcoming_Events()
+        {
+            Context.Events.Add(new Event
+            {
+                Date = DateTime.Now.AddDays(-1)
+            });
+            Context.Events.Add(new Event
+            {
+                Date = DateTime.Now.AddDays(30)
+            });
+            Context.Events.Add(new Event
+            {
+                Date = DateTime.Now.AddDays(30)
+            });
+            Context.Events.Add(new Event
+            {
+                Date = DateTime.Now.AddDays(37)
+            });
+            Context.SaveChanges();
+            var response = await HttpClient.GetAsync("/events?upcoming=true");
+            var events = await response.Content.ReadAsAsync<List<EventDetailViewModel>>();
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            events.Count.Should().Be(3);
         }
 
         [Fact]

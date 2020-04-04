@@ -23,7 +23,7 @@ namespace NetBaires.Data
         }
         public DbSet<Sponsor> Sponsors { get; set; }
         public DbSet<Member> Members { get; set; }
-        public DbSet<FollowedMember> FollowedMembers { get; set; }
+        public DbSet<FollowingMember> FollowingMembers { get; set; }
 
         public DbSet<Badge> Badges { get; set; }
         public DbSet<BadgeGroup> BadgeGroups { get; set; }

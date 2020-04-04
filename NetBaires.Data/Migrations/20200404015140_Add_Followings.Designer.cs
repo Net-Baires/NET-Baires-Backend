@@ -10,8 +10,8 @@ using NetBaires.Data;
 namespace NetBaires.Data.Migrations
 {
     [DbContext(typeof(NetBairesContext))]
-    [Migration("20200403190806_Add_Followed_Members")]
-    partial class Add_Followed_Members
+    [Migration("20200404015140_Add_Followings")]
+    partial class Add_Followings
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -140,29 +140,29 @@ namespace NetBaires.Data.Migrations
                     b.ToTable("BadgeMembers");
                 });
 
-            modelBuilder.Entity("NetBaires.Data.Entities.FollowedMember", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.FollowingMember", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("FollowedId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("FollowingDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("FollowingId")
+                        .HasColumnType("int");
 
                     b.Property<int>("MemberId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FollowedId");
+                    b.HasIndex("FollowingId");
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("FollowedMembers");
+                    b.ToTable("FollowingMembers");
                 });
 
             modelBuilder.Entity("NetBaires.Data.Event", b =>
@@ -478,11 +478,11 @@ namespace NetBaires.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("NetBaires.Data.Entities.FollowedMember", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.FollowingMember", b =>
                 {
-                    b.HasOne("NetBaires.Data.Member", "Followed")
+                    b.HasOne("NetBaires.Data.Member", "Following")
                         .WithMany()
-                        .HasForeignKey("FollowedId");
+                        .HasForeignKey("FollowingId");
 
                     b.HasOne("NetBaires.Data.Member", "Member")
                         .WithMany("FollowingMembers")

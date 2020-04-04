@@ -46,7 +46,7 @@ namespace NetBaires.Api.Features.Events
         [ProducesResponseType(typeof(Event), 200)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetById([FromRoute]int id, [FromQuery]bool? done, [FromQuery]bool? live) =>
-        await _iMediator.Send(new GetEventsQuery(done, live, id));
+             await _iMediator.Send(new GetEventsQuery(done, live, id));
 
         [HttpGet]
         [AllowAnonymous]
@@ -54,8 +54,8 @@ namespace NetBaires.Api.Features.Events
         [ApiExplorerSettingsExtend("Anonymous")]
         [ProducesResponseType(typeof(Event), 200)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> GetAll([FromQuery]bool? done, [FromQuery]bool? live) =>
-                await _iMediator.Send(new GetEventsQuery(done, live));
+        public async Task<IActionResult> GetAll([FromQuery]bool? done, [FromQuery]bool? live, [FromQuery]bool? upcoming) =>
+                await _iMediator.Send(new GetEventsQuery(done, live, upcoming));
 
 
         [HttpGet("{id}/Live/Detail")]

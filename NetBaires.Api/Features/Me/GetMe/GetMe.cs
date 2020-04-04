@@ -42,9 +42,9 @@ namespace NetBaires.Api.Features.Me.GetMe
 
             var memberToResponse = _mapper.Map(member, new MemberDetailViewModel());
 
-            memberToResponse.FollowedMembers = await _context.FollowedMembers.Cacheable()
+            memberToResponse.FollowedMembers = await _context.FollowingMembers.Cacheable()
                                                         .Where(x => x.MemberId == currentMemberId)
-                                                        .Select(x => x.Followed.Id)
+                                                        .Select(x => x.Following.Id)
                                                         .ToListAsync(cancellationToken: cancellationToken);
 
             return HttpResponseCodeHelper.Ok(memberToResponse);

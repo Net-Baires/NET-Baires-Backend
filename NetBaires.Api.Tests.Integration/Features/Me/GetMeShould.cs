@@ -34,7 +34,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Me
         public async Task Get_Followed()
         {
             var loggedUser = Context.Members.Include(x => x.FollowingMembers)
-                  .ThenInclude(x => x.Followed)
+                  .ThenInclude(x => x.Following)
                   .First(x => x.Email == "admin@admin.com");
 
             var member1 = new Member {Id = 12};

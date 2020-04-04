@@ -138,29 +138,29 @@ namespace NetBaires.Data.Migrations
                     b.ToTable("BadgeMembers");
                 });
 
-            modelBuilder.Entity("NetBaires.Data.Entities.FollowedMember", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.FollowingMember", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("FollowedId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("FollowingDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("FollowingId")
+                        .HasColumnType("int");
 
                     b.Property<int>("MemberId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FollowedId");
+                    b.HasIndex("FollowingId");
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("FollowedMembers");
+                    b.ToTable("FollowingMembers");
                 });
 
             modelBuilder.Entity("NetBaires.Data.Event", b =>
@@ -476,11 +476,11 @@ namespace NetBaires.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("NetBaires.Data.Entities.FollowedMember", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.FollowingMember", b =>
                 {
-                    b.HasOne("NetBaires.Data.Member", "Followed")
+                    b.HasOne("NetBaires.Data.Member", "Following")
                         .WithMany()
-                        .HasForeignKey("FollowedId");
+                        .HasForeignKey("FollowingId");
 
                     b.HasOne("NetBaires.Data.Member", "Member")
                         .WithMany("FollowingMembers")
