@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
-using NetBaires.Api.ViewModels;
+﻿using NetBaires.Api.ViewModels;
 
 namespace NetBaires.Api.Features.Speakers.GetSpeakers
 {
-    public class GetSpeakerResponse 
+    public class GetSpeakersResponse
     {
         public MemberDetailViewModel Member { get; set; }
         public int CountEventsAsSpeaker { get; set; }
-        public List<EventDetailViewModel> Events { get; set; }
 
-        public GetSpeakerResponse()
+        public GetSpeakersResponse()
         {
             
         }

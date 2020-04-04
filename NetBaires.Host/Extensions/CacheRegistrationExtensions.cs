@@ -22,7 +22,7 @@ namespace NetBaires.Host.Extensions
         }
         public static IApplicationBuilder UseCache(this IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //app.UseResponseCaching();
+            app.UseResponseCaching();
             return app;
         }
     }

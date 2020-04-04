@@ -38,7 +38,7 @@ namespace NetBaires.Api.Features.Speakers.GetSpeakers
                                             &&
                                             x.Events.Any(s => s.Speaker))
                                         .ToList()
-                                        .Select(x => new GetSpeakerResponse
+                                        .Select(x => new GetSpeakersResponse
                                         {
                                             Member = _mapper.Map<MemberDetailViewModel>(x),
                                             CountEventsAsSpeaker = x.Events.Count(s => s.Speaker)

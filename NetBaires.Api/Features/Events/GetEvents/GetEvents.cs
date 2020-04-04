@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,6 +36,8 @@ namespace NetBaires.Api.Features.Events.GetEvents
                                                      .Where(x => (request.Done != null ? x.Done == request.Done : true)
                                                             &&
                                                             (request.Live != null ? x.Live == request.Live : true)
+                                                            &&
+                                                            (request.Upcoming != null ? x.Date > DateTime.Now : true)
                                                             &&
                                                             (request.Id != null ? x.Id == request.Id : true))
                                                      .Cacheable()

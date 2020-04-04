@@ -6,9 +6,11 @@ using EFSecondLevelCache.Core.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Data
 {
+ 
     public class NetBairesContext : DbContext
     {
         public NetBairesContext(DbContextOptions<NetBairesContext> options)
@@ -21,6 +23,8 @@ namespace NetBaires.Data
         }
         public DbSet<Sponsor> Sponsors { get; set; }
         public DbSet<Member> Members { get; set; }
+        public DbSet<FollowingMember> FollowingMembers { get; set; }
+
         public DbSet<Badge> Badges { get; set; }
         public DbSet<BadgeGroup> BadgeGroups { get; set; }
         public DbSet<Event> Events { get; set; }
@@ -67,14 +71,6 @@ namespace NetBaires.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-            //var cascadeFKs = modelBuilder.Model.GetEntityTypes()
-            //    .SelectMany(t => t.GetForeignKeys())
-            //    .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
-
-            //foreach (var fk in cascadeFKs)
-            //    fk.DeleteBehavior = DeleteBehavior.Restrict;
-
             modelBuilder
                 .Entity<Member>()
                 .Property(e => e.Role)
@@ -86,12 +82,10 @@ namespace NetBaires.Data
                 .HasForeignKey(sc => sc.BadgeId);
 
 
-            //modelBuilder.Entity<GroupCodeMember>().HasKey(sc => new { UserId = sc.MemberId, sc.GroupCodeId });
-            //modelBuilder.Entity<GroupCodeMember>()
-            //    .HasOne<Member>(sc => sc.Member)
-            //    .WithMany(s => s.GroupCodes)
-            //    .HasForeignKey(sc => sc.GroupCode)
-            //    .OnDelete(DeleteBehavior.Cascade); 
+            modelBuilder.Entity<Member>()
+                .HasMany(sc => sc.FollowingMembers)
+                .WithOne(x=> x.Member)
+                .HasForeignKey(sc => sc.MemberId);
 
 
             modelBuilder.Entity<BadgeMember>()
@@ -131,7 +125,6 @@ namespace NetBaires.Data
                 .HasConversion(
                     v => v.ToString(),
                     v => (EventPlatform)Enum.Parse(typeof(EventPlatform), v));
-
 
         }
 

@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace NetBaires.Api.Features.Members.SearchMember
+namespace NetBaires.Api.Features.Members.UpdateInformation
 {
     public class UpdateInformationCommand : IRequest<IActionResult>
     {

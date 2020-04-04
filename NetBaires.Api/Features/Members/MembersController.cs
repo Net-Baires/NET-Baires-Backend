@@ -8,11 +8,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Auth;
 using NetBaires.Api.Features.Members.AddMember;
+using NetBaires.Api.Features.Members.FollowMember;
 using NetBaires.Api.Features.Members.GetBadgeFromMember;
 using NetBaires.Api.Features.Members.GetBadgesFromMember;
+using NetBaires.Api.Features.Members.GetFollowingsFromMember;
 using NetBaires.Api.Features.Members.GetMemberDetail;
 using NetBaires.Api.Features.Members.InformAttendances;
 using NetBaires.Api.Features.Members.SearchMember;
+using NetBaires.Api.Features.Members.UnFollowMember;
+using NetBaires.Api.Features.Members.UpdateInformation;
 using NetBaires.Api.Features.Slack;
 using NetBaires.Api.ViewModels;
 using NetBaires.Data;
@@ -60,7 +64,13 @@ namespace NetBaires.Api.Features.Members
         [AllowAnonymous]
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
         public async Task<IActionResult> GetById([FromRoute]GetMemberDetailQuery query) =>
-                     await _mediator.Send(query);
+            await _mediator.Send(query);
+
+        [HttpGet("{id:int}/followings")]
+        [AllowAnonymous]
+        [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
+        public async Task<IActionResult> GetById([FromRoute]GetFollowingsFromMemberQuery query) =>
+            await _mediator.Send(query);
 
         [HttpGet("{query}")]
         [AllowAnonymous]
@@ -97,15 +107,23 @@ namespace NetBaires.Api.Features.Members
         [HttpPost]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> Post(AddMemberCommand command)
+        public async Task<IActionResult> AddMember(AddMemberCommand command)
             => await _mediator.Send(command);
 
+        [HttpPost("{id}/Follow")]
+        [ApiExplorerSettingsExtend(UserRole.Member)]
+        public async Task<IActionResult> FollowMember([FromRoute]int id)
+            => await _mediator.Send(new FollowMemberCommand(id));
 
+        [HttpDelete("{id}/UnFollow")]
+        [ApiExplorerSettingsExtend(UserRole.Member)]
+        public async Task<IActionResult> UnFollowMember([FromRoute]int id)
+            => await _mediator.Send(new UnFollowMemberCommand(id));
 
         [HttpPut("{id}")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> Put(int id, Member member)
+        public async Task<IActionResult> UpdateMember(int id, Member member)
         {
             member.Id = id;
             if (member.Organized)

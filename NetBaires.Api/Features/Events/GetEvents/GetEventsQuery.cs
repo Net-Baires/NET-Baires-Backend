@@ -7,8 +7,9 @@ namespace NetBaires.Api.Features.Events.GetEvents
     {
         public bool? Done { get; set; }
         public bool? Live { get; set; }
+        public bool? Upcoming { get; set; }
         public int? Id { get; set; }
-        public  int? MemberId { get; set; }
+        public int? MemberId { get; set; }
 
         public GetEventsQuery(bool? done, bool? live, int? id)
         {
@@ -16,10 +17,12 @@ namespace NetBaires.Api.Features.Events.GetEvents
             Live = live;
             Id = id;
         }
-        public GetEventsQuery(bool? done, bool? live)
+        public GetEventsQuery(bool? done, bool? live, bool? upcoming)
         {
             Done = done;
             Live = live;
+            Upcoming = upcoming;
+
         }
     }
 

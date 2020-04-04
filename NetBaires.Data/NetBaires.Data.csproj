@@ -15,6 +15,10 @@
     <Compile Remove="Migrations\20191025041019_k.Designer.cs" />
     <Compile Remove="Migrations\20191227035309_Update_Members_Add_FirstLogin.cs" />
     <Compile Remove="Migrations\20191227035309_Update_Members_Add_FirstLogin.Designer.cs" />
+    <Compile Remove="Migrations\20200403185012_Add_Followed_Members.cs" />
+    <Compile Remove="Migrations\20200403185012_Add_Followed_Members.Designer.cs" />
+    <Compile Remove="Migrations\20200403190806_Add_Followed_Members.cs" />
+    <Compile Remove="Migrations\20200403190806_Add_Followed_Members.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

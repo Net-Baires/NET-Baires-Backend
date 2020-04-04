@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,9 +8,6 @@ using Flurl.Http;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using NetBaires.Api.Helpers;
-using NetBaires.Api.Services;
-using NetBaires.Api.ViewModels;
-using NetBaires.Data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 

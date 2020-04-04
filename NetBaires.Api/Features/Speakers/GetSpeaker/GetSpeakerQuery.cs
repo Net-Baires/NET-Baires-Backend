@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace NetBaires.Api.Features.Speakers.GetSpeakers
+namespace NetBaires.Api.Features.Speakers.GetSpeaker
 {
     public class GetSpeakerQuery : IRequest<IActionResult>
     {

@@ -1,7 +1,11 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using NetBaires.Api.ViewModels;
+using NetBaires.Data;
 using NetBaires.Host;
 using Xunit;
 
@@ -24,6 +28,36 @@ namespace NetBaires.Api.Tests.Integration.Features.Me
             response.StatusCode.Should().Be(200);
             meResponse.Email.Should().Be("admin@admin.com");
             meResponse.FirstName.Should().Be("Admin");
+        }
+
+        [Fact]
+        public async Task Get_Followed()
+        {
+            var loggedUser = Context.Members.Include(x => x.FollowingMembers)
+                  .ThenInclude(x => x.Following)
+                  .First(x => x.Email == "admin@admin.com");
+
+            var member1 = new Member {Id = 12};
+            var member2 = new Member {Id = 13};
+            var member3 = new Member {Id = 14};
+            Context.Members.Add(member1);
+            Context.Members.Add(member2);
+            Context.Members.Add(member3);
+            Context.SaveChanges();
+
+            loggedUser.Follow(member1);
+            loggedUser.Follow(member2);
+            loggedUser.Follow(member3);
+            Context.SaveChanges();
+
+            var response = await HttpClient.GetAsync("/me");
+
+            var meResponse = await response.Content.ReadAsAsync<MemberDetailViewModel>();
+
+            meResponse.FollowedMembers.Count.Should().Be(3);
+            meResponse.FollowedMembers.Contains(12);
+            meResponse.FollowedMembers.Contains(13);
+            meResponse.FollowedMembers.Contains(15);
         }
     }
 }

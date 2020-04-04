@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using EFSecondLevelCache.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +12,7 @@ using NetBaires.Api.Features.Events.UpdateEvent;
 using NetBaires.Api.Helpers;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Features.Speakers.GetSpeakers
+namespace NetBaires.Api.Features.Speakers.GetSpeaker
 {
 
     public class GetSpeakerHandler : IRequestHandler<GetSpeakerQuery, IActionResult>
@@ -32,6 +33,7 @@ namespace NetBaires.Api.Features.Speakers.GetSpeakers
         {
 
             var eventToReturn = await _context.Members
+                                        .Cacheable()
                                         .Where(x =>
                                              x.Id == request.Id
                                             &&
@@ -39,10 +41,10 @@ namespace NetBaires.Api.Features.Speakers.GetSpeakers
                                         .Select(x => new MemberEvents
                                         {
                                             Member = x,
-                                            Events = _context.Events.Where(e=> e.Attendees.Any(a=> a.MemberId == x.Id && a.Speaker)).ToList(),
-                                            CountEventsAsSpeaker = x.Events.Count(s => s.Speaker)
+                                            Events = _context.Events.Where(e=> e.Attendees.Any(a=> a.MemberId == x.Id && a.Speaker)).ToList()
                                         })
-                                        .FirstOrDefaultAsync();
+                                        .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+            eventToReturn.CountEventsAsSpeaker = eventToReturn.Events.Count;
             if (eventToReturn == null)
                 return HttpResponseCodeHelper.NotContent();
 

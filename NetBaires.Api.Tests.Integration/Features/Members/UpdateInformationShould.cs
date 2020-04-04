@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using NetBaires.Api.Features.Members.SearchMember;
+using NetBaires.Api.Features.Members.UpdateInformation;
 using NetBaires.Host;
 using Xunit;
 

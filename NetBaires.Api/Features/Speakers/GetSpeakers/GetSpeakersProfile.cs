@@ -7,7 +7,7 @@ namespace NetBaires.Api.Features.Speakers.GetSpeakers
     {
         public GetSpeakersProfile()
         {
-            CreateMap<Member, GetSpeakerResponse>();
+            CreateMap<Member, GetSpeakersResponse>();
         }
     }
 }

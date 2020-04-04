@@ -12,6 +12,8 @@ using NetBaires.Api.Features.Events.GetDataToReportAttendanceToEvent;
 using NetBaires.Api.Features.Events.GetEventLiveDetail;
 using NetBaires.Api.Features.Events.GetEvents;
 using NetBaires.Api.Features.Events.GetInfoToCheckAttendanceGeneral;
+using NetBaires.Api.Features.Events.GetLinkEventLive;
+using NetBaires.Api.Features.Events.GetSpeakersInEvent;
 using NetBaires.Api.Features.Events.PutCheckAttendanceByCode;
 using NetBaires.Api.Features.Events.PutReportAttendance;
 using NetBaires.Api.Features.Events.SyncEvent;
@@ -44,7 +46,7 @@ namespace NetBaires.Api.Features.Events
         [ProducesResponseType(typeof(Event), 200)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetById([FromRoute]int id, [FromQuery]bool? done, [FromQuery]bool? live) =>
-        await _iMediator.Send(new GetEventsQuery(done, live, id));
+             await _iMediator.Send(new GetEventsQuery(done, live, id));
 
         [HttpGet]
         [AllowAnonymous]
@@ -52,17 +54,36 @@ namespace NetBaires.Api.Features.Events
         [ApiExplorerSettingsExtend("Anonymous")]
         [ProducesResponseType(typeof(Event), 200)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> GetAll([FromQuery]bool? done, [FromQuery]bool? live) =>
-                await _iMediator.Send(new GetEventsQuery(done, live));
+        public async Task<IActionResult> GetAll([FromQuery]bool? done, [FromQuery]bool? live, [FromQuery]bool? upcoming) =>
+                await _iMediator.Send(new GetEventsQuery(done, live, upcoming));
 
 
         [HttpGet("{id}/Live/Detail")]
-        [AllowAnonymous]
         [SwaggerOperation(Summary = "Retorna el detalle de un evento en vivo")]
         [ApiExplorerSettingsExtend(UserRole.Organizer)]
-        //[AuthorizeRoles(new UserRole[2] { UserRole.Organizer, UserRole.Admin })]
+        [AuthorizeRoles(UserRole.Organizer, UserRole.Admin, UserRole.Member)]
+        [ResponseCache(Duration = 60)]
         public async Task<IActionResult> GetEventLiveDetail([FromRoute]int id) =>
-                         await _iMediator.Send(new GetEventLiveDetailQuery(id));
+            await _iMediator.Send(new GetEventLiveDetailQuery(id));
+
+        [HttpGet("{id}/Speakers")]
+        [AllowAnonymous]
+        [SwaggerOperation(Summary = "Retorna todos los Speakers de un evento")]
+        [ApiExplorerSettingsExtend(UserRole.Organizer)]
+        [ProducesResponseType(typeof(GetSpeakersInEventInEventResponse), 200)]
+        [ResponseCache(Duration = 60)]
+        public async Task<IActionResult> GetSpeakersInEvent([FromRoute]int id) =>
+            await _iMediator.Send(new GetSpeakersInEventQuery(id));
+
+
+        [HttpGet("Live/Link")]
+        [AllowAnonymous]
+        [SwaggerOperation(Summary = "Retorna el link de la transmisión en vivo")]
+        [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
+        [ProducesResponseType(typeof(GetLinkEventLiveQuery.Response), 200)]
+        [ResponseCache(Duration = 60)]
+        public async Task<IActionResult> GetEventLiveLink() =>
+            await _iMediator.Send(new GetLinkEventLiveQuery());
 
         [HttpGet("{id}/Attendance")]
         [SwaggerOperation(Summary = "Retorna toda la información requerida por el miembro de la comunidad para reportar su asistencia a un evento particular")]
@@ -104,9 +125,9 @@ namespace NetBaires.Api.Features.Events
         [ApiExplorerSettingsExtend(UserRole.Admin)]
         [SwaggerOperation(Summary = "Retorna todos los miembros que se encuentran registrados a un evento particular")]
         [AuthorizeRoles(UserRole.Admin)]
-        public async Task<IActionResult> GetAttendees([FromRoute]int eventId, [FromQuery]int? memberId ,[FromQuery]string query)
+        public async Task<IActionResult> GetAttendees([FromRoute]int eventId, [FromQuery]int? memberId, [FromQuery]string query)
         {
-            return await _iMediator.Send(new GetAttendeesQuery(eventId,memberId,query));
+            return await _iMediator.Send(new GetAttendeesQuery(eventId, memberId, query));
         }
 
         [HttpPost("{idEvent:int}/Members/{idMember}/attende")]
