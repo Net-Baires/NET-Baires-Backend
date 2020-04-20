@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EFSecondLevelCache.Core;
@@ -47,7 +48,15 @@ namespace NetBaires.Data
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             var changedEntityNames = this.GetChangedEntityNames();
+            var domainEventEntities = ChangeTracker.Entries<Entity>()
+                           .Select(po => po.Entity)
+                           .Where(po => po.DomainEvents.Any())
+                           .ToArray();
 
+            foreach (var entity in domainEventEntities)
+            {
+            
+            }
             this.ChangeTracker.AutoDetectChangesEnabled = false; // for performance reasons, to avoid calling DetectChanges() again.
             var result = await base.SaveChangesAsync(cancellationToken); ;
             this.ChangeTracker.AutoDetectChangesEnabled = true;

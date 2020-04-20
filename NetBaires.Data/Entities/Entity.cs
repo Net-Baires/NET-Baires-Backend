@@ -9,7 +9,7 @@ namespace NetBaires.Data
         int? _requestedHashCode;
         int _Id;
 
-        private List<IDomainEvents> _domainEvents;
+        private List<IDomainEvents> _domainEvents = new List<IDomainEvents>();
 
         public virtual int Id
         {

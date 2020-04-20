@@ -16,7 +16,7 @@ namespace NetBaires.Api.ViewModels
         public bool DoNotKnow { get; set; }
         public bool Organizer { get; set; }
         public bool Speaker { get; set; }
-        public long  AverageAttendance { get; set; }
+        public int  AverageAttendance { get; set; }
         public MemberDetailViewModel MemberDetail { get; set; }
         public EventDetailViewModel Event { get; set; }
         public class GetAttendeesProfile : Profile

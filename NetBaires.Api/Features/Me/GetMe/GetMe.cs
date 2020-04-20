@@ -11,7 +11,7 @@ using NetBaires.Api.Auth;
 using NetBaires.Api.Helpers;
 using NetBaires.Api.ViewModels;
 using NetBaires.Data;
-
+using AutoMapper.QueryableExtensions;
 namespace NetBaires.Api.Features.Me.GetMe
 {
 
@@ -37,7 +37,9 @@ namespace NetBaires.Api.Features.Me.GetMe
         public async Task<IActionResult> Handle(GetMeQuery request, CancellationToken cancellationToken)
         {
             var currentMemberId = currentUser.User.Id;
-            var member = await _context.Members.Cacheable()
+            var member = await _context.Members.Include(s => s.Events).ProjectTo<MemberDetailViewModel>(_mapper.ConfigurationProvider)
+                .Cacheable()
+
                                                .FirstOrDefaultAsync(x => x.Id == currentMemberId);
 
             var memberToResponse = _mapper.Map(member, new MemberDetailViewModel());

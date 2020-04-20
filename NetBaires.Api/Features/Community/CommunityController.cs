@@ -28,6 +28,7 @@ namespace NetBaires.Api.Features.Community
         [HttpGet("summary")]
         [AllowAnonymous]
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
+        [ResponseCache(Duration = 100)]
         public async Task<IActionResult> Get() =>
                      await _mediator.Send(new GetCommunitySummaryQuery());
 

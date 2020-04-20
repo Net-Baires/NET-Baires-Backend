@@ -66,6 +66,8 @@ namespace NetBaires.Data
 
         public DomainResponse AssignBadge(Badge badge)
         {
+            if (GroupCodeBadges.Any(x => x.Badge.Id == badge.Id))
+                return DomainResponse.Error("El badge que esta intentando asignar, ya se encuentra asignado");
             foreach (var groupCodeMember in Members)
             {
                 badge.Members.Add(new BadgeMember

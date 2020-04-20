@@ -25,10 +25,10 @@ namespace NetBaires.Api.ViewModels
         public bool Organized { get; set; }
         public bool Colaborator { get; set; }
         public List<int> FollowedMembers { get; set; }
-        public decimal AverageAttendance { get; set; }
-        public decimal EventsRegistered { get; set; }
-        public decimal EventsAttended { get; set; }
-        public decimal EventsNoAttended { get; set; }
+        public int AverageAttendance { get; set; }
+        public int EventsRegistered { get; set; }
+        public int EventsAttended { get; set; }
+        public int EventsNoAttended { get; set; }
         public bool Following { get; set; }
 
         public class MemberDetailViewModelProfile : Profile

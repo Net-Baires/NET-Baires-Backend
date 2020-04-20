@@ -1,4 +1,6 @@
-﻿namespace NetBaires.Api.Options
+﻿using System.Collections.Generic;
+
+namespace NetBaires.Api.Options
 {
     public class AttendanceOptions
     {
@@ -10,6 +12,10 @@
     {
         public string ApiUrl { get; set; }
         public string SiteUrl { get; set; }
+    }
+    public class CorsOptions
+    {
+        public List<string> Urls { get; set; }
     }
 
     public class BadgesOptions

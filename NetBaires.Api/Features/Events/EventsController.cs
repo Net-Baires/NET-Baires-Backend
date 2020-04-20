@@ -62,7 +62,6 @@ namespace NetBaires.Api.Features.Events
         [SwaggerOperation(Summary = "Retorna el detalle de un evento en vivo")]
         [ApiExplorerSettingsExtend(UserRole.Organizer)]
         [AuthorizeRoles(UserRole.Organizer, UserRole.Admin, UserRole.Member)]
-        [ResponseCache(Duration = 60)]
         public async Task<IActionResult> GetEventLiveDetail([FromRoute]int id) =>
             await _iMediator.Send(new GetEventLiveDetailQuery(id));
 
