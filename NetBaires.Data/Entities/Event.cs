@@ -2,11 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using NetBaires.Data.DomainEvents;
+using NetBaires.Events.DomainEvents;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace NetBaires.Data
+namespace NetBaires.Data.Entities
 {
+    public class Material : Entity
+    {
+        public string Title { get; set; }
+        public string Link { get; set; }
+        public Event Event { get; set; }
+        public int EventId { get; set; }
+
+        public Material(string title, string link)
+        {
+            Title = title;
+            Link = link;
+        }
+        public Material()
+        {
+
+        }
+    }
+
     public class Event : Entity
     {
         public string Title { get; set; }
@@ -29,6 +48,7 @@ namespace NetBaires.Data
         public DateTime Date { get; set; }
         public List<SponsorEvent> Sponsors { get; set; } = new List<SponsorEvent>();
         public List<GroupCode> GroupCodes { get; protected set; } = new List<GroupCode>();
+        public List<Material> Materials { get; set; } = new List<Material>();
         public DomainResponse AssignBadgeToAttended(Badge badge)
         {
             if (!Done)
@@ -42,9 +62,18 @@ namespace NetBaires.Data
                         BadgeId = badge.Id,
                         MemberId = item.MemberId
                     });
-                    AddDomainEvent(new AssignedBadgeToAttendance(item.MemberId, badge));
+                    AddDomainEvent(new AssignedBadgeToAttendance(item.MemberId, badge.Id));
                 }
             return DomainResponse.Ok();
+        }
+
+        public void AddMaterial(string title, string link)
+        {
+            Materials.Add(new Material(title, link));
+        }
+        public void RemoveMaterial(Material material)
+        {
+            Materials.Remove(material);
         }
 
         public DomainResponse AssignBadgeToAttended(Badge badge, Member member)
@@ -62,7 +91,7 @@ namespace NetBaires.Data
                 BadgeId = badge.Id,
                 MemberId = member.Id
             });
-            AddDomainEvent(new AssignedBadgeToAttendance(member.Id, badge));
+            AddDomainEvent(new AssignedBadgeToAttendance(member.Id, badge.Id));
             return DomainResponse.Ok();
         }
 
@@ -156,7 +185,7 @@ namespace NetBaires.Data
         private static Random random = new Random();
         public static string RandomString(int length)
         {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }

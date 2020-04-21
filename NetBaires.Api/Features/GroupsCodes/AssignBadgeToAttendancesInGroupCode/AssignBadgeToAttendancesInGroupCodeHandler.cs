@@ -5,10 +5,11 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using NetBaires.Api.Features.Events.AssignBadgeToAttendances;
 using NetBaires.Api.Helpers;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Features.Events.AssignBadgeToAttendances
+namespace NetBaires.Api.Features.GroupsCodes.AssignBadgeToAttendancesInGroupCode
 {
 
     public class AssignBadgeToAttendancesInGroupCodeHandler : IRequestHandler<AssignBadgeToAttendancesInGroupCodeCommand, IActionResult>
@@ -31,8 +32,10 @@ namespace NetBaires.Api.Features.Events.AssignBadgeToAttendances
                 return HttpResponseCodeHelper.NotFound("El badge que esta intentando asignar no se encuentra en el sistema");
 
             var groupCode = await _context.GroupCodes.Include(s => s.Members)
-                                                         .Where(x => x.Id == request.GroupCodeId)
-                                                         .FirstOrDefaultAsync();
+                                                     .Include(x=> x.GroupCodeBadges)
+                                                     .ThenInclude(x=> x.Badge)
+                                                     .Where(x => x.Id == request.GroupCodeId)
+                                                     .FirstOrDefaultAsync();
             if (groupCode == null)
                 return HttpResponseCodeHelper.NotFound("El badge que esta intentando asignar no se encuentra en el sistema");
 

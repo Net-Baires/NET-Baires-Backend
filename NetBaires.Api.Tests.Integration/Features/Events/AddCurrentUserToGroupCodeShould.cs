@@ -2,8 +2,9 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
-using NetBaires.Api.Features.GroupsCodes.AddMemberToGroupCode;
+using NetBaires.Api.Features.Events.AddCurrentUserToGroupCode;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 using NetBaires.Host;
 using Xunit;
 

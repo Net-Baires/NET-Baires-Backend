@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using NetBaires.Api.Auth.CustomsClaims;
 using NetBaires.Api.Auth.Tokens;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Api.Auth
 {

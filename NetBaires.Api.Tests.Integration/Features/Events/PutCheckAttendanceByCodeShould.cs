@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using NetBaires.Api.Models.ServicesResponse.Attendance;
+using NetBaires.Data.Entities;
 using NetBaires.Host;
 using Xunit;
 

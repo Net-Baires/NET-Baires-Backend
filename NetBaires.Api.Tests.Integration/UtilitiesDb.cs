@@ -1,5 +1,6 @@
 ﻿using NetBaires.Data;
 using System.Linq;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Api.Tests.Integration
 {

@@ -13,7 +13,7 @@ namespace NetBaires.Host.Extensions
                               .AllowAnyMethod()
                               .AllowAnyHeader()
                               .AllowAnyOrigin()
-                              .WithOrigins(configuration.GetSection("Common").Get<CommonOptions>().SiteUrl)
+                              .WithOrigins(configuration.GetSection("Cors").Get<CorsOptions>().Urls.ToArray())
                               .AllowCredentials());
             return app;
         }

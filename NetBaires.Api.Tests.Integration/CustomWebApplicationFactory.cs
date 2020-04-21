@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using NetBaires.Data;
 using System;
+using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace NetBaires.Api.Tests.Integration
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            
             builder.ConfigureServices(async services =>
             {
                 var descriptor = services.SingleOrDefault(

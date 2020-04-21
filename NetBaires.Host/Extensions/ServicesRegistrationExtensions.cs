@@ -7,6 +7,7 @@ using NetBaires.Api.Services.EventBrite;
 using NetBaires.Api.Services.Meetup;
 using NetBaires.Api.Services.Sync;
 using NetBaires.Api.Services.Sync.Process;
+using NetBaires.Data;
 
 namespace NetBaires.Host.Extensions
 {
@@ -30,7 +31,8 @@ namespace NetBaires.Host.Extensions
             services.AddScoped<IProcessEvents, ProcessEventsFromEventbrite>();
             services.AddScoped<IProcessEvents, ProcessEventsFromMeetup>();
             services.AddScoped<IAttendanceService, AttendanceService>();
-
+            services.AddScoped<IQueueServices, QueueServices>();
+            
             return services;
         }
     }

@@ -11,7 +11,7 @@ using NetBaires.Api.Features.Events.AddAttendee;
 using NetBaires.Api.Helpers;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Features.GroupsCodes.AddMemberToGroupCode
+namespace NetBaires.Api.Features.Events.AddCurrentUserToGroupCode
 {
     public class AddCurrentUserToGroupCodeHandler : IRequestHandler<AddCurrentUserToGroupCodeCommand, IActionResult>
     {

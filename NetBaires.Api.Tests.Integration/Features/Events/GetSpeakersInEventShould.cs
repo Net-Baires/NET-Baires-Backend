@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NetBaires.Api.Features.Events.GetSpeakersInEvent;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 using NetBaires.Host;
 using Xunit;
 namespace NetBaires.Api.Tests.Integration.Features.Events

@@ -13,7 +13,7 @@ namespace NetBaires.Api.ViewModels.GroupCode
         {
             public GetBadgeGroupsProfile()
             {
-                CreateMap<Data.GroupCode, GroupCodeResponseViewModel>()
+                CreateMap<Data.Entities.GroupCode, GroupCodeResponseViewModel>()
                     .ForMember(x => x.MembersCount, o => o.MapFrom(x => x.Members.Count));
             }
         }

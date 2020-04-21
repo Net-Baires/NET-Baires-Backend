@@ -8,6 +8,7 @@ using NetBaires.Api.Auth;
 using NetBaires.Api.Models.ServicesResponse;
 using NetBaires.Api.Options;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 using PusherServer;
 
 namespace NetBaires.Api.Features.Auth

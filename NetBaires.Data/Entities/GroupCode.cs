@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NetBaires.Data.DomainEvents;
+using NetBaires.Events.DomainEvents;
 
-namespace NetBaires.Data
+namespace NetBaires.Data.Entities
 {
     public class GroupCodeBadge : Entity
     {
@@ -66,6 +66,8 @@ namespace NetBaires.Data
 
         public DomainResponse AssignBadge(Badge badge)
         {
+            if (GroupCodeBadges.Any(x => x.Badge.Id == badge.Id))
+                return DomainResponse.Error("El badge que esta intentando asignar, ya se encuentra asignado");
             foreach (var groupCodeMember in Members)
             {
                 badge.Members.Add(new BadgeMember
@@ -73,7 +75,7 @@ namespace NetBaires.Data
                     BadgeId = badge.Id,
                     MemberId = groupCodeMember.MemberId
                 });
-                AddDomainEvent(new AssignedBadgeToAttendance(groupCodeMember.MemberId, badge));
+                AddDomainEvent(new AssignedBadgeToAttendance(groupCodeMember.MemberId, badge.Id));
             }
             GroupCodeBadges.Add(new GroupCodeBadge(this, badge));
             return DomainResponse.Ok();

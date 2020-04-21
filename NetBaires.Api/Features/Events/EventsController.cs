@@ -3,9 +3,11 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetBaires.Api.Features.Events.AddAttendee;
+using NetBaires.Api.Features.Events.AddCurrentUserToGroupCode;
 using NetBaires.Api.Features.Events.AddMemberToGroupCode;
 using NetBaires.Api.Features.Events.AssignBadgeToAttendances;
 using NetBaires.Api.Features.Events.CompleteEvent;
+using NetBaires.Api.Features.Events.CreateGroupCode;
 using NetBaires.Api.Features.Events.DeleteMemberToGroupCode;
 using NetBaires.Api.Features.Events.GetAttendees;
 using NetBaires.Api.Features.Events.GetDataToReportAttendanceToEvent;
@@ -14,15 +16,15 @@ using NetBaires.Api.Features.Events.GetEvents;
 using NetBaires.Api.Features.Events.GetInfoToCheckAttendanceGeneral;
 using NetBaires.Api.Features.Events.GetLinkEventLive;
 using NetBaires.Api.Features.Events.GetSpeakersInEvent;
-using NetBaires.Api.Features.Events.PutCheckAttendanceByCode;
+using NetBaires.Api.Features.Events.PutCheckAttendanceGeneralByCode;
+using NetBaires.Api.Features.Events.PutCheckAttendanceGeneralByToken;
 using NetBaires.Api.Features.Events.PutReportAttendance;
 using NetBaires.Api.Features.Events.SyncEvent;
 using NetBaires.Api.Features.Events.SyncWithExternalEvents;
 using NetBaires.Api.Features.Events.UpdateAttendee;
 using NetBaires.Api.Features.Events.UpdateEvent;
-using NetBaires.Api.Features.GroupsCodes.AddMemberToGroupCode;
-using NetBaires.Api.Handlers.Events;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace NetBaires.Api.Features.Events
@@ -62,7 +64,6 @@ namespace NetBaires.Api.Features.Events
         [SwaggerOperation(Summary = "Retorna el detalle de un evento en vivo")]
         [ApiExplorerSettingsExtend(UserRole.Organizer)]
         [AuthorizeRoles(UserRole.Organizer, UserRole.Admin, UserRole.Member)]
-        [ResponseCache(Duration = 60)]
         public async Task<IActionResult> GetEventLiveDetail([FromRoute]int id) =>
             await _iMediator.Send(new GetEventLiveDetailQuery(id));
 

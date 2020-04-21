@@ -6,6 +6,7 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NetBaires.Api.ViewModels;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 using NetBaires.Host;
 using Xunit;
 

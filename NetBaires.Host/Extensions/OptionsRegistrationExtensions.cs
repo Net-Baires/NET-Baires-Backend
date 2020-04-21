@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NetBaires.Api.Options;
+using NetBaires.Data;
 
 namespace NetBaires.Host.Extensions
 {
@@ -17,6 +18,9 @@ namespace NetBaires.Host.Extensions
             services.Configure<BadgrOptions>(Configuration.GetSection("Badgr"));
             services.Configure<CommonOptions>(Configuration.GetSection("Common"));
             services.Configure<BadgesOptions>(Configuration.GetSection("Badges"));
+            services.Configure<CorsOptions>(Configuration.GetSection("Cors"));
+
+            
             services.Configure<ConnectionStringsOptions>(Configuration.GetSection("ConnectionStrings"));
             return services;
         }

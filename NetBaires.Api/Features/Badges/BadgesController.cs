@@ -16,6 +16,7 @@ using NetBaires.Api.Features.Badges.NewBadge;
 using NetBaires.Api.Features.Badges.UpdateBadge;
 using NetBaires.Api.ViewModels;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace NetBaires.Api.Features.Badges

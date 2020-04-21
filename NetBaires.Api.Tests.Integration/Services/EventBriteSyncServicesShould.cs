@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 using NetBaires.Host;
 using Xunit;
 

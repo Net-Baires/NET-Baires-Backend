@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using NetBaires.Api.Features.BadgeGroups.ViewModels;
+using NetBaires.Data.Entities;
 using NetBaires.Host;
 using Xunit;
 
@@ -21,7 +22,7 @@ namespace NetBaires.Api.Tests.Integration.Features.BadgeGroups
         [Fact]
         public async Task Return_BadgeGroups()
         {
-            Context.BadgeGroups.Add(new Data.BadgeGroup
+            Context.BadgeGroups.Add(new BadgeGroup
             {
                 Badges = new List<Badge> {
                     new Badge(),

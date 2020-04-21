@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using NetBaires.Data;
+using NetBaires.Data.Entities;
 using Newtonsoft.Json;
 using Profile = AutoMapper.Profile;
 
-namespace NetBaires.Api.Features.Events.PutReportAttendance
+namespace NetBaires.Api.Features.Events.CreateGroupCode
 {
     public class CreateGroupCodeCommand : IRequest<IActionResult>
     {

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Helpers;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Api.Features.Events.AddAttendee
 {

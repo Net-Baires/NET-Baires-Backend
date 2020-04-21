@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using NetBaires.Api.Features.Notifications.SendPushNotifications;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Api.Features.Notifications
 {

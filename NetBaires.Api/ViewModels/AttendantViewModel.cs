@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using AutoMapper;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Api.ViewModels
 {
@@ -16,7 +17,7 @@ namespace NetBaires.Api.ViewModels
         public bool DoNotKnow { get; set; }
         public bool Organizer { get; set; }
         public bool Speaker { get; set; }
-        public long  AverageAttendance { get; set; }
+        public int  AverageAttendance { get; set; }
         public MemberDetailViewModel MemberDetail { get; set; }
         public EventDetailViewModel Event { get; set; }
         public class GetAttendeesProfile : Profile

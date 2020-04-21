@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using NetBaires.Api.Features.Members.AddMember;
+using NetBaires.Data.Entities;
 using NetBaires.Host;
 using Xunit;
 

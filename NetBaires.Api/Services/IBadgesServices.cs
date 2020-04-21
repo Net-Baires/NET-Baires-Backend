@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using NetBaires.Data;
 using System.IO;
 using System.Threading.Tasks;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Api.Services
 {

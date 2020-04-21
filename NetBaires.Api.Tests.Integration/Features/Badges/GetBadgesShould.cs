@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NetBaires.Api.ViewModels;
+using NetBaires.Data.Entities;
 using NetBaires.Host;
 using Xunit;
 
@@ -22,7 +23,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Badges
         public async Task Return_All_Badges()
         {
             var dateTimeNow = new DateTime(2019, 10, 10, 12, 12, 12);
-            var firstBadgeToAdd = new Data.Badge
+            var firstBadgeToAdd = new Badge
             {
                 Name = "First Badge",
                 Description = "First badge description",
@@ -32,7 +33,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Badges
                 SimpleImageUrl="https://simpleimage.url.com"
             };
             Context.Badges.Add(firstBadgeToAdd);
-            Context.Badges.Add(new Data.Badge
+            Context.Badges.Add(new Badge
             {
                 Name = "First Badge",
                 Description = "First badge description",

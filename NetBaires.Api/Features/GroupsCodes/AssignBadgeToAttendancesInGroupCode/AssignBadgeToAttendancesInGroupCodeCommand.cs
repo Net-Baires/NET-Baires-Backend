@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace NetBaires.Api.Features.Events.AssignBadgeToAttendances
+namespace NetBaires.Api.Features.GroupsCodes.AssignBadgeToAttendancesInGroupCode
 {
     public class AssignBadgeToAttendancesInGroupCodeCommand : IRequest<IActionResult>
     {

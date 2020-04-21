@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 using NetBaires.Host;
 using Xunit;
 

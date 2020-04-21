@@ -9,6 +9,7 @@ using NetBaires.Api.Models;
 using NetBaires.Api.Options;
 using NetBaires.Api.ViewModels;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Api.Features.Slack
 {

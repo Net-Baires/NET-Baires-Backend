@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Api
 {

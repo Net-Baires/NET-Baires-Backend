@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using NetBaires.Events.DomainEvents;
 
-namespace NetBaires.Data
+namespace NetBaires.Data.Entities
 {
     public abstract class Entity
     {
@@ -9,7 +10,7 @@ namespace NetBaires.Data
         int? _requestedHashCode;
         int _Id;
 
-        private List<IDomainEvents> _domainEvents;
+        private List<IDomainEvents> _domainEvents = new List<IDomainEvents>();
 
         public virtual int Id
         {

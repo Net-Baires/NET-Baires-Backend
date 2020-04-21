@@ -7,13 +7,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NetBaires.Api.Auth;
 using NetBaires.Api.Auth.Tokens;
-using NetBaires.Api.Handlers.Events;
 using NetBaires.Api.Helpers;
 using NetBaires.Api.Models.ServicesResponse.Attendance;
 using NetBaires.Api.Options;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 
-namespace NetBaires.Api.Features.Events.PutCheckAttendanceGeneral
+namespace NetBaires.Api.Features.Events.PutCheckAttendanceGeneralByToken
 {
 
     public class PutCheckAttendanceGeneralHandler : IRequestHandler<PutCheckAttendanceGeneralCommand, IActionResult>

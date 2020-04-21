@@ -9,6 +9,7 @@ using NetBaires.Api.Features.Events.UpdateEvent;
 using NetBaires.Api.Helpers;
 using NetBaires.Api.ViewModels;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Api.Features.Events.UpdateAttendee
 {

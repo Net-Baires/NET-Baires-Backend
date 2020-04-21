@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace NetBaires.Data
+namespace NetBaires.Data.Entities
 {
    
     public enum EventPlatform

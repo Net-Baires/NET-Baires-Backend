@@ -15,7 +15,7 @@ namespace NetBaires.Api.ViewModels.GroupCode
         {
             public GetBadgeGroupsProfile()
             {
-                CreateMap<Data.GroupCode, GroupCodeFullDetailResponseViewModel>()
+                CreateMap<Data.Entities.GroupCode, GroupCodeFullDetailResponseViewModel>()
                     .ForMember(dest => dest.Badges, opt => opt.MapFrom(src => src.GroupCodeBadges))
 
                         ;

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using NetBaires.Api.Features.Community.GetCommunitySummary;
 using NetBaires.Api.Features.Slack;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Api.Features.Community
 {
@@ -28,6 +29,7 @@ namespace NetBaires.Api.Features.Community
         [HttpGet("summary")]
         [AllowAnonymous]
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
+        [ResponseCache(Duration = 100)]
         public async Task<IActionResult> Get() =>
                      await _mediator.Send(new GetCommunitySummaryQuery());
 

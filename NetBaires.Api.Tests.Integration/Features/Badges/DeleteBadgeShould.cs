@@ -4,14 +4,15 @@ using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 using NetBaires.Host;
 using Xunit;
 
 namespace NetBaires.Api.Tests.Integration.Features.Badges
 {
-    public class DeleteBadgeShould : IntegrationTestsBase
+    public class RemoveMaterial : IntegrationTestsBase
     {
-        public DeleteBadgeShould(CustomWebApplicationFactory<Startup> factory) : base(factory)
+        public RemoveMaterial(CustomWebApplicationFactory<Startup> factory) : base(factory)
         {
             AuthenticateAdminAsync().GetAwaiter().GetResult(); ;
         }
@@ -20,7 +21,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Badges
         public async Task Delete_Badge()
         {
 
-            var newBadge = new Data.Badge();
+            var newBadge = new Badge();
             Context.Badges.Add(newBadge);
             await Context.SaveChangesAsync();
 
@@ -33,11 +34,11 @@ namespace NetBaires.Api.Tests.Integration.Features.Badges
         [Fact]
         public async Task Not_Delete_Badge_Has_Members()
         {
-            var newBadge = new Data.Badge();
+            var newBadge = new Badge();
             newBadge.Members = new List<BadgeMember>();
             newBadge.Members.Add(new BadgeMember
             {
-                Member = new Data.Member
+                Member = new Member
                 {
                     Email = "Newuser@user.com"
                 }

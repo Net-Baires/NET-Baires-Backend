@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace NetBaires.Api.Features.Events.PutCheckAttendanceByCode
+namespace NetBaires.Api.Features.Events.PutCheckAttendanceGeneralByCode
 {
     public class PutCheckAttendanceByCodeCommand : IRequest<IActionResult>
     {

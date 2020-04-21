@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using NetBaires.Api.Features.Events.UpdateEvent;
+using NetBaires.Data.Entities;
 using NetBaires.Host;
 using Xunit;
 

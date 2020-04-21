@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Host.Extensions
 {

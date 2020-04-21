@@ -1,6 +1,6 @@
 ﻿using NetBaires.Host;
 
-namespace NetBaires.Api.Tests.Integration.Features.Me
+namespace NetBaires.Api.Tests.Integration.Features.Twitter
 {
     public class TwitterShould : IntegrationTestsBase
     {

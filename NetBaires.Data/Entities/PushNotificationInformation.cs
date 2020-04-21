@@ -1,4 +1,4 @@
-﻿namespace NetBaires.Data
+﻿namespace NetBaires.Data.Entities
 {
     public class PushNotificationInformation : Entity
     {

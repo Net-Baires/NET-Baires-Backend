@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NetBaires.Api.Features.Events.UpdateAttendee;
 using NetBaires.Api.ViewModels;
+using NetBaires.Data.Entities;
 using NetBaires.Host;
 using Xunit;
 

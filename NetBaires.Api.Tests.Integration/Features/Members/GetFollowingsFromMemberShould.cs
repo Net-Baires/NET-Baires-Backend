@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using NetBaires.Api.Features.Members.GetFollowingsFromMember;
 using NetBaires.Api.ViewModels;
+using NetBaires.Data.Entities;
 using NetBaires.Host;
 using Xunit;
 
@@ -23,9 +24,9 @@ namespace NetBaires.Api.Tests.Integration.Features.Members
         [Fact]
         public async Task Return_All_Followings()
         {
-            var memberToFollow = new Data.Member();
+            var memberToFollow = new Member();
             Context.Members.Add(memberToFollow);
-            var memberToFollow2 = new Data.Member();
+            var memberToFollow2 = new Member();
             Context.Members.Add(memberToFollow2);
             Context.SaveChanges();
             var member = Context.Members.Include(x => x.FollowingMembers)

@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using NetBaires.Api.Features.Events.UpdateEvent;
 using NetBaires.Api.Helpers;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Api.Features.Speakers.GetSpeaker
 {

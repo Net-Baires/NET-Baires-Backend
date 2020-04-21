@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace NetBaires.Api.Features.GroupsCodes.AddMemberToGroupCode
+namespace NetBaires.Api.Features.Events.AddCurrentUserToGroupCode
 {
     public class AddCurrentUserToGroupCodeCommand : IRequest<IActionResult>
     {

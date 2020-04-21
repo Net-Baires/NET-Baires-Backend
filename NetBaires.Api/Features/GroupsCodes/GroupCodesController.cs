@@ -3,10 +3,13 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetBaires.Api.Features.Events.AssignBadgeToAttendances;
+using NetBaires.Api.Features.GroupsCodes.AssignBadgeToAttendancesInGroupCode;
 using NetBaires.Api.Features.GroupsCodes.DeleteGroupCode;
 using NetBaires.Api.Features.GroupsCodes.GetGroupCode;
+using NetBaires.Api.Features.GroupsCodes.MakeRaffle;
 using NetBaires.Api.Features.GroupsCodes.UpdateGroupCode;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace NetBaires.Api.Features.GroupsCodes

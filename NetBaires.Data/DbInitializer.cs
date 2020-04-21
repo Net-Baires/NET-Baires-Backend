@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Data
 {

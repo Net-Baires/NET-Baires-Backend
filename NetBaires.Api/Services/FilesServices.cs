@@ -6,24 +6,24 @@ using Microsoft.Azure.Storage.Blob;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NetBaires.Api.Options;
+using NetBaires.Data;
 
 namespace NetBaires.Api.Services
 {
     public class FilesServices : IFilesServices
     {
-        private readonly ConnectionStringsOptions connectionStringsOptions;
+        private readonly ConnectionStringsOptions _connectionStringsOptions;
         private readonly ILogger<FilesServices> _logger;
 
-        public FilesServices(IOptions<ConnectionStringsOptions> ConnectionStringsOptions,
+        public FilesServices(IOptions<ConnectionStringsOptions> connectionStringsOptions,
         ILogger<FilesServices> logger)
         {
-            connectionStringsOptions = ConnectionStringsOptions.Value;
+            _connectionStringsOptions = connectionStringsOptions.Value;
             _logger = logger;
         }
         public async Task<FileDetail> UploadAsync(Stream file, string fileName, Container container)
         {
-            CloudStorageAccount storageAccount;
-            CloudStorageAccount.TryParse(connectionStringsOptions.BlobStorage, out storageAccount);
+            CloudStorageAccount.TryParse(_connectionStringsOptions.BlobStorage, out var storageAccount);
 
             CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
 
@@ -43,7 +43,7 @@ namespace NetBaires.Api.Services
             try
             {
                 CloudStorageAccount storageAccount;
-                CloudStorageAccount.TryParse(connectionStringsOptions.BlobStorage, out storageAccount);
+                CloudStorageAccount.TryParse(_connectionStringsOptions.BlobStorage, out storageAccount);
 
                 CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
 
@@ -66,7 +66,7 @@ namespace NetBaires.Api.Services
         public async Task<Stream> GetAsync(string fileName, Container container)
         {
             CloudStorageAccount storageAccount;
-            CloudStorageAccount.TryParse(connectionStringsOptions.BlobStorage, out storageAccount);
+            CloudStorageAccount.TryParse(_connectionStringsOptions.BlobStorage, out storageAccount);
 
             CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
 

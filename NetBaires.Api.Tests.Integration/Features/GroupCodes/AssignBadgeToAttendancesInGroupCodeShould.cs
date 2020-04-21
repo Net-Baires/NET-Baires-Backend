@@ -1,9 +1,15 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using NetBaires.Api.Auth;
+using NetBaires.Api.Services;
 using NetBaires.Data;
+using NetBaires.Data.DomainEvents;
+using NetBaires.Data.Entities;
+using NetBaires.Events.DomainEvents;
 using NetBaires.Host;
 using Xunit;
 
@@ -27,13 +33,43 @@ namespace NetBaires.Api.Tests.Integration.Features.GroupCodes
             var response = await HttpClient.PostAsync($"/groupcodes/{_newGroupCode.Id}/badges/{_newBadge.Id}", null);
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
             RefreshContext();
-            _newMember = Context.Members.Include(s=> s.Badges).ThenInclude(s=> s.Badge).Where(x => x.Id == _newMember.Id).FirstOrDefault();
+            _newMember = Context.Members.Include(s => s.Badges).ThenInclude(s => s.Badge).Where(x => x.Id == _newMember.Id).FirstOrDefault();
             _newMember.Badges.Count.Should().Be(1);
             _newMember.Badges.First().Badge.Id.Should().Be(_newBadge.Id);
 
         }
 
+        [Fact]
+        public async Task Add_Members_To_Badge_Add_Message_To_The_Queue()
+        {
+            QueueServices.Clear<AssignedBadgeToAttendance>();
+            FillData();
 
+            var a = await HttpClient.PostAsync($"/groupcodes/{_newGroupCode.Id}/badges/{_newBadge.Id}", null);
+
+            var bb = await a.Content.ReadAsStringAsync();
+            var message = QueueServices.GetMessage<AssignedBadgeToAttendance>();
+            message.MemberId.Should().NotBe(0);
+            message.BadgeId.Should().Be(_newBadge.Id);
+            Action act = () => QueueServices.GetMessage<AssignedBadgeToAttendance>();
+            act.Should().Throw<NullReferenceException>();
+
+            QueueServices.Clear<AssignedBadgeToAttendance>();
+
+        }
+        [Fact]
+        public async Task Not_Assign_Two_Time_Same_Badge()
+        {
+            FillData();
+            await HttpClient.PostAsync($"/groupcodes/{_newGroupCode.Id}/badges/{_newBadge.Id}", null);
+            var response = await HttpClient.PostAsync($"/groupcodes/{_newGroupCode.Id}/badges/{_newBadge.Id}", null);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            RefreshContext();
+            _newMember = Context.Members.Include(s => s.Badges).ThenInclude(s => s.Badge).Where(x => x.Id == _newMember.Id).FirstOrDefault();
+            _newMember.Badges.Count.Should().Be(1);
+            _newMember.Badges.First().Badge.Id.Should().Be(_newBadge.Id);
+
+        }
 
         private void FillData()
         {

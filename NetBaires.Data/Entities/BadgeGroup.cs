@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace NetBaires.Data
+namespace NetBaires.Data.Entities
 {
     public class BadgeGroup
     {

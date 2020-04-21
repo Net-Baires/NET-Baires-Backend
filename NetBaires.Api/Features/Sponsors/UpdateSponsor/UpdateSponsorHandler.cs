@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using NetBaires.Api.Helpers;
 using NetBaires.Api.Services;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Api.Features.Sponsors.UpdateSponsor
 {
