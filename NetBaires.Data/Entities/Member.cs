@@ -26,7 +26,7 @@ namespace NetBaires.Data.Entities
         public bool Colaborator { get; set; } = false;
         public DateTime FirstLogin { get; protected set; } = DateTime.Now;
         public UserRole Role { get; set; } = UserRole.Member;
-        public IList<BadgeMember> Badges { get; set; }
+        public IList<BadgeMember> Badges { get; set; } = new List<BadgeMember>();
         public List<Attendance> Events { get; set; }
         public List<GroupCodeMember> GroupCodes { get; set; }
         public void SetFile(Uri uri, string fileName)
@@ -35,6 +35,13 @@ namespace NetBaires.Data.Entities
             PictureName = fileName;
         }
 
+        public DomainResponse AssignBadge(Badge badge)
+        {
+            if (Badges.Any(x => x.BadgeId == badge.Id))
+                return DomainResponse.Error("Este miembro ya tiene el badge");
+            Badges.Add(new BadgeMember(badge, this));
+            return DomainResponse.Ok();
+        }
         public void Follow(Member member)
         {
             if (!FollowingMembers.Any(x => x.Member == member))

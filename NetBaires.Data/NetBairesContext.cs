@@ -92,11 +92,17 @@ namespace NetBaires.Data
                 .WithMany(s => s.Members)
                 .HasForeignKey(sc => sc.BadgeId);
 
+            modelBuilder.Entity<FollowingMember>()
+                .HasOne(x => x.Member)
+                .WithMany(x=> x.FollowingMembers)
+                .HasForeignKey(sc => sc.FollowingId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Member>()
                 .HasMany(sc => sc.FollowingMembers)
                 .WithOne(x => x.Member)
-                .HasForeignKey(sc => sc.MemberId);
+                .HasForeignKey(sc => sc.MemberId)
+                .OnDelete(DeleteBehavior.Restrict);
 
 
             modelBuilder.Entity<BadgeMember>()
