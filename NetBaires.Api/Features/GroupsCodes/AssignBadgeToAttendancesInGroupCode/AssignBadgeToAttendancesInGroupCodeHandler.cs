@@ -32,6 +32,8 @@ namespace NetBaires.Api.Features.GroupsCodes.AssignBadgeToAttendancesInGroupCode
                 return HttpResponseCodeHelper.NotFound("El badge que esta intentando asignar no se encuentra en el sistema");
 
             var groupCode = await _context.GroupCodes.Include(s => s.Members)
+                                                     .ThenInclude(x=> x.Member)
+                                                     .ThenInclude(x=> x.Badges)
                                                      .Include(x=> x.GroupCodeBadges)
                                                      .ThenInclude(x=> x.Badge)
                                                      .Where(x => x.Id == request.GroupCodeId)

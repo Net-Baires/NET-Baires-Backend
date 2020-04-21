@@ -9,5 +9,15 @@ namespace NetBaires.Data.Entities
         public int MemberId { get; set; }
         public Member Member { get; set; }
         public DateTime AssignmentDate { get; set; } = DateTime.Now;
+
+        public BadgeMember(Badge badge, Member member)
+        {
+            MemberId = member.Id;
+            BadgeId = badge.Id;
+        }
+        public BadgeMember()
+        {
+            
+        }
     }
 }

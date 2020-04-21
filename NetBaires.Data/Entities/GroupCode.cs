@@ -68,15 +68,11 @@ namespace NetBaires.Data.Entities
         {
             if (GroupCodeBadges.Any(x => x.Badge.Id == badge.Id))
                 return DomainResponse.Error("El badge que esta intentando asignar, ya se encuentra asignado");
+
             foreach (var groupCodeMember in Members)
-            {
-                badge.Members.Add(new BadgeMember
-                {
-                    BadgeId = badge.Id,
-                    MemberId = groupCodeMember.MemberId
-                });
-                AddDomainEvent(new AssignedBadgeToAttendance(groupCodeMember.MemberId, badge.Id));
-            }
+                if (groupCodeMember.Member.AssignBadge(badge).SuccessResult)
+                    AddDomainEvent(new AssignedBadgeToAttendance(groupCodeMember.MemberId, badge.Id));
+
             GroupCodeBadges.Add(new GroupCodeBadge(this, badge));
             return DomainResponse.Ok();
         }
