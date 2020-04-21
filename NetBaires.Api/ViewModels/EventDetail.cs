@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Profile = AutoMapper.Profile;

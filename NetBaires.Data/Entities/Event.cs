@@ -6,8 +6,24 @@ using NetBaires.Events.DomainEvents;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace NetBaires.Data
+namespace NetBaires.Data.Entities
 {
+    public class Material : Entity
+    {
+        public string Title { get; set; }
+        public string Link { get; set; }
+
+        public Material(string title, string link)
+        {
+            Title = title;
+            Link = link;
+        }
+        public Material()
+        {
+
+        }
+    }
+
     public class Event : Entity
     {
         public string Title { get; set; }
@@ -30,6 +46,7 @@ namespace NetBaires.Data
         public DateTime Date { get; set; }
         public List<SponsorEvent> Sponsors { get; set; } = new List<SponsorEvent>();
         public List<GroupCode> GroupCodes { get; protected set; } = new List<GroupCode>();
+        public List<Material> Materials { get; set; } = new List<Material>();
         public DomainResponse AssignBadgeToAttended(Badge badge)
         {
             if (!Done)
@@ -46,6 +63,15 @@ namespace NetBaires.Data
                     AddDomainEvent(new AssignedBadgeToAttendance(item.MemberId, badge.Id));
                 }
             return DomainResponse.Ok();
+        }
+
+        public void AddMaterial(string title, string link)
+        {
+            Materials.Add(new Material(title, link));
+        }
+        public void RemoveMaterial(Material material)
+        {
+            Materials.Remove(material);
         }
 
         public DomainResponse AssignBadgeToAttended(Badge badge, Member member)

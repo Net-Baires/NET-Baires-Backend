@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NetBaires.Data
+namespace NetBaires.Data.Entities
 {
     public class Badge : Entity
     {

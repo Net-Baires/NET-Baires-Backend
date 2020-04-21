@@ -5,6 +5,7 @@ using NetBaires.Api.Auth.CustomsClaims;
 using NetBaires.Api.Auth.Tokens;
 using NetBaires.Api.Options;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Api.Auth
 {

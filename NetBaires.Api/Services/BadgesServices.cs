@@ -5,6 +5,7 @@ using NetBaires.Data;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Api.Services
 {

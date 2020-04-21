@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Api.Features.Events.UpdateEvent
 {

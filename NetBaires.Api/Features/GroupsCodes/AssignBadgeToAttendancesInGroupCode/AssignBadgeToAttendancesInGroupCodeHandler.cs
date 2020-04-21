@@ -5,10 +5,11 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using NetBaires.Api.Features.Events.AssignBadgeToAttendances;
 using NetBaires.Api.Helpers;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Features.Events.AssignBadgeToAttendances
+namespace NetBaires.Api.Features.GroupsCodes.AssignBadgeToAttendancesInGroupCode
 {
 
     public class AssignBadgeToAttendancesInGroupCodeHandler : IRequestHandler<AssignBadgeToAttendancesInGroupCodeCommand, IActionResult>

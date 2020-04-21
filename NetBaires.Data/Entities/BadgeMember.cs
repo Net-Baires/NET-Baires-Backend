@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NetBaires.Data
+namespace NetBaires.Data.Entities
 {
     public class BadgeMember
     {

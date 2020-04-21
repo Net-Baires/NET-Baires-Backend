@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NetBaires.Api.Features.GroupsCodes.UpdateGroupCode;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 using NetBaires.Host;
 using Newtonsoft.Json;
 using Xunit;

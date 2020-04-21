@@ -8,7 +8,7 @@ using NetBaires.Api.Auth;
 using NetBaires.Api.Helpers;
 using NetBaires.Data;
 
-namespace NetBaires.Api.Features.Events.PutReportAttendance
+namespace NetBaires.Api.Features.Events.CreateGroupCode
 {
     public class CreateGroupCodeHandler : IRequestHandler<CreateGroupCodeCommand, IActionResult>
     {

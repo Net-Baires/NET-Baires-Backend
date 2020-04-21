@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using NetBaires.Api.Features.GroupsCodes.AddMemberToGroupCode;
-using NetBaires.Data;
+using NetBaires.Data.Entities;
 
-namespace NetBaires.Api.Features.Events.GetEventLiveDetail
+namespace NetBaires.Api.Features.Events.AddCurrentUserToGroupCode
 {
     public class AddMemberToGroupCodeProfile : Profile
     {

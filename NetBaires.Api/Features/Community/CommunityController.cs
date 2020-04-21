@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using NetBaires.Api.Features.Community.GetCommunitySummary;
 using NetBaires.Api.Features.Slack;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Api.Features.Community
 {

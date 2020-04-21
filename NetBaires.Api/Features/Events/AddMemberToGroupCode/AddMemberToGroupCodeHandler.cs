@@ -10,6 +10,7 @@ using NetBaires.Api.Auth;
 using NetBaires.Api.Features.Events.AddAttendee;
 using NetBaires.Api.Helpers;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Api.Features.Events.AddMemberToGroupCode
 {

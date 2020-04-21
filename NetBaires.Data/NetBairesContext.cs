@@ -7,7 +7,6 @@ using EFSecondLevelCache.Core.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using NetBaires.Api.Services;
 using NetBaires.Data.Entities;
 
 namespace NetBaires.Data
@@ -30,6 +29,7 @@ namespace NetBaires.Data
         public DbSet<Badge> Badges { get; set; }
         public DbSet<BadgeGroup> BadgeGroups { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<Material> Materials { get; set; }
         public DbSet<BadgeMember> BadgeMembers { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<SponsorEvent> SponsorEvents { get; set; }

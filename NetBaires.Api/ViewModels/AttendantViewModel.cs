@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using AutoMapper;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Api.ViewModels
 {

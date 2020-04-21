@@ -4,6 +4,7 @@ using NetBaires.Data;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using NetBaires.Data.Entities;
 using NetBaires.Host;
 using Xunit;
 

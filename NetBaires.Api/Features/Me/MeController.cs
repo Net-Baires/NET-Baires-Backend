@@ -5,6 +5,7 @@ using NetBaires.Api.Features.Me.GetMe;
 using NetBaires.Api.Features.Me.UpdateMe;
 using NetBaires.Api.ViewModels;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace NetBaires.Api.Features.Me

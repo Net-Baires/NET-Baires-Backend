@@ -7,6 +7,7 @@ using NetBaires.Api.Services.EventBrite;
 using NetBaires.Api.Services.Meetup;
 using NetBaires.Api.Services.Sync;
 using NetBaires.Api.Services.Sync.Process;
+using NetBaires.Data;
 
 namespace NetBaires.Host.Extensions
 {

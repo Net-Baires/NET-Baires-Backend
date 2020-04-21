@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using NetBaires.Api.Auth;
 using NetBaires.Api.Helpers;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Api.Features.Events.GetEventLiveDetail
 {

@@ -13,6 +13,7 @@ using NetBaires.Api.Features.BadgeGroups.GetBadgeGroups;
 using NetBaires.Api.Features.BadgeGroups.NewBadgeGroups;
 using NetBaires.Api.Features.Badges;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace NetBaires.Api.Features.BadgeGroups

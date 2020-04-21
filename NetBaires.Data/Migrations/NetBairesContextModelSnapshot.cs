@@ -19,7 +19,7 @@ namespace NetBaires.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("NetBaires.Data.Attendance", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.Attendance", b =>
                 {
                     b.Property<int>("MemberId")
                         .HasColumnType("int");
@@ -61,7 +61,7 @@ namespace NetBaires.Data.Migrations
                     b.ToTable("Attendances");
                 });
 
-            modelBuilder.Entity("NetBaires.Data.Badge", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.Badge", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -99,7 +99,7 @@ namespace NetBaires.Data.Migrations
                     b.ToTable("Badges");
                 });
 
-            modelBuilder.Entity("NetBaires.Data.BadgeGroup", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.BadgeGroup", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -120,7 +120,7 @@ namespace NetBaires.Data.Migrations
                     b.ToTable("BadgeGroups");
                 });
 
-            modelBuilder.Entity("NetBaires.Data.BadgeMember", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.BadgeMember", b =>
                 {
                     b.Property<int>("MemberId")
                         .HasColumnType("int");
@@ -138,32 +138,7 @@ namespace NetBaires.Data.Migrations
                     b.ToTable("BadgeMembers");
                 });
 
-            modelBuilder.Entity("NetBaires.Data.Entities.FollowingMember", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("FollowingDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("FollowingId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MemberId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FollowingId");
-
-                    b.HasIndex("MemberId");
-
-                    b.ToTable("FollowingMembers");
-                });
-
-            modelBuilder.Entity("NetBaires.Data.Event", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.Event", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -224,7 +199,32 @@ namespace NetBaires.Data.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("NetBaires.Data.GroupCode", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.FollowingMember", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("FollowingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FollowingId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MemberId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FollowingId");
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("FollowingMembers");
+                });
+
+            modelBuilder.Entity("NetBaires.Data.Entities.GroupCode", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -250,7 +250,7 @@ namespace NetBaires.Data.Migrations
                     b.ToTable("GroupCodes");
                 });
 
-            modelBuilder.Entity("NetBaires.Data.GroupCodeBadge", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.GroupCodeBadge", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -275,7 +275,7 @@ namespace NetBaires.Data.Migrations
                     b.ToTable("GroupCodeBadge");
                 });
 
-            modelBuilder.Entity("NetBaires.Data.GroupCodeMember", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.GroupCodeMember", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -303,7 +303,30 @@ namespace NetBaires.Data.Migrations
                     b.ToTable("GroupCodeMembers");
                 });
 
-            modelBuilder.Entity("NetBaires.Data.Member", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.Material", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("Materials");
+                });
+
+            modelBuilder.Entity("NetBaires.Data.Entities.Member", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -370,7 +393,7 @@ namespace NetBaires.Data.Migrations
                     b.ToTable("Members");
                 });
 
-            modelBuilder.Entity("NetBaires.Data.PushNotificationInformation", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.PushNotificationInformation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -390,7 +413,7 @@ namespace NetBaires.Data.Migrations
                     b.ToTable("PushNotificationInformation");
                 });
 
-            modelBuilder.Entity("NetBaires.Data.Sponsor", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.Sponsor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -421,7 +444,7 @@ namespace NetBaires.Data.Migrations
                     b.ToTable("Sponsors");
                 });
 
-            modelBuilder.Entity("NetBaires.Data.SponsorEvent", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.SponsorEvent", b =>
                 {
                     b.Property<int>("SponsorId")
                         .HasColumnType("int");
@@ -439,37 +462,37 @@ namespace NetBaires.Data.Migrations
                     b.ToTable("SponsorEvents");
                 });
 
-            modelBuilder.Entity("NetBaires.Data.Attendance", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.Attendance", b =>
                 {
-                    b.HasOne("NetBaires.Data.Event", "Event")
+                    b.HasOne("NetBaires.Data.Entities.Event", "Event")
                         .WithMany("Attendees")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NetBaires.Data.Member", "Member")
+                    b.HasOne("NetBaires.Data.Entities.Member", "Member")
                         .WithMany("Events")
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("NetBaires.Data.Badge", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.Badge", b =>
                 {
-                    b.HasOne("NetBaires.Data.BadgeGroup", null)
+                    b.HasOne("NetBaires.Data.Entities.BadgeGroup", null)
                         .WithMany("Badges")
                         .HasForeignKey("BadgeGroupId");
                 });
 
-            modelBuilder.Entity("NetBaires.Data.BadgeMember", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.BadgeMember", b =>
                 {
-                    b.HasOne("NetBaires.Data.Badge", "Badge")
+                    b.HasOne("NetBaires.Data.Entities.Badge", "Badge")
                         .WithMany("Members")
                         .HasForeignKey("BadgeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NetBaires.Data.Member", "Member")
+                    b.HasOne("NetBaires.Data.Entities.Member", "Member")
                         .WithMany("Badges")
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -478,68 +501,77 @@ namespace NetBaires.Data.Migrations
 
             modelBuilder.Entity("NetBaires.Data.Entities.FollowingMember", b =>
                 {
-                    b.HasOne("NetBaires.Data.Member", "Following")
+                    b.HasOne("NetBaires.Data.Entities.Member", "Following")
                         .WithMany()
-                        .HasForeignKey("FollowingId");
+                        .HasForeignKey("FollowingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("NetBaires.Data.Member", "Member")
+                    b.HasOne("NetBaires.Data.Entities.Member", "Member")
                         .WithMany("FollowingMembers")
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("NetBaires.Data.GroupCode", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.GroupCode", b =>
                 {
-                    b.HasOne("NetBaires.Data.Event", "Event")
+                    b.HasOne("NetBaires.Data.Entities.Event", "Event")
                         .WithMany("GroupCodes")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("NetBaires.Data.GroupCodeBadge", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.GroupCodeBadge", b =>
                 {
-                    b.HasOne("NetBaires.Data.Badge", "Badge")
+                    b.HasOne("NetBaires.Data.Entities.Badge", "Badge")
                         .WithMany()
                         .HasForeignKey("BadgeId");
 
-                    b.HasOne("NetBaires.Data.GroupCode", "GroupCode")
+                    b.HasOne("NetBaires.Data.Entities.GroupCode", "GroupCode")
                         .WithMany("GroupCodeBadges")
                         .HasForeignKey("GroupCodeId");
                 });
 
-            modelBuilder.Entity("NetBaires.Data.GroupCodeMember", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.GroupCodeMember", b =>
                 {
-                    b.HasOne("NetBaires.Data.GroupCode", "GroupCode")
+                    b.HasOne("NetBaires.Data.Entities.GroupCode", "GroupCode")
                         .WithMany("Members")
                         .HasForeignKey("GroupCodeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NetBaires.Data.Member", "Member")
+                    b.HasOne("NetBaires.Data.Entities.Member", "Member")
                         .WithMany("GroupCodes")
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("NetBaires.Data.PushNotificationInformation", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.Material", b =>
                 {
-                    b.HasOne("NetBaires.Data.Member", null)
+                    b.HasOne("NetBaires.Data.Entities.Event", null)
+                        .WithMany("Materials")
+                        .HasForeignKey("EventId");
+                });
+
+            modelBuilder.Entity("NetBaires.Data.Entities.PushNotificationInformation", b =>
+                {
+                    b.HasOne("NetBaires.Data.Entities.Member", null)
                         .WithMany("PushNotifications")
                         .HasForeignKey("MemberId");
                 });
 
-            modelBuilder.Entity("NetBaires.Data.SponsorEvent", b =>
+            modelBuilder.Entity("NetBaires.Data.Entities.SponsorEvent", b =>
                 {
-                    b.HasOne("NetBaires.Data.Event", "Event")
+                    b.HasOne("NetBaires.Data.Entities.Event", "Event")
                         .WithMany("Sponsors")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NetBaires.Data.Sponsor", "Sponsor")
+                    b.HasOne("NetBaires.Data.Entities.Sponsor", "Sponsor")
                         .WithMany("Events")
                         .HasForeignKey("SponsorId")
                         .OnDelete(DeleteBehavior.Cascade)

@@ -1,4 +1,4 @@
-﻿namespace NetBaires.Api.Services
+﻿namespace NetBaires.Data
 {
     public interface IQueueServices
     {

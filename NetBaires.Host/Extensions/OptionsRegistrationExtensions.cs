@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NetBaires.Api.Options;
+using NetBaires.Data;
 
 namespace NetBaires.Host.Extensions
 {

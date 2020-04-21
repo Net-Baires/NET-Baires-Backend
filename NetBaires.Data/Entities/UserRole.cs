@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace NetBaires.Data
+namespace NetBaires.Data.Entities
 {
 
     [Flags]

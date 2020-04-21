@@ -5,7 +5,8 @@ using Microsoft.Extensions.Logging;
 using NetBaires.Api.Services.Meetup;
 using NetBaires.Api.Services.Meetup.Models;
 using NetBaires.Data;
-using Member = NetBaires.Data.Member;
+using NetBaires.Data.Entities;
+using Member = NetBaires.Data.Entities.Member;
 
 namespace NetBaires.Api.Services.Sync
 {

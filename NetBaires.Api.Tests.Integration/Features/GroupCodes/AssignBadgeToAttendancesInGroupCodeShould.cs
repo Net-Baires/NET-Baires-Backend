@@ -8,6 +8,7 @@ using NetBaires.Api.Auth;
 using NetBaires.Api.Services;
 using NetBaires.Data;
 using NetBaires.Data.DomainEvents;
+using NetBaires.Data.Entities;
 using NetBaires.Events.DomainEvents;
 using NetBaires.Host;
 using Xunit;

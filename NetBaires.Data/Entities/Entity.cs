@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using NetBaires.Events.DomainEvents;
 
-namespace NetBaires.Data
+namespace NetBaires.Data.Entities
 {
     public abstract class Entity
     {

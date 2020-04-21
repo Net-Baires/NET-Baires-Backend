@@ -20,6 +20,7 @@ using NetBaires.Api.Features.Members.UpdateInformation;
 using NetBaires.Api.Features.Slack;
 using NetBaires.Api.ViewModels;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace NetBaires.Api.Features.Members

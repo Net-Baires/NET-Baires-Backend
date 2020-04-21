@@ -1,4 +1,4 @@
-﻿namespace NetBaires.Api.Options
+﻿namespace NetBaires.Data
 {
     public class ConnectionStringsOptions
     {

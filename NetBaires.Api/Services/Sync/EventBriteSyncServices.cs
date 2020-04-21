@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Services.EventBrite;
 using NetBaires.Data;
-using Member = NetBaires.Data.Member;
+using NetBaires.Data.Entities;
+using Member = NetBaires.Data.Entities.Member;
 
 namespace NetBaires.Api.Services.Sync
 {

@@ -10,6 +10,7 @@ using NetBaires.Api.Features.Members.SearchMember;
 using NetBaires.Api.Services.Meetup.Models;
 using NetBaires.Host;
 using Xunit;
+using Member = NetBaires.Data.Entities.Member;
 
 namespace NetBaires.Api.Tests.Integration.Features.Members
 {
@@ -23,7 +24,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Members
         [Fact]
         public async Task UnFollow_New_Member()
         {
-            var memberToFollow = new Data.Member();
+            var memberToFollow = new Member();
             Context.Members.Add(memberToFollow);
             Context.SaveChanges();
             var member = Context.Members.Include(x => x.FollowingMembers)

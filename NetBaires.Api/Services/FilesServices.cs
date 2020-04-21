@@ -6,6 +6,7 @@ using Microsoft.Azure.Storage.Blob;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NetBaires.Api.Options;
+using NetBaires.Data;
 
 namespace NetBaires.Api.Services
 {

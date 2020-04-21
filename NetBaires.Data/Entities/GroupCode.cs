@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NetBaires.Data.DomainEvents;
 using NetBaires.Events.DomainEvents;
 
-namespace NetBaires.Data
+namespace NetBaires.Data.Entities
 {
     public class GroupCodeBadge : Entity
     {

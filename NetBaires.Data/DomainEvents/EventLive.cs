@@ -1,4 +1,5 @@
 ﻿using System;
+using NetBaires.Data.Entities;
 using NetBaires.Events.DomainEvents;
 
 namespace NetBaires.Data.DomainEvents

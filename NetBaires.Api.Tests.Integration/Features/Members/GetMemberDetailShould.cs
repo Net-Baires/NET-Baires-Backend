@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using NetBaires.Api.ViewModels;
+using NetBaires.Data.Entities;
 using NetBaires.Host;
 using Xunit;
 
@@ -57,7 +58,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Members
         [Fact]
         public async Task Return_True_Current_User_Follow_Member()
         {
-            var memberToFollow = new Data.Member();
+            var memberToFollow = new Member();
             Context.Members.Add(memberToFollow);
             Context.SaveChanges();
             var memberLogged = Context.Members.Include(x => x.FollowingMembers)

@@ -7,6 +7,7 @@ using NetBaires.Api.Features.Sponsors.GetSponsors;
 using NetBaires.Api.Features.Sponsors.NewSponsor;
 using NetBaires.Api.Features.Sponsors.UpdateSponsor;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Api.Features.Sponsors
 {

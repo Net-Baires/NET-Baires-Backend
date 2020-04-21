@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using NetBaires.Api.Features.Speakers.GetSpeaker;
 using NetBaires.Api.Features.Speakers.GetSpeakers;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace NetBaires.Api.Features.Speakers

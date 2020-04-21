@@ -10,8 +10,9 @@ using NetBaires.Api.Helpers;
 using NetBaires.Api.Models.ServicesResponse.Attendance;
 using NetBaires.Api.Options;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 
-namespace NetBaires.Api.Features.Events.PutCheckAttendanceByCode
+namespace NetBaires.Api.Features.Events.PutCheckAttendanceGeneralByCode
 {
 
     public class PutCheckAttendanceByCodeHandler : IRequestHandler<PutCheckAttendanceByCodeCommand, IActionResult>

@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Api
 {

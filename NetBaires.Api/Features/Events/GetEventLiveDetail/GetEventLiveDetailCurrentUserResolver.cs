@@ -2,6 +2,7 @@
 using AutoMapper;
 using NetBaires.Api.Auth;
 using NetBaires.Data;
+using NetBaires.Data.Entities;
 
 namespace NetBaires.Api.Features.Events.GetEventLiveDetail
 {

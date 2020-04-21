@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NetBaires.Data.Entities;
 
-namespace NetBaires.Data
+namespace NetBaires.Data.Entities
 {
     public class Member : Entity
     {
