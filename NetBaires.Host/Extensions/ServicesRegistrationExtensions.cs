@@ -30,7 +30,8 @@ namespace NetBaires.Host.Extensions
             services.AddScoped<IProcessEvents, ProcessEventsFromEventbrite>();
             services.AddScoped<IProcessEvents, ProcessEventsFromMeetup>();
             services.AddScoped<IAttendanceService, AttendanceService>();
-
+            services.AddScoped<IQueueServices, QueueServices>();
+            
             return services;
         }
     }

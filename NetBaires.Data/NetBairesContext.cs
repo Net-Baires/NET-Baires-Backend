@@ -7,11 +7,12 @@ using EFSecondLevelCache.Core.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using NetBaires.Api.Services;
 using NetBaires.Data.Entities;
 
 namespace NetBaires.Data
 {
- 
+
     public class NetBairesContext : DbContext
     {
         public NetBairesContext(DbContextOptions<NetBairesContext> options)
@@ -53,15 +54,16 @@ namespace NetBaires.Data
                            .Where(po => po.DomainEvents.Any())
                            .ToArray();
 
-            foreach (var entity in domainEventEntities)
-            {
-            
-            }
+
             this.ChangeTracker.AutoDetectChangesEnabled = false; // for performance reasons, to avoid calling DetectChanges() again.
             var result = await base.SaveChangesAsync(cancellationToken); ;
             this.ChangeTracker.AutoDetectChangesEnabled = true;
 
             this.GetService<IEFCacheServiceProvider>().InvalidateCacheDependencies(changedEntityNames);
+            var queueServices = this.GetService<IQueueServices>();
+            foreach (var entity in domainEventEntities)
+                foreach (var domainEvent in entity.DomainEvents)
+                    queueServices.AddMessage(domainEvent);
 
             return result;
         }
@@ -93,7 +95,7 @@ namespace NetBaires.Data
 
             modelBuilder.Entity<Member>()
                 .HasMany(sc => sc.FollowingMembers)
-                .WithOne(x=> x.Member)
+                .WithOne(x => x.Member)
                 .HasForeignKey(sc => sc.MemberId);
 
 

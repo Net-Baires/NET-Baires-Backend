@@ -4,13 +4,22 @@ namespace NetBaires.Data.DomainEvents
 {
     public class AssignedBadgeToAttendance : IDomainEvents
     {
-        public int MemberId { get; }
-        public Badge Badge { get; }
+        public int MemberId { get; set; }
+        public int BadgeId { get; set; }
+        public string Name { get; set; }
+        public string ImageUrl { get; set; }
 
         public AssignedBadgeToAttendance(int memberId, Badge badge)
         {
             MemberId = memberId;
-            Badge = badge ?? throw new ArgumentNullException(nameof(badge));
+            BadgeId = badge.Id;
+            Name = badge.Name;
+            ImageUrl = badge.ImageUrl;
+        }
+
+        public AssignedBadgeToAttendance()
+        {
+            
         }
     }
     public class EnableGeneralAttendance : IDomainEvents
@@ -33,20 +42,22 @@ namespace NetBaires.Data.DomainEvents
     }
     public class EventLive : IDomainEvents
     {
-        public Event Event { get; }
+        public int EventId { get; }
 
         public EventLive(Event @event)
         {
-            Event = @event ?? throw new ArgumentNullException(nameof(@event));
+            if (@event == null)throw new ArgumentNullException(nameof(@event));
+            EventId = @event.Id;
         }
     }
     public class EventUnLive : IDomainEvents
     {
-        public Event Event { get; }
+        public int EventId { get; }
 
         public EventUnLive(Event @event)
         {
-            Event = @event ?? throw new ArgumentNullException(nameof(@event));
+            if (@event == null) throw new ArgumentNullException(nameof(@event));
+            EventId = @event.Id;
         }
     }
 }
