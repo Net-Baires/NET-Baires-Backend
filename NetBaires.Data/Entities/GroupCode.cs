@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NetBaires.Data.DomainEvents;
+using NetBaires.Events.DomainEvents;
 
 namespace NetBaires.Data
 {
@@ -75,7 +76,7 @@ namespace NetBaires.Data
                     BadgeId = badge.Id,
                     MemberId = groupCodeMember.MemberId
                 });
-                AddDomainEvent(new AssignedBadgeToAttendance(groupCodeMember.MemberId, badge));
+                AddDomainEvent(new AssignedBadgeToAttendance(groupCodeMember.MemberId, badge.Id));
             }
             GroupCodeBadges.Add(new GroupCodeBadge(this, badge));
             return DomainResponse.Ok();

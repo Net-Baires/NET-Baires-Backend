@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NetBaires.Data.DomainEvents;
+using NetBaires.Events.DomainEvents;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -42,7 +43,7 @@ namespace NetBaires.Data
                         BadgeId = badge.Id,
                         MemberId = item.MemberId
                     });
-                    AddDomainEvent(new AssignedBadgeToAttendance(item.MemberId, badge));
+                    AddDomainEvent(new AssignedBadgeToAttendance(item.MemberId, badge.Id));
                 }
             return DomainResponse.Ok();
         }
@@ -62,7 +63,7 @@ namespace NetBaires.Data
                 BadgeId = badge.Id,
                 MemberId = member.Id
             });
-            AddDomainEvent(new AssignedBadgeToAttendance(member.Id, badge));
+            AddDomainEvent(new AssignedBadgeToAttendance(member.Id, badge.Id));
             return DomainResponse.Ok();
         }
 

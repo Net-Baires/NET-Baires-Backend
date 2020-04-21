@@ -8,6 +8,7 @@ using NetBaires.Api.Auth;
 using NetBaires.Api.Services;
 using NetBaires.Data;
 using NetBaires.Data.DomainEvents;
+using NetBaires.Events.DomainEvents;
 using NetBaires.Host;
 using Xunit;
 
@@ -43,12 +44,12 @@ namespace NetBaires.Api.Tests.Integration.Features.GroupCodes
             QueueServices.Clear<AssignedBadgeToAttendance>();
             FillData();
 
-            await HttpClient.PostAsync($"/groupcodes/{_newGroupCode.Id}/badges/{_newBadge.Id}", null);
+            var a = await HttpClient.PostAsync($"/groupcodes/{_newGroupCode.Id}/badges/{_newBadge.Id}", null);
+
+            var bb = await a.Content.ReadAsStringAsync();
             var message = QueueServices.GetMessage<AssignedBadgeToAttendance>();
             message.MemberId.Should().NotBe(0);
             message.BadgeId.Should().Be(_newBadge.Id);
-            message.Name.Should().Be(_newBadge.Name);
-            message.ImageUrl.Should().Be(_newBadge.ImageUrl);
             Action act = () => QueueServices.GetMessage<AssignedBadgeToAttendance>();
             act.Should().Throw<NullReferenceException>();
 
