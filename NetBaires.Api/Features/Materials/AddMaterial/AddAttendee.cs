@@ -6,9 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetBaires.Api.Helpers;
 using NetBaires.Data;
-using NetBaires.Data.Entities;
 
-namespace NetBaires.Api.Features.Events.AddMaterial
+namespace NetBaires.Api.Features.Materials.AddMaterial
 {
 
     public class AddMaterialHandler : IRequestHandler<AddMaterialCommand, IActionResult>

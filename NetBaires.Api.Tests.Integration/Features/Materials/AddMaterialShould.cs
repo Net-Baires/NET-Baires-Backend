@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using NetBaires.Api.Features.Events.AddMaterial;
+using NetBaires.Api.Features.Materials.AddMaterial;
 using NetBaires.Data.Entities;
 using NetBaires.Host;
 using Newtonsoft.Json;
