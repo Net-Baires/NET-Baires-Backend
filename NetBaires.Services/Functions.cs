@@ -61,7 +61,7 @@ namespace NetBaires.Services
                     var badge = connection.Query<Badge>($"SELECT ImageUrl,Name,Description FROM Badges WHERE ID = {data.BadgeId}").FirstOrDefault();
                     removedByStringBuilder.Replace("{{BadgeName}}", badge.Name);
                     removedByStringBuilder.Replace("{{BadgeImageUrl}}", badge.ImageUrl);
-                    message.SetSubject((new StringBuilder(config["Subject"])).Replace("{{MemberName}}", memberName)
+                    message.SetSubject((new StringBuilder(config["NotifyAssignedBadgeToAttendanceSubject"])).Replace("{{MemberName}}", memberName)
                         .Replace("{{BadgeName}}", badge.Name)
                         .ToString());
 
