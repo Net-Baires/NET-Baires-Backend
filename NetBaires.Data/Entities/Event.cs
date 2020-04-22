@@ -25,7 +25,25 @@ namespace NetBaires.Data.Entities
 
         }
     }
+    public class EventInformation : Entity
+    {
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public bool Visible { get; set; }
+        public Event Event { get; set; }
+        public int EventId { get; set; }
 
+        public EventInformation(string title, string description, bool visible)
+        {
+            Title = title;
+            Description = description;
+            Visible = visible;
+        }
+        public EventInformation()
+        {
+
+        }
+    }
     public class Event : Entity
     {
         public string Title { get; set; }
@@ -49,6 +67,9 @@ namespace NetBaires.Data.Entities
         public List<SponsorEvent> Sponsors { get; set; } = new List<SponsorEvent>();
         public List<GroupCode> GroupCodes { get; protected set; } = new List<GroupCode>();
         public List<Material> Materials { get; set; } = new List<Material>();
+        public List<EventInformation> Information { get; set; } = new List<EventInformation>();
+
+        
         public DomainResponse AssignBadgeToAttended(Badge badge)
         {
             if (!Done)
@@ -74,6 +95,16 @@ namespace NetBaires.Data.Entities
         public void RemoveMaterial(Material material)
         {
             Materials.Remove(material);
+        }
+
+
+        public void AddInformation(string title, string description, bool visible)
+        {
+            Information.Add(new EventInformation(title, description,visible));
+        }
+        public void RemoveInformation(EventInformation information)
+        {
+            Information.Remove(information);
         }
 
         public DomainResponse AssignBadgeToAttended(Badge badge, Member member)
@@ -177,13 +208,13 @@ namespace NetBaires.Data.Entities
                          if (!x.Attended && !x.NotifiedAbsence)
                              x.NoAttend();
                          if (x.Attended)
-                             AddDomainEvent(new ToThankAttended(Id, x.MemberId, completeEvent.SendMaterialToAttendees));
+                             AddDomainEvent(new notifiedAttendedEventEnd(Id, x.MemberId, completeEvent.SendMaterialToAttendees));
                      });
             if (completeEvent.ThanksSpeakers)
-                AddDomainEvent(new ToThankSpeakers(Id));
+                AddDomainEvent(new NotifiedSpeakersEventEnd(Id));
 
             if (completeEvent.ThanksSponsors)
-                AddDomainEvent(new ToThankSponsors(Id));
+                AddDomainEvent(new NotifiedSponsorsEventEnd(Id));
 
         }
     }

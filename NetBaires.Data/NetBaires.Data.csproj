@@ -23,6 +23,8 @@
     <Compile Remove="Migrations\20200421192706_Add_Materials.Designer.cs" />
     <Compile Remove="Migrations\20200421230732_Add_Materials_2.cs" />
     <Compile Remove="Migrations\20200421230732_Add_Materials_2.Designer.cs" />
+    <Compile Remove="Migrations\20200422013959_Update_Sponsor_Add_Email.cs" />
+    <Compile Remove="Migrations\20200422013959_Update_Sponsor_Add_Email.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

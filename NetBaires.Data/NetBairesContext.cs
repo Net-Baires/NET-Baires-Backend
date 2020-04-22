@@ -30,6 +30,7 @@ namespace NetBaires.Data
         public DbSet<BadgeGroup> BadgeGroups { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Material> Materials { get; set; }
+        public DbSet<EventInformation> EventInformation { get; set; }
         public DbSet<BadgeMember> BadgeMembers { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<SponsorEvent> SponsorEvents { get; set; }

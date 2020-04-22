@@ -9,6 +9,7 @@ using NetBaires.Api.Features.Events.CompleteEvent;
 using NetBaires.Data;
 using NetBaires.Data.DomainEvents;
 using NetBaires.Data.Entities;
+using NetBaires.Events.DomainEvents;
 using NetBaires.Host;
 using Newtonsoft.Json;
 using Xunit;
@@ -60,7 +61,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
                 new StringContent(JsonConvert.SerializeObject(command), Encoding.UTF8, "application/json"));
 
 
-            var list = QueueServices.GetMessages<ToThankAttended>();
+            var list = QueueServices.GetMessages<notifiedAttendedEventEnd>();
             list.Count.Should().Be(2);
             list.ToList().Any(x => x.MemberId == memberAttended.Id
                                    &&
@@ -82,7 +83,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
                 new StringContent(JsonConvert.SerializeObject(command), Encoding.UTF8, "application/json"));
 
 
-            var list = QueueServices.GetMessages<ToThankAttended>();
+            var list = QueueServices.GetMessages<notifiedAttendedEventEnd>();
             list.Count.Should().Be(1);
             list.ToList().Any(x => x.EventId == eventToAdd.Id
                                    &&
@@ -102,7 +103,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
                 new StringContent(JsonConvert.SerializeObject(command), Encoding.UTF8, "application/json"));
 
 
-            var list = QueueServices.GetMessages<ToThankSpeakers>();
+            var list = QueueServices.GetMessages<NotifiedSpeakersEventEnd>();
             list.Count.Should().Be(1);
             list.ToList().Any(x => x.EventId == eventToAdd.Id).Should().BeTrue();
         }
@@ -120,7 +121,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
                 new StringContent(JsonConvert.SerializeObject(command), Encoding.UTF8, "application/json"));
 
 
-            var list = QueueServices.GetMessages<ToThankSponsors>();
+            var list = QueueServices.GetMessages<NotifiedSponsorsEventEnd>();
             list.Count.Should().Be(1);
             list.ToList().Any(x => x.EventId == eventToAdd.Id).Should().BeTrue();
         }
@@ -155,9 +156,9 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
 
         public override void Dispose()
         {
-            QueueServices.Clear<ToThankAttended>();
-            QueueServices.Clear<ToThankSpeakers>();
-            QueueServices.Clear<ToThankSponsors>();
+            QueueServices.Clear<notifiedAttendedEventEnd>();
+            QueueServices.Clear<NotifiedSpeakersEventEnd>();
+            QueueServices.Clear<NotifiedSponsorsEventEnd>();
 
         }
     }
