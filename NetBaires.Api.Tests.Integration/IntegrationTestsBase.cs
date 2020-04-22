@@ -14,7 +14,7 @@ using NetBaires.Host;
 
 namespace NetBaires.Api.Tests.Integration
 {
-    public class IntegrationTestsBase :
+    public class IntegrationTestsBase : IDisposable,
       IClassFixture<CustomWebApplicationFactory<Startup>>
     {
         protected readonly HttpClient HttpClient;
@@ -104,5 +104,9 @@ namespace NetBaires.Api.Tests.Integration
             }
         }
 
+        public virtual void Dispose()
+        {
+            
+        }
     }
 }

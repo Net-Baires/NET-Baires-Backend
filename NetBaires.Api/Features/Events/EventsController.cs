@@ -23,7 +23,6 @@ using NetBaires.Api.Features.Events.SyncEvent;
 using NetBaires.Api.Features.Events.SyncWithExternalEvents;
 using NetBaires.Api.Features.Events.UpdateAttendee;
 using NetBaires.Api.Features.Events.UpdateEvent;
-using NetBaires.Data;
 using NetBaires.Data.Entities;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -177,8 +176,12 @@ namespace NetBaires.Api.Features.Events
         [SwaggerOperation(Summary = "Cambia el estado de un evento a Completado")]
         [AuthorizeRoles(UserRole.Admin)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult> CompleteEvent([FromRoute] CompleteEventCommand command) =>
-                     await _iMediator.Send(command);
+        public async Task<IActionResult> CompleteEvent([FromRoute] int id, [FromBody] CompleteEventCommand command)
+        {
+            command.Id = id;
+            return await _iMediator.Send(command);
+        }
+
 
         [HttpPost("{eventId:int}/badges/{badgeId:int}/Attendances")]
         [SwaggerOperation(Summary = "Sincroniza un evento en particular con la plataforma externa")]
@@ -194,6 +197,8 @@ namespace NetBaires.Api.Features.Events
         public async Task<IActionResult> CreateGroupCode([FromRoute] int eventId, [FromBody]CreateGroupCodeCommand command) =>
             await _iMediator.Send(new CreateGroupCodeCommand { EventId = eventId, Detail = command.Detail });
 
+
+
         [HttpPost("{eventId:int}/groupcodes/{code}")]
         [SwaggerOperation(Summary = "Agrega al usuario logueado al group de codigo")]
         [AuthorizeRoles(UserRole.Member)]
@@ -206,9 +211,10 @@ namespace NetBaires.Api.Features.Events
         [SwaggerOperation(Summary = "Agrega un miembro al grupo de código.")]
         [AuthorizeRoles(UserRole.Admin, UserRole.Organizer)]
         [ApiExplorerSettingsExtend(UserRole.Admin)]
-        public async Task<IActionResult>
-            AddMemberToGroupCode([FromRoute]AddMemberToGroupCodeCommand command) =>
+        public async Task<IActionResult> AddMemberToGroupCode([FromRoute]AddMemberToGroupCodeCommand command) =>
             await _iMediator.Send(command);
+
+
 
         [HttpDelete("{eventId:int}/groupcodes/{groupCodeId}/members/{memberId}")]
         [SwaggerOperation(Summary = "Remueve un miembro de un groupo de código")]

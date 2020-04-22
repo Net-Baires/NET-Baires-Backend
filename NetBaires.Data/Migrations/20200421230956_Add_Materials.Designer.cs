@@ -10,7 +10,7 @@ using NetBaires.Data;
 namespace NetBaires.Data.Migrations
 {
     [DbContext(typeof(NetBairesContext))]
-    [Migration("20200421192706_Add_Materials")]
+    [Migration("20200421230956_Add_Materials")]
     partial class Add_Materials
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -312,7 +312,7 @@ namespace NetBaires.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("EventId")
+                    b.Property<int>("EventId")
                         .HasColumnType("int");
 
                     b.Property<string>("Link")
@@ -469,13 +469,13 @@ namespace NetBaires.Data.Migrations
                     b.HasOne("NetBaires.Data.Entities.Event", "Event")
                         .WithMany("Attendees")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("NetBaires.Data.Entities.Member", "Member")
                         .WithMany("Events")
                         .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -483,7 +483,8 @@ namespace NetBaires.Data.Migrations
                 {
                     b.HasOne("NetBaires.Data.Entities.BadgeGroup", null)
                         .WithMany("Badges")
-                        .HasForeignKey("BadgeGroupId");
+                        .HasForeignKey("BadgeGroupId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("NetBaires.Data.Entities.BadgeMember", b =>
@@ -491,26 +492,25 @@ namespace NetBaires.Data.Migrations
                     b.HasOne("NetBaires.Data.Entities.Badge", "Badge")
                         .WithMany("Members")
                         .HasForeignKey("BadgeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("NetBaires.Data.Entities.Member", "Member")
                         .WithMany("Badges")
                         .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("NetBaires.Data.Entities.FollowingMember", b =>
                 {
                     b.HasOne("NetBaires.Data.Entities.Member", "Following")
-                        .WithMany()
+                        .WithMany("FollowingMembers")
                         .HasForeignKey("FollowingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NetBaires.Data.Entities.Member", "Member")
-                        .WithMany("FollowingMembers")
+                        .WithMany()
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -521,7 +521,7 @@ namespace NetBaires.Data.Migrations
                     b.HasOne("NetBaires.Data.Entities.Event", "Event")
                         .WithMany("GroupCodes")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -529,11 +529,13 @@ namespace NetBaires.Data.Migrations
                 {
                     b.HasOne("NetBaires.Data.Entities.Badge", "Badge")
                         .WithMany()
-                        .HasForeignKey("BadgeId");
+                        .HasForeignKey("BadgeId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("NetBaires.Data.Entities.GroupCode", "GroupCode")
                         .WithMany("GroupCodeBadges")
-                        .HasForeignKey("GroupCodeId");
+                        .HasForeignKey("GroupCodeId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("NetBaires.Data.Entities.GroupCodeMember", b =>
@@ -541,28 +543,31 @@ namespace NetBaires.Data.Migrations
                     b.HasOne("NetBaires.Data.Entities.GroupCode", "GroupCode")
                         .WithMany("Members")
                         .HasForeignKey("GroupCodeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("NetBaires.Data.Entities.Member", "Member")
                         .WithMany("GroupCodes")
                         .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("NetBaires.Data.Entities.Material", b =>
                 {
-                    b.HasOne("NetBaires.Data.Entities.Event", null)
+                    b.HasOne("NetBaires.Data.Entities.Event", "Event")
                         .WithMany("Materials")
-                        .HasForeignKey("EventId");
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("NetBaires.Data.Entities.PushNotificationInformation", b =>
                 {
                     b.HasOne("NetBaires.Data.Entities.Member", null)
                         .WithMany("PushNotifications")
-                        .HasForeignKey("MemberId");
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("NetBaires.Data.Entities.SponsorEvent", b =>
@@ -570,13 +575,13 @@ namespace NetBaires.Data.Migrations
                     b.HasOne("NetBaires.Data.Entities.Event", "Event")
                         .WithMany("Sponsors")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("NetBaires.Data.Entities.Sponsor", "Sponsor")
                         .WithMany("Events")
                         .HasForeignKey("SponsorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

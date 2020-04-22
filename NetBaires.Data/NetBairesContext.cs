@@ -40,7 +40,7 @@ namespace NetBaires.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 
-            //optionsBuilder.EnableSensitiveDataLogging();
+            optionsBuilder.EnableSensitiveDataLogging();
             //optionsBuilder.UseLoggerFactory(_myLoggerFactory);
             base.OnConfiguring(optionsBuilder);
 
@@ -82,6 +82,8 @@ namespace NetBaires.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+
             modelBuilder
                 .Entity<Member>()
                 .Property(e => e.Role)
@@ -92,17 +94,16 @@ namespace NetBaires.Data
                 .WithMany(s => s.Members)
                 .HasForeignKey(sc => sc.BadgeId);
 
+
             modelBuilder.Entity<FollowingMember>()
                 .HasOne(x => x.Member)
-                .WithMany(x=> x.FollowingMembers)
+                .WithMany(x => x.FollowingMembers)
                 .HasForeignKey(sc => sc.FollowingId)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Member>()
-                .HasMany(sc => sc.FollowingMembers)
-                .WithOne(x => x.Member)
-                .HasForeignKey(sc => sc.MemberId)
-                .OnDelete(DeleteBehavior.Restrict);
+
+
 
 
             modelBuilder.Entity<BadgeMember>()

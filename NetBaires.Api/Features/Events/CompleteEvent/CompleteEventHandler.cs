@@ -30,7 +30,7 @@ namespace NetBaires.Api.Features.Events.CompleteEvent
             if (eventToUpdate == null)
                 return HttpResponseCodeHelper.NotFound();
 
-            eventToUpdate.Complete();
+            eventToUpdate.Complete(request);
 
             await _context.SaveChangesAsync();
 

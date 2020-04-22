@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Queue;
@@ -36,6 +37,13 @@ namespace NetBaires.Api.Services
             queue.CreateIfNotExists();
             var message = JsonConvert.DeserializeObject<TData>(queue.GetMessage().AsString);
             return message;
+        }
+        public List<TData> GetMessages<TData>(int count = 10)
+        {
+            CloudQueue queue = _queueClient.GetQueueReference(typeof(TData).Name.ToLower());
+            queue.CreateIfNotExists();
+            var messages = queue.GetMessages(count);
+            return  messages.Select(x=>  JsonConvert.DeserializeObject<TData>(x.AsString)).ToList();
         }
         public void Clear<TData>()
         {

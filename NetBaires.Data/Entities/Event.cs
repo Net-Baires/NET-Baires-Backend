@@ -165,21 +165,37 @@ namespace NetBaires.Data.Entities
             return newGroupCode;
         }
 
-        public void Complete()
+        public void Complete(CompleteEvent completeEvent = null)
         {
+            if (completeEvent == null)
+                completeEvent = new CompleteEvent();
+            SetUnLive();
             Done = true;
             Attendees.ToList()
                      .ForEach(x =>
                      {
-                         if (!x.Attended
-                         &&
-                         !x.NotifiedAbsence)
+                         if (!x.Attended && !x.NotifiedAbsence)
                              x.NoAttend();
+                         if (x.Attended)
+                             AddDomainEvent(new ToThankAttended(Id, x.MemberId, completeEvent.SendMaterialToAttendees));
                      });
+            if (completeEvent.ThanksSpeakers)
+                AddDomainEvent(new ToThankSpeakers(Id));
 
+            if (completeEvent.ThanksSponsors)
+                AddDomainEvent(new ToThankSponsors(Id));
 
         }
     }
+
+    public class CompleteEvent
+    {
+        public bool ThanksSponsors { get; set; } = false;
+        public bool ThanksSpeakers { get; set; } = false;
+        public bool ThanksAttendees { get; set; } = false;
+        public bool SendMaterialToAttendees { get; set; } = false;
+    }
+
     public static class RandomHelper
     {
         private static Random random = new Random();

@@ -19,6 +19,10 @@
     <Compile Remove="Migrations\20200403185012_Add_Followed_Members.Designer.cs" />
     <Compile Remove="Migrations\20200403190806_Add_Followed_Members.cs" />
     <Compile Remove="Migrations\20200403190806_Add_Followed_Members.Designer.cs" />
+    <Compile Remove="Migrations\20200421192706_Add_Materials.cs" />
+    <Compile Remove="Migrations\20200421192706_Add_Materials.Designer.cs" />
+    <Compile Remove="Migrations\20200421230732_Add_Materials_2.cs" />
+    <Compile Remove="Migrations\20200421230732_Add_Materials_2.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
