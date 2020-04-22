@@ -96,6 +96,7 @@ namespace NetBaires.Data
                 .HasForeignKey(sc => sc.BadgeId);
 
 
+
             modelBuilder.Entity<FollowingMember>()
                 .HasOne(x => x.Member)
                 .WithMany(x => x.FollowingMembers)

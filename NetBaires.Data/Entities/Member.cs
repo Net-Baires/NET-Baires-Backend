@@ -45,7 +45,7 @@ namespace NetBaires.Data.Entities
         public void Follow(Member member)
         {
             if (!FollowingMembers.Any(x => x.Member == member))
-                FollowingMembers.Add(new FollowingMember(member, DateTime.Now));
+                FollowingMembers.Add(new FollowingMember(this,member, DateTime.Now));
         }
         public void UnFollow(FollowingMember followingMember)
         {

@@ -39,6 +39,7 @@ namespace NetBaires.Api.Features.Members.GetMemberDetail
                 return HttpResponseCodeHelper.NotFound();
 
             var memberToReturn = _mapper.Map<MemberDetailViewModel>(member);
+            var list = await _context.FollowingMembers.ToListAsync();
             memberToReturn.Following = await _context.FollowingMembers.AnyAsync(x => x.MemberId == request.Id
                                                                                      &&
                                                                                      x.FollowingId == _currentUser.User.Id, cancellationToken: cancellationToken);

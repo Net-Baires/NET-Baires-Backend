@@ -29,6 +29,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Sponsors
             formData.Add(new StringContent("New Name"), nameof(NewSponsorCommand.Name));
             formData.Add(new StringContent("New Description"), nameof(NewSponsorCommand.Description));
             formData.Add(new StringContent("New SiteUrl"), nameof(NewSponsorCommand.SiteUrl));
+            formData.Add(new StringContent("New Email"), nameof(NewSponsorCommand.Email));
 
             var response = await HttpClient.PutAsync($"/sponsors/{sponsor.Id}", formData);
 
@@ -41,6 +42,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Sponsors
             sponsor.Name.Should().Be("New Name");
             sponsor.Description.Should().Be("New Description");
             sponsor.SiteUrl.Should().Be("New SiteUrl");
+            sponsor.Email.Should().Be("New Email");
 
             (await FileServices.GetAsync(oldLogoFileName, Api.Services.Container.Sponsors)).Should().BeNull();
             (await FileServices.GetAsync(sponsor.LogoFileName, Api.Services.Container.Sponsors)).Should().NotBeNull();

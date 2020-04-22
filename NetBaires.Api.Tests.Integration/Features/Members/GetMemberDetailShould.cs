@@ -61,10 +61,11 @@ namespace NetBaires.Api.Tests.Integration.Features.Members
             var memberToFollow = new Member();
             Context.Members.Add(memberToFollow);
             Context.SaveChanges();
+            RefreshContext();
             var memberLogged = Context.Members.Include(x => x.FollowingMembers)
                 .ThenInclude(x => x.Following)
                 .First(x => x.Email == "admin@admin.com");
-            memberToFollow.Follow(memberLogged);
+            memberLogged.Follow(memberToFollow);
             Context.SaveChanges();
 
             var response = await HttpClient.GetAsync($"/members/{memberToFollow.Id}");

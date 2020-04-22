@@ -26,8 +26,8 @@ namespace NetBaires.Api.Features.EventInformation
         [SwaggerOperation(Summary = "Retorna toda la información adicional de un evento")]
         [AuthorizeRoles(UserRole.Admin, UserRole.Organizer, UserRole.Member)]
         [ApiExplorerSettingsExtend(UserRole.Member)]
-        public async Task<IActionResult> GetEventInformation([FromRoute] int eventId) =>
-            await _iMediator.Send(new GetEventInformationQuery(eventId));
+        public async Task<IActionResult> GetEventInformation([FromRoute] int eventId,[FromQuery]bool? visible = null) =>
+            await _iMediator.Send(new GetEventInformationQuery(eventId, visible));
 
 
         [HttpPost("Events/{eventId}/Information")]

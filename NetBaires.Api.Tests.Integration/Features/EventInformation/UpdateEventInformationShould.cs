@@ -43,6 +43,7 @@ namespace NetBaires.Api.Tests.Integration.Features.EventInformation
            
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
+            
             RefreshContext();
             var eventInformation = Context.EventInformation.FirstOrDefault(s => s.Id == _event.Id);
 

@@ -5,6 +5,7 @@ using AutoMapper;
 using EFSecondLevelCache.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NetBaires.Api.Helpers;
 using NetBaires.Api.ViewModels;
 using NetBaires.Data;
@@ -29,7 +30,7 @@ namespace NetBaires.Api.Features.Events.GetSpeakersInEvent
         public async Task<IActionResult> Handle(GetSpeakersInEventQuery request, CancellationToken cancellationToken)
         {
 
-            var speakers = _context.Attendances.Where(x => x.EventId == request.Id
+            var speakers = _context.Attendances.Include(x=> x.Member).Where(x => x.EventId == request.Id
                                                                                           &&
                                                                                           x.Speaker)
                                         .Cacheable()

@@ -41,6 +41,21 @@ namespace NetBaires.Api.Tests.Integration.Features.EventInformation
                                    && x.Visible == _eventInformation.Visible).Should().BeTrue();
         }
 
+        [Fact]
+        public async Task Get_Visible_EventInformation()
+        {
+            FillData();
+            _event.AddInformation("Title 2", "http://link.com", true);
+            _event.AddInformation("Title 2", "http://link.com", false);
+            _event.AddInformation("Title 2", "http://link.com", false);
+            Context.SaveChanges();
+            var response = await HttpClient.GetAsync($"/events/{_event.Id}/information?visible=true");
+            var materials = await response.Content.ReadAsAsync<List<EventInformationViewModel>>();
+            
+            materials.Count.Should().Be(4);
+            
+        }
+
         private void FillData()
         {
             _event = new Event();

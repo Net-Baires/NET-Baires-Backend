@@ -11,10 +11,13 @@ namespace NetBaires.Data.Entities
         public int? FollowingId { get; set; }
         public DateTime FollowingDate { get; set; }
 
-        public FollowingMember(Member member, DateTime followingMember)
+        public FollowingMember(Member member, Member followingMember, DateTime followingDate)
         {
-            Following = member;
-            FollowingDate = followingMember;
+            MemberId = member.Id;
+            Member = member;
+            FollowingId = followingMember.Id;
+            Following = followingMember;
+            FollowingDate = followingDate;
         }
 
         public FollowingMember()

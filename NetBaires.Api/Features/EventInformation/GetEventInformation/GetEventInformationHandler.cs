@@ -28,7 +28,9 @@ namespace NetBaires.Api.Features.EventInformation.GetEventInformation
         }
         public async Task<IActionResult> Handle(GetEventInformationQuery request, CancellationToken cancellationToken)
         {
-            var materials = await _context.EventInformation.Where(x => x.Event.Id == request.EventId)
+            var materials = await _context.EventInformation.Where(x => x.Event.Id == request.EventId
+                                        &&
+                                        (request.Visible == null || x.Visible == request.Visible))
                 .ProjectTo<EventInformationViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
