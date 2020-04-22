@@ -4,6 +4,8 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NetBaires.Api.Features.EventInformation.GetEventInformation;
+using NetBaires.Api.Helpers;
 using NetBaires.Api.ViewModels;
 using NetBaires.Data;
 
@@ -36,7 +38,7 @@ namespace NetBaires.Api.Features.EventInformation.UpdateEventInformation
             await _context.SaveChangesAsync();
 
 
-            return new ObjectResult(_mapper.Map(eventInformationToUpdate, new EventDetail())) { StatusCode = 200 };
+            return HttpResponseCodeHelper.Ok(_mapper.Map<EventInformationViewModel>(eventInformationToUpdate));
         }
     }
 }

@@ -49,14 +49,14 @@ namespace NetBaires.Api.Features.EventInformation
             return await _iMediator.Send(new RemoveEventInformationCommand(eventId, informationId));
         }
 
-        [HttpPut("Events/{eventId}/Information/{InformationId}")]
+        [HttpPut("Events/{eventId}/Information/{eventInformationId}")]
         [SwaggerOperation(Summary = "Actualiza la información de un evento")]
         [AuthorizeRoles(UserRole.Admin, UserRole.Organizer)]
         [ApiExplorerSettingsExtend(UserRole.Organizer)]
-        public async Task<IActionResult> PutCheckAttendanceGeneral(int eventId, int eventInformationId,[FromBody]UpdateEventInformationCommand command)
+        public async Task<IActionResult> PutCheckAttendanceGeneral(int eventId, int eventInformationId, [FromBody]UpdateEventInformationCommand command)
         {
             command.Id = eventInformationId;
-            return await _iMediator.Send(new UpdateEventInformationCommand());
+            return await _iMediator.Send(command);
         }
     }
 }
