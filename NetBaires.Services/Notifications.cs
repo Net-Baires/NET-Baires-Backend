@@ -11,13 +11,13 @@ namespace NetBaires.Services
     public static class Notifications
     {
         [FunctionName("NotifyAssignedBadgeToAttendance")]
-        public static async Task NotifyAssignedBadgeToAttendance([QueueTrigger(nameof(AssignedBadgeToAttendance), Connection = "")]string myQueueItem,
+        public static async Task NotifyAssignedBadgeToAttendance([QueueTrigger(nameof(AssignedBadgeToMember), Connection = "")]string myQueueItem,
             [Blob("templates/emails/NotifyAssignedBadge.html", FileAccess.Read)] Stream myBlob,
             ILogger log,
             [SendGrid(ApiKey = "CustomSendGridKeyAppSettingName")] IAsyncCollector<SendGridMessage> messageCollector,
             ExecutionContext context)
         {
-            await (new NotifyEmails()).Notify(new NotifyAssignedBadgeToAttendanceMakeEmail(), myQueueItem, myBlob, log, messageCollector, context, nameof(AssignedBadgeToAttendance));
+            await (new NotifyEmails()).Notify(new NotifyAssignedBadgeToMemberMakeEmail(), myQueueItem, myBlob, log, messageCollector, context, nameof(AssignedBadgeToMember));
 
         }
 
@@ -35,15 +35,13 @@ namespace NetBaires.Services
 
         [FunctionName("NotifiedSpeakersEventEnd")]
         public static async Task NotifiedSpeakersEventEnd([QueueTrigger(nameof(NotifiedSpeakersEventEnd), Connection = "")]string myQueueItem,
-            [Blob("templates/emails/NotifyToThankSponsors.html", FileAccess.Read)] Stream myBlob,
+            [Blob("templates/emails/NotifyToThankSpeakers.html", FileAccess.Read)] Stream myBlob,
             ILogger log,
             [SendGrid(ApiKey = "CustomSendGridKeyAppSettingName")] IAsyncCollector<SendGridMessage> messageCollector,
             ExecutionContext context)
         {
-            await (new NotifyEmails()).Notify(new NotifiedSponsorsEventEndMakeEmail(), myQueueItem, myBlob, log, messageCollector, context, nameof(NotifiedSpeakersEventEnd));
+            await (new NotifyEmails()).Notify(new NotifiedSpeakersEventEndMakeEmail(), myQueueItem, myBlob, log, messageCollector, context, nameof(NotifiedSpeakersEventEnd));
         }
-
-
 
     }
 }

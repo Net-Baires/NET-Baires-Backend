@@ -18,19 +18,20 @@ namespace NetBaires.Services.MakeEmail
             try
             {
                 log.LogInformation($"{notificationName} - Started");
-
+                var config = new ConfigurationBuilder()
+                      .SetBasePath(context.FunctionAppDirectory)
+                      .AddJsonFile("local.settings.json", true, true)
+                      .AddEnvironmentVariables()
+                      .Build();
                 StreamReader reader = new StreamReader(myBlob);
-                
+                var emailFrom = config["EmailFrom"];
                 var data = JsonSerializer.Deserialize<TData>(myQueueItem);
-                foreach (var email in makeBody.Make(data, reader, new ConfigurationBuilder()
-                    .SetBasePath(context.FunctionAppDirectory)
-                    .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                    .AddEnvironmentVariables()
-                    .Build()))
+                foreach (var email in makeBody.Make(data, reader, config))
                 {
                     var message = new SendGridMessage();
                     message.AddContent("text/html", email.Body);
-                    message.SetFrom(email.Email);
+                    message.SetFrom(emailFrom);
+                    message.AddTo(email.Email);
                     message.SetSubject(email.Subject);
                     await messageCollector.AddAsync(message);
                 }

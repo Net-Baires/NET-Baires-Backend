@@ -9,13 +9,13 @@ using NetBaires.Events.DomainEvents;
 
 namespace NetBaires.Services.MakeEmail
 {
-    public class NotifyAssignedBadgeToAttendanceMakeEmail : IMakeEmail<AssignedBadgeToAttendance>
+    public class NotifyAssignedBadgeToMemberMakeEmail : IMakeEmail<AssignedBadgeToMember>
     {
         private string _memberName;
         private Badge _badge;
         private Member _member;
 
-        public List<EmailToSend> Make(AssignedBadgeToAttendance data, StreamReader reader, IConfigurationRoot config)
+        public List<EmailToSend> Make(AssignedBadgeToMember data, StreamReader reader, IConfigurationRoot config)
         {
             var currentEnvironment = config["CurrentEnvironment"];
             var connectionString = config["ConnectionString"];

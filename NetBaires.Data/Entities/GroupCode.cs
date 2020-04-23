@@ -71,7 +71,7 @@ namespace NetBaires.Data.Entities
 
             foreach (var groupCodeMember in Members)
                 if (groupCodeMember.Member.AssignBadge(badge).SuccessResult)
-                    AddDomainEvent(new AssignedBadgeToAttendance(groupCodeMember.MemberId, badge.Id));
+                    AddDomainEvent(new AssignedBadgeToMember(groupCodeMember.MemberId, badge.Id));
 
             GroupCodeBadges.Add(new GroupCodeBadge(this, badge));
             return DomainResponse.Ok();

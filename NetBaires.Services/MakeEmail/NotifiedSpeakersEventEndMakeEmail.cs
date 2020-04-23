@@ -27,12 +27,12 @@ namespace NetBaires.Services.MakeEmail
                                                             INNER JOIN Events E
                                                             ON E.Id = A.EventId
                                                             WHERE E.Id = {data.EventId} AND Speaker = 1").ToList();
+                var template = reader.ReadToEnd();
                 foreach (var member in _members)
                 {
                     var memberProfileBuilder = new StringBuilder(config["EventLink"]);
-
                     var speakerName = $"{member.FirstName} {member.LastName}";
-                    var builder = new StringBuilder(reader.ReadToEnd());
+                    var builder = new StringBuilder(template);
                     builder.Replace("{{EventTitle}}", member.Title);
                     builder.Replace("{{SpeakerName}}", speakerName);
                     memberProfileBuilder.Replace("{{MemberId}}", member.Id.ToString());

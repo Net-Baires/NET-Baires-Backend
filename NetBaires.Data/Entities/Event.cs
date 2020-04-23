@@ -83,7 +83,7 @@ namespace NetBaires.Data.Entities
                         BadgeId = badge.Id,
                         MemberId = item.MemberId
                     });
-                    AddDomainEvent(new AssignedBadgeToAttendance(item.MemberId, badge.Id));
+                    AddDomainEvent(new AssignedBadgeToMember(item.MemberId, badge.Id));
                 }
             return DomainResponse.Ok();
         }
@@ -122,7 +122,7 @@ namespace NetBaires.Data.Entities
                 BadgeId = badge.Id,
                 MemberId = member.Id
             });
-            AddDomainEvent(new AssignedBadgeToAttendance(member.Id, badge.Id));
+            AddDomainEvent(new AssignedBadgeToMember(member.Id, badge.Id));
             return DomainResponse.Ok();
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NetBaires.Events.DomainEvents;
 
 namespace NetBaires.Data.Entities
 {
@@ -40,6 +41,7 @@ namespace NetBaires.Data.Entities
             if (Badges.Any(x => x.BadgeId == badge.Id))
                 return DomainResponse.Error("Este miembro ya tiene el badge");
             Badges.Add(new BadgeMember(badge, this));
+            AddDomainEvent(new AssignedBadgeToMember(this.Id, badge.Id));
             return DomainResponse.Ok();
         }
         public void Follow(Member member)
