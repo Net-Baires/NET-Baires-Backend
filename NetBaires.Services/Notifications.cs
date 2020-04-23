@@ -34,13 +34,22 @@ namespace NetBaires.Services
 
 
         [FunctionName("NotifiedSpeakersEventEnd")]
-        public static async Task NotifiedSpeakersEventEnd([QueueTrigger(nameof(NotifiedSpeakersEventEnd), Connection = "")]string myQueueItem,
+        public static async Task NotifiedSpeakersEventEnd([QueueTrigger(nameof(Events.DomainEvents.NotifiedSpeakersEventEnd), Connection = "")]string myQueueItem,
             [Blob("templates/emails/NotifyToThankSpeakers.html", FileAccess.Read)] Stream myBlob,
             ILogger log,
             [SendGrid(ApiKey = "CustomSendGridKeyAppSettingName")] IAsyncCollector<SendGridMessage> messageCollector,
             ExecutionContext context)
         {
-            await (new NotifyEmails()).Notify(new NotifiedSpeakersEventEndMakeEmail(), myQueueItem, myBlob, log, messageCollector, context, nameof(NotifiedSpeakersEventEnd));
+            await (new NotifyEmails()).Notify(new NotifiedSpeakersEventEndMakeEmail(), myQueueItem, myBlob, log, messageCollector, context, nameof(Events.DomainEvents.NotifiedSpeakersEventEnd));
+        }
+        [FunctionName("NotifiedAttendedEventEnd")]
+        public static async Task NotifiedAttendedEventEnd([QueueTrigger(nameof(Events.DomainEvents.NotifiedAttendedEventEnd), Connection = "")]string myQueueItem,
+            [Blob("templates/emails/NotifiedAttendedEventEnd.html", FileAccess.Read)] Stream myBlob,
+            ILogger log,
+            [SendGrid(ApiKey = "CustomSendGridKeyAppSettingName")] IAsyncCollector<SendGridMessage> messageCollector,
+            ExecutionContext context)
+        {
+            await (new NotifyEmails()).Notify(new NotifiedAttendedEventEndMakeEmail(), myQueueItem, myBlob, log, messageCollector, context, nameof(Events.DomainEvents.NotifiedAttendedEventEnd));
         }
 
     }
