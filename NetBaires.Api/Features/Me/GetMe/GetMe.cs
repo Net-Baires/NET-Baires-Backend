@@ -45,7 +45,7 @@ namespace NetBaires.Api.Features.Me.GetMe
             var memberToResponse = _mapper.Map(member, new MemberDetailViewModel());
 
             memberToResponse.FollowedMembers = await _context.FollowingMembers.Cacheable()
-                                                        .Where(x => x.FollowingId == currentMemberId)
+                                                        .Where(x => x.Following.Id == currentMemberId)
                                                         .Select(x => x.Member.Id)
                                                         .ToListAsync(cancellationToken);
 

@@ -2,7 +2,7 @@
 {
     public class NotifiedSponsorsEventEnd : IDomainEvents
     {
-        public int EventId { get; }
+        public int EventId { get; set; }
 
         public NotifiedSponsorsEventEnd(int eventId)
         {
@@ -11,7 +11,7 @@
 
         public NotifiedSponsorsEventEnd()
         {
-            
+
         }
     }
 }

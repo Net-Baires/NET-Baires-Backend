@@ -3,7 +3,7 @@ using System;
 
 namespace NetBaires.Data.Entities
 {
-    public class FollowingMember : Entity
+    public class FollowingMember :Entity
     {
         public int? MemberId { get; set; }
         public Member? Member { get; set; }

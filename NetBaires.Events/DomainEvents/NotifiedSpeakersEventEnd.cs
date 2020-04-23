@@ -2,7 +2,7 @@
 {
     public class NotifiedSpeakersEventEnd : IDomainEvents
     {
-        public int EventId { get; }
+        public int EventId { get; set; }
 
         public NotifiedSpeakersEventEnd(int eventId)
         {
@@ -11,7 +11,7 @@
 
         public NotifiedSpeakersEventEnd()
         {
-            
+
         }
     }
 }

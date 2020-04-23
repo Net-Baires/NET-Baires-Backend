@@ -31,6 +31,7 @@ namespace NetBaires.Api.ViewModels
         public int EventsAttended { get; set; }
         public int EventsNoAttended { get; set; }
         public bool Following { get; set; }
+        public bool Followed { get; set; }
 
         public class MemberDetailViewModelProfile : Profile
         {

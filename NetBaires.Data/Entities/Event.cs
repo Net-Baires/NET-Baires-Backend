@@ -207,8 +207,8 @@ namespace NetBaires.Data.Entities
                      {
                          if (!x.Attended && !x.NotifiedAbsence)
                              x.NoAttend();
-                         if (x.Attended)
-                             AddDomainEvent(new notifiedAttendedEventEnd(Id, x.MemberId, completeEvent.SendMaterialToAttendees));
+                         if (x.Attended && completeEvent.ThanksAttendees)
+                             AddDomainEvent(new NotifiedAttendedEventEnd(Id, x.MemberId, completeEvent.SendMaterialToAttendees));
                      });
             if (completeEvent.ThanksSpeakers)
                 AddDomainEvent(new NotifiedSpeakersEventEnd(Id));

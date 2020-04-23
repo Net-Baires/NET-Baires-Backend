@@ -28,12 +28,11 @@ namespace NetBaires.Api.Features.Members.GetFollowingsFromMember
 
         public async Task<IActionResult> Handle(GetFollowingsFromMemberQuery request, CancellationToken cancellationToken)
         {
-            var followings = await _context.Members.Where(x=> x.Id ==request.Id).Take(1)
-                .SelectMany(x=> x.FollowingMembers)
+            var followings = await _context.FollowingMembers.Where(x=> x.Following.Id == request.Id)
                 .Select(s=> new GetFollowingsFromMemberQuery.Response
                 {
                     FollowingDate =  s.FollowingDate,
-                    Member =  _mapper.Map<MemberDetailViewModel>(s.Following)
+                    Member =  _mapper.Map<MemberDetailViewModel>(s.Member)
                 })
                 .ToListAsync(cancellationToken: cancellationToken);
 

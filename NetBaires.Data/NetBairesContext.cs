@@ -96,16 +96,13 @@ namespace NetBaires.Data
                 .HasForeignKey(sc => sc.BadgeId);
 
 
-
+            //modelBuilder.Entity<FollowingMember>().HasKey(sc => new { sc.FollowingId, sc.MemberId });
             modelBuilder.Entity<FollowingMember>()
                 .HasOne(x => x.Member)
                 .WithMany(x => x.FollowingMembers)
                 .HasForeignKey(sc => sc.FollowingId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
-
-
-
 
 
             modelBuilder.Entity<BadgeMember>()

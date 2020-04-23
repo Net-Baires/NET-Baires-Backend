@@ -30,8 +30,10 @@ namespace NetBaires.Api.Features.Members.UnFollowMember
 
         public async Task<IActionResult> Handle(UnFollowMemberCommand request, CancellationToken cancellationToken)
         {
-            var me = await _context.Members.FirstOrDefaultAsync(x => x.Id == _currentUser.User.Id);
-            var following = await _context.FollowingMembers.FirstOrDefaultAsync(x => x.Member.Id == _currentUser.User.Id
+            var me = await _context.Members.Include(x=> x.FollowingMembers).FirstOrDefaultAsync(x => x.Id == _currentUser.User.Id);
+            var following = await _context.FollowingMembers.Include(x=> x.Member)
+                .Include(x=> x.Following)
+                .FirstOrDefaultAsync(x => x.Member.Id == _currentUser.User.Id
                                                                                                      &&
                                                                                                      x.Following.Id == request.MemberId);
             if (following == null)

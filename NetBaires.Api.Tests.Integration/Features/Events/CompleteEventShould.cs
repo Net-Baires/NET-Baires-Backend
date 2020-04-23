@@ -61,7 +61,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
                 new StringContent(JsonConvert.SerializeObject(command), Encoding.UTF8, "application/json"));
 
 
-            var list = QueueServices.GetMessages<notifiedAttendedEventEnd>();
+            var list = QueueServices.GetMessages<NotifiedAttendedEventEnd>();
             list.Count.Should().Be(2);
             list.ToList().Any(x => x.MemberId == memberAttended.Id
                                    &&
@@ -83,7 +83,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
                 new StringContent(JsonConvert.SerializeObject(command), Encoding.UTF8, "application/json"));
 
 
-            var list = QueueServices.GetMessages<notifiedAttendedEventEnd>();
+            var list = QueueServices.GetMessages<NotifiedAttendedEventEnd>();
             list.Count.Should().Be(1);
             list.ToList().Any(x => x.EventId == eventToAdd.Id
                                    &&
@@ -156,7 +156,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
 
         public override void Dispose()
         {
-            QueueServices.Clear<notifiedAttendedEventEnd>();
+            QueueServices.Clear<NotifiedAttendedEventEnd>();
             QueueServices.Clear<NotifiedSpeakersEventEnd>();
             QueueServices.Clear<NotifiedSponsorsEventEnd>();
 

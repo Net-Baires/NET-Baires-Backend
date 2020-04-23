@@ -32,10 +32,12 @@ namespace NetBaires.Api.Tests.Integration.Features.Members
             var member = Context.Members.Include(x => x.FollowingMembers)
                 .ThenInclude(x => x.Following)
                 .First(x => x.Email == "admin@admin.com");
-            member.Follow(memberToFollow);
-            member.Follow(memberToFollow2);
+            memberToFollow.Follow(member);
             Context.SaveChanges();
 
+            memberToFollow2.Follow(member);
+            Context.SaveChanges();
+            RefreshContext();
             var response = await HttpClient.GetAsync($"/members/{member.Id}/followings");
             var memberResponse = await response.Content.ReadAsAsync<List<GetFollowingsFromMemberQuery.Response>>();
 

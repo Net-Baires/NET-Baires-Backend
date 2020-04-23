@@ -25,6 +25,12 @@
     <Compile Remove="Migrations\20200421230732_Add_Materials_2.Designer.cs" />
     <Compile Remove="Migrations\20200422013959_Update_Sponsor_Add_Email.cs" />
     <Compile Remove="Migrations\20200422013959_Update_Sponsor_Add_Email.Designer.cs" />
+    <Compile Remove="Migrations\20200422233643_Update_Following_Member.cs" />
+    <Compile Remove="Migrations\20200422233643_Update_Following_Member.Designer.cs" />
+    <Compile Remove="Migrations\20200423003031_Update_Following_Member_2.cs" />
+    <Compile Remove="Migrations\20200423003031_Update_Following_Member_2.Designer.cs" />
+    <Compile Remove="Migrations\20200423004835_Update_Following_Member.cs" />
+    <Compile Remove="Migrations\20200423004835_Update_Following_Member.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
