@@ -23,6 +23,7 @@ namespace NetBaires.Data
 
         }
         public DbSet<Sponsor> Sponsors { get; set; }
+        public DbSet<Template> Templates { get; set; }
         public DbSet<Member> Members { get; set; }
         public DbSet<FollowingMember> FollowingMembers { get; set; }
 
@@ -84,6 +85,34 @@ namespace NetBaires.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
+            //var cascadeFKs = modelBuilder.Model.GetEntityTypes()
+            //    .SelectMany(t => t.GetForeignKeys())
+            //    .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
+
+            //foreach (var fk in cascadeFKs)
+            //    fk.DeleteBehavior = DeleteBehavior.Restrict;
+
+            modelBuilder
+                .Entity<Event>()
+                .HasOne(x => x.EmailTemplateThanksSpeakers)
+                .WithMany(x => x.EventsThanksSpeakers)
+                .HasForeignKey(x => x.EmailTemplateThanksSpeakersId)
+                .IsRequired(false);
+
+
+            modelBuilder
+                .Entity<Event>()
+                .HasOne(x => x.EmailTemplateThanksSponsors)
+                .WithMany(x => x.EventsThanksThanksSponsors)
+                .HasForeignKey(x => x.EmailTemplateThanksSponsorsId)
+                .IsRequired(false);
+
+            modelBuilder
+                .Entity<Event>()
+                .HasOne(x => x.EmailTemplateThanksAttended)
+                .WithMany(x => x.EventsThanksAttended)
+                .HasForeignKey(x => x.EmailTemplateThanksAttendedId)
+                .IsRequired(false);
 
             modelBuilder
                 .Entity<Member>()

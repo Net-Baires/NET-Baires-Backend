@@ -17,7 +17,10 @@ namespace NetBaires.Api.Features.Events.UpdateEvent
         public string OnlineLink { get; set; }
         public bool? GeneralAttended { get; set; }
         public List<SponsorEventViewModel> Sponsors { get; set; }
-       
+        public int? EmailTemplateThanksSponsorsId { get; set; }
+        public int? EmailTemplateThanksSpeakersId { get; set; }
+        public int? EmailTemplateThanksAttendedId { get; set; }
+
     }
     public class SponsorEventViewModel
     {

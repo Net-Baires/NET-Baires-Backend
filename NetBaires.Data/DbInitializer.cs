@@ -27,6 +27,31 @@ namespace NetBaires.Data
                 });
             }
 
+            if (!context.Templates.Any(x => x.Type == TemplateTypeEnum.EmailTemplateThanksAttended))
+                context.Templates.AddAsync(new Template
+                {
+                    Name = "Agradecimiento a asistentes del evento Mensual NET-Baires",
+                    Description = "Template para el envio mensual",
+                    TemplateContent = "",
+                    Type = TemplateTypeEnum.EmailTemplateThanksAttended
+                });
+            if (!context.Templates.Any(x => x.Type == TemplateTypeEnum.EmailTemplateThanksSponsors))
+                context.Templates.AddAsync(new Template
+                {
+                    Name = "Agradecimiento a sponsors de evento Mensual NET-Baires",
+                    Description = "Template para el envio mensual",
+                    TemplateContent = "",
+                    Type = TemplateTypeEnum.EmailTemplateThanksSponsors
+                });
+            if (!context.Templates.Any(x => x.Type == TemplateTypeEnum.EmailTemplateThanksSpeakers))
+                context.Templates.AddAsync(new Template
+                {
+                    Name = "Agradecimiento a Speakers del evento Mensual NET-Baires",
+                    Description = "Template para el envio mensual",
+                    TemplateContent = "",
+                    Type = TemplateTypeEnum.EmailTemplateThanksSpeakers
+                });
+
             context.Database.Migrate();
             context.SaveChanges();
         }

@@ -10,6 +10,7 @@ using NetBaires.Data;
 using NetBaires.Api.Services;
 using NetBaires.Api.Services.Sync;
 using System.Linq;
+using AutoFixture;
 using NetBaires.Host;
 
 namespace NetBaires.Api.Tests.Integration
@@ -21,6 +22,7 @@ namespace NetBaires.Api.Tests.Integration
         private readonly CustomWebApplicationFactory<Startup>
             _factory;
         protected IUserService UserService;
+        protected Fixture Fixture = new Fixture();
 
         protected IFilesServices FileServices;
         protected ISyncServices SyncServices;
