@@ -51,6 +51,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
             eventToTest.Attendees.First().DidNotAttend.Should().BeFalse();
             eventToTest.Attendees.First().DoNotKnow.Should().BeFalse();
             eventToTest.Attendees.First().NotifiedAbsence.Should().BeFalse();
+            eventToTest.Attendees.First().AttendanceRegisterType.Should().Be(AttendanceRegisterType.CurrentEvent);
         }
         [Fact]
         public async Task Does_Not_Report_Attendance_Event_Has_not_GeneralAttended()

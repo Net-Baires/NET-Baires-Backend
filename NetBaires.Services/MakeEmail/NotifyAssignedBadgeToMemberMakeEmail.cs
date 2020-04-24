@@ -24,6 +24,8 @@ namespace NetBaires.Services.MakeEmail
 
             using (var connection = new SqlConnection(connectionString))
             {
+                var memberProfileBuilder = new StringBuilder(config["MemberProfileLink"]);
+
                 var template = connection
                     .Query<Template>($"SELECT TemplateContent FROM Templates Where Type = 3")
                     .FirstOrDefault();
@@ -36,6 +38,9 @@ namespace NetBaires.Services.MakeEmail
                 builder.Replace("{{MemberName}}", _memberName);
 
                 _badge = connection.Query<Badge>($"SELECT ImageUrl,Name,Description FROM Badges WHERE ID = {data.BadgeId}").FirstOrDefault();
+                memberProfileBuilder.Replace("{{MemberId}}", data.MemberId.ToString());
+                builder.Replace("{{MemberProfileLink}}",
+                    string.Concat(currentEnvironment, memberProfileBuilder.ToString()));
 
                 builder.Replace("{{BadgeName}}", _badge.Name);
                 builder.Replace("{{BadgeImageUrl}}", _badge.ImageUrl);

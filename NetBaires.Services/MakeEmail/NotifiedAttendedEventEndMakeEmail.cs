@@ -27,10 +27,10 @@ namespace NetBaires.Services.MakeEmail
                 var member = connection.Query<Member>($"SELECT Email, FirstName, LastName FROM Members WHERE Id = {data.MemberId}").FirstOrDefault();
 
                 var template = connection
-                    .Query<Template>($"SELECT TemplateContent FROM Templates Where Id = {data.EventId}")
+                    .Query<Template>($"SELECT TemplateContent FROM Templates Where Id = {@event.EmailTemplateThanksAttendedId}")
                     .FirstOrDefault();
 
-                var memberProfileBuilder = new StringBuilder(config["EventLink"]);
+                var memberProfileBuilder = new StringBuilder(config["MemberProfileLink"]);
                 var memberName = $"{member.FirstName} {member.LastName}";
 
                 var builder = new StringBuilder(template.TemplateContent);

@@ -21,18 +21,18 @@ namespace NetBaires.Services.MakeEmail
             using (var connection = new SqlConnection(connectionString))
             {
                 _members = connection.Query<Member>(
-                    @$"SELECT E.Title,M.Id, M.FirstName, M.LastName, M.Email FROM Attendances A
+                    @$"SELECT E.Title,M.Id, M.FirstName, M.LastName, M.Email,E.EmailTemplateThanksSpeakersId FROM Attendances A
                                                             INNER JOIN Members M
                                                             ON A.MemberId = M.Id
                                                             INNER JOIN Events E
                                                             ON E.Id = A.EventId
                                                             WHERE E.Id = {data.EventId} AND Speaker = 1").ToList();
                 var template = connection
-                    .Query<Template>($"SELECT TemplateContent FROM Templates Where Id = {data.EventId}")
+                    .Query<Template>($"SELECT TemplateContent FROM Templates Where Id = {_members.First().EmailTemplateThanksSpeakersId}")
                     .FirstOrDefault();
                 foreach (var member in _members)
                 {
-                    var memberProfileBuilder = new StringBuilder(config["EventLink"]);
+                    var memberProfileBuilder = new StringBuilder(config["MemberProfileLink"]);
                     var speakerName = $"{member.FirstName} {member.LastName}";
                     var builder = new StringBuilder(template.TemplateContent);
                     builder.Replace("{{EventTitle}}", member.Title);
@@ -61,6 +61,7 @@ namespace NetBaires.Services.MakeEmail
             public string Email { get; set; }
             public string FirstName { get; set; }
             public string LastName { get; set; }
+            public int EmailTemplateThanksSpeakersId { get; set; }
         }
     }
 }

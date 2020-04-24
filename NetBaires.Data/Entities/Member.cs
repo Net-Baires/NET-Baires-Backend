@@ -11,6 +11,7 @@ namespace NetBaires.Data.Entities
         public List<FollowingMember> FollowingMembers { get; set; } = new List<FollowingMember>();
         public List<PushNotificationInformation> PushNotifications { get; set; } = new List<PushNotificationInformation>();
         public long MeetupId { get; set; }
+        public string EventbriteId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Username { get; set; }

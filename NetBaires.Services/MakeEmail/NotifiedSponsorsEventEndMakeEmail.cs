@@ -25,11 +25,11 @@ namespace NetBaires.Services.MakeEmail
                                                                 on S.Id = SE.SponsorId
                                                                 INNER JOIN Events E ON E.Id = SE.EventId
                                                                 WHERE E.Id = {data.EventId}").ToList();
-                var @event = connection.Query<Event>($"SELECT Id,Title,Description FROM Events where Id = {data.EventId}")
+                var @event = connection.Query<Event>($"SELECT Id,Title,Description,EmailTemplateThanksSponsorsId FROM Events where Id = {data.EventId}")
                     .FirstOrDefault();
                 eventLinkBuilder.Replace("{{EventId}}", @event.Id.ToString());
                 var template = connection
-                    .Query<Template>($"SELECT TemplateContent FROM Templates Where Id = {data.EventId}")
+                    .Query<Template>($"SELECT TemplateContent FROM Templates Where Id = {@event.EmailTemplateThanksSponsorsId}")
                     .FirstOrDefault();
                 foreach (var sponsor in sponsors)
                 {
@@ -63,6 +63,7 @@ namespace NetBaires.Services.MakeEmail
             public int Id { get; set; }
             public string Title { get; set; }
             public string Description { get; set; }
+            public int EmailTemplateThanksSponsorsId { get; set; }
         }
 
 
