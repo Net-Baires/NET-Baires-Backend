@@ -12,7 +12,7 @@ namespace NetBaires.Services.MakeEmail
     public class NotifiedSponsorsEventEndMakeEmail : IMakeEmail<NotifiedSponsorsEventEnd>
     {
 
-        public List<EmailToSend> Make(NotifiedSponsorsEventEnd data, StreamReader reader, IConfigurationRoot config)
+        public List<EmailToSend> Make(NotifiedSponsorsEventEnd data,  IConfigurationRoot config)
         {
             var returnList = new List<EmailToSend>();
             var currentEnvironment = config["CurrentEnvironment"];
@@ -28,10 +28,12 @@ namespace NetBaires.Services.MakeEmail
                 var @event = connection.Query<Event>($"SELECT Id,Title,Description FROM Events where Id = {data.EventId}")
                     .FirstOrDefault();
                 eventLinkBuilder.Replace("{{EventId}}", @event.Id.ToString());
-
+                var template = connection
+                    .Query<Template>($"SELECT TemplateContent FROM Templates Where Id = {data.EventId}")
+                    .FirstOrDefault();
                 foreach (var sponsor in sponsors)
                 {
-                    var builder = new StringBuilder(reader.ReadToEnd());
+                    var builder = new StringBuilder(template.TemplateContent);
                     builder.Replace("{{EventTitle}}", @event.Title);
                     builder.Replace("{{SponsorName}}", sponsor.Name);
                     builder.Replace("{{EventDescription}}", @event.Description);

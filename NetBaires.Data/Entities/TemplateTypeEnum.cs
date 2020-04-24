@@ -4,6 +4,7 @@
     {
         EmailTemplateThanksSponsors,
         EmailTemplateThanksSpeakers,
-        EmailTemplateThanksAttended
+        EmailTemplateThanksAttended,
+        EmailTemplateAssignedBadgeToMember
     }
 }

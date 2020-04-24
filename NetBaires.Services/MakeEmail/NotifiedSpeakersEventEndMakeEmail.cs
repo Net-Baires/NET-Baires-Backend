@@ -13,7 +13,7 @@ namespace NetBaires.Services.MakeEmail
     {
         private List<Member> _members;
 
-        public List<EmailToSend> Make(NotifiedSpeakersEventEnd data, StreamReader reader, IConfigurationRoot config)
+        public List<EmailToSend> Make(NotifiedSpeakersEventEnd data, IConfigurationRoot config)
         {
             var returnList = new List<EmailToSend>();
             var currentEnvironment = config["CurrentEnvironment"];
@@ -27,12 +27,14 @@ namespace NetBaires.Services.MakeEmail
                                                             INNER JOIN Events E
                                                             ON E.Id = A.EventId
                                                             WHERE E.Id = {data.EventId} AND Speaker = 1").ToList();
-                var template = reader.ReadToEnd();
+                var template = connection
+                    .Query<Template>($"SELECT TemplateContent FROM Templates Where Id = {data.EventId}")
+                    .FirstOrDefault();
                 foreach (var member in _members)
                 {
                     var memberProfileBuilder = new StringBuilder(config["EventLink"]);
                     var speakerName = $"{member.FirstName} {member.LastName}";
-                    var builder = new StringBuilder(template);
+                    var builder = new StringBuilder(template.TemplateContent);
                     builder.Replace("{{EventTitle}}", member.Title);
                     builder.Replace("{{SpeakerName}}", speakerName);
                     memberProfileBuilder.Replace("{{MemberId}}", member.Id.ToString());

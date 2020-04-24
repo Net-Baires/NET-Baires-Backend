@@ -40,7 +40,8 @@ namespace NetBaires.Api.Auth
 
         public UserService(NetBairesContext context,
         IMapper mapper,
-         IHttpContextAccessor httpContextAccessor, IOptions<AppSettings> appSettings)
+         IHttpContextAccessor httpContextAccessor,
+        IOptions<AppSettings> appSettings)
         {
             _context = context;
             this.mapper = mapper;
@@ -112,19 +113,28 @@ namespace NetBaires.Api.Auth
                 new CustomClaim(ClaimTypes.Role, rol.ToString())
             }, DateTime.UtcNow.AddDays(30)));
         }
-        public async Task<AuthenticateUser> AuthenticateOrCreate(string email)
+        public async Task<AuthenticateUser> AuthenticateOrCreate(string email, long meetupId)
         {
-            var user = _context.Members.SingleOrDefault(x => x.Email.ToUpper() == email.ToUpper());
+            var user = await _context.Members.FirstOrDefaultAsync(x => x.Email.ToUpper() == email.ToUpper()
+                                         ||
+                                         x.MeetupId == meetupId);
             if (user == null)
             {
                 user = new Member
                 {
                     Email = email,
+                    MeetupId = meetupId,
                     Role = UserRole.Member
                 };
                 await _context.Members.AddAsync(user);
                 await _context.SaveChangesAsync();
             }
+            else if (string.IsNullOrWhiteSpace(user.Email))
+            {
+                user.Email = email;
+                await _context.SaveChangesAsync();
+            }
+
             return new AuthenticateUser(TokenService.Generate(_appSettings.Secret, new List<CustomClaim>
             {
                 new CustomClaim(EnumClaims.UserId.ToString().LowercaseFirst(), user.Id.ToString()),

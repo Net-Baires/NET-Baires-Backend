@@ -17,39 +17,36 @@ namespace NetBaires.Services
             [SendGrid(ApiKey = "CustomSendGridKeyAppSettingName")] IAsyncCollector<SendGridMessage> messageCollector,
             ExecutionContext context)
         {
-            await (new NotifyEmails()).Notify(new NotifyAssignedBadgeToMemberMakeEmail(), myQueueItem, myBlob, log, messageCollector, context, nameof(AssignedBadgeToMember));
+            await (new NotifyEmails()).Notify(new NotifyAssignedBadgeToMemberMakeEmail(), myQueueItem, log, messageCollector, context, nameof(AssignedBadgeToMember));
 
         }
 
 
         [FunctionName("NotifiedSponsorsEventEnd")]
         public static async Task NotifyToThankSponsors([QueueTrigger(nameof(NotifiedSponsorsEventEnd), Connection = "")]string myQueueItem,
-            [Blob("templates/emails/NotifyToThankSponsors.html", FileAccess.Read)] Stream myBlob,
             ILogger log,
             [SendGrid(ApiKey = "CustomSendGridKeyAppSettingName")] IAsyncCollector<SendGridMessage> messageCollector,
             ExecutionContext context)
         {
-            await (new NotifyEmails()).Notify(new NotifiedSponsorsEventEndMakeEmail(), myQueueItem, myBlob, log, messageCollector, context, nameof(NotifiedSponsorsEventEnd));
+            await (new NotifyEmails()).Notify(new NotifiedSponsorsEventEndMakeEmail(), myQueueItem, log, messageCollector, context, nameof(NotifiedSponsorsEventEnd));
         }
 
 
         [FunctionName("NotifiedSpeakersEventEnd")]
         public static async Task NotifiedSpeakersEventEnd([QueueTrigger(nameof(Events.DomainEvents.NotifiedSpeakersEventEnd), Connection = "")]string myQueueItem,
-            [Blob("templates/emails/NotifyToThankSpeakers.html", FileAccess.Read)] Stream myBlob,
             ILogger log,
             [SendGrid(ApiKey = "CustomSendGridKeyAppSettingName")] IAsyncCollector<SendGridMessage> messageCollector,
             ExecutionContext context)
         {
-            await (new NotifyEmails()).Notify(new NotifiedSpeakersEventEndMakeEmail(), myQueueItem, myBlob, log, messageCollector, context, nameof(Events.DomainEvents.NotifiedSpeakersEventEnd));
+            await (new NotifyEmails()).Notify(new NotifiedSpeakersEventEndMakeEmail(), myQueueItem, log, messageCollector, context, nameof(Events.DomainEvents.NotifiedSpeakersEventEnd));
         }
         [FunctionName("NotifiedAttendedEventEnd")]
         public static async Task NotifiedAttendedEventEnd([QueueTrigger(nameof(Events.DomainEvents.NotifiedAttendedEventEnd), Connection = "")]string myQueueItem,
-            [Blob("templates/emails/NotifiedAttendedEventEnd.html", FileAccess.Read)] Stream myBlob,
             ILogger log,
             [SendGrid(ApiKey = "CustomSendGridKeyAppSettingName")] IAsyncCollector<SendGridMessage> messageCollector,
             ExecutionContext context)
         {
-            await (new NotifyEmails()).Notify(new NotifiedAttendedEventEndMakeEmail(), myQueueItem, myBlob, log, messageCollector, context, nameof(Events.DomainEvents.NotifiedAttendedEventEnd));
+            await (new NotifyEmails()).Notify(new NotifiedAttendedEventEndMakeEmail(), myQueueItem, log, messageCollector, context, nameof(Events.DomainEvents.NotifiedAttendedEventEnd));
         }
 
     }

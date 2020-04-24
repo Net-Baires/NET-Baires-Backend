@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using NetBaires.Api.Auth;
 using NetBaires.Data;
 using NetBaires.Data.Entities;
 using NetBaires.Host;
@@ -10,7 +11,35 @@ using Xunit;
 
 namespace NetBaires.Api.Tests.Integration.Services
 {
+    public class UserServiceShould : IntegrationTestsBase
+    {
 
+        public UserServiceShould(CustomWebApplicationFactory<Startup> factory) : base(factory)
+        {
+            AuthenticateAdminAsync().GetAwaiter().GetResult();
+        }
+
+        [Fact]
+        public async Task Login_With_The_Existed_Member()
+        {
+            var email = "test@test.com";
+            var newMember = new Member
+            {
+                MeetupId = 1231243123
+            };
+            Context.Members.Add(newMember);
+            Context.SaveChanges();
+            var result = await UserService.AuthenticateOrCreate(email, newMember.MeetupId);
+            RefreshContext();
+            var members = await Context.Members.Where(x => x.MeetupId == newMember.MeetupId
+                                       ||
+                                       x.Email == email).ToListAsync();
+            members.Count.Should().Be(1);
+            members.First().MeetupId.Should().Be(newMember.MeetupId);
+            members.First().Email.Should().Be(email);
+        }
+
+    }
     public class EventBriteSyncServicesShould : IntegrationTestsBase
     {
         private Event _event;
@@ -32,7 +61,7 @@ namespace NetBaires.Api.Tests.Integration.Services
                         },
                         Attended = false
                     }
-                   
+
                 }
 
             };

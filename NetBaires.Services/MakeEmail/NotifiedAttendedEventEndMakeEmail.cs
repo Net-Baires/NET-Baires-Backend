@@ -9,10 +9,12 @@ using NetBaires.Events.DomainEvents;
 
 namespace NetBaires.Services.MakeEmail
 {
+
+
     public class NotifiedAttendedEventEndMakeEmail : IMakeEmail<NotifiedAttendedEventEnd>
     {
 
-        public List<EmailToSend> Make(NotifiedAttendedEventEnd data, StreamReader reader, IConfigurationRoot config)
+        public List<EmailToSend> Make(NotifiedAttendedEventEnd data, IConfigurationRoot config)
         {
             var returnList = new List<EmailToSend>();
             var currentEnvironment = config["CurrentEnvironment"];
@@ -21,16 +23,17 @@ namespace NetBaires.Services.MakeEmail
             {
 
 
-                var @event = connection.Query<Event>($"SELECT Title FROM Events WHERE Id = {data.EventId}").FirstOrDefault();
+                var @event = connection.Query<Event>($"SELECT Title, EmailTemplateThanksAttendedId FROM Events WHERE Id = {data.EventId}").FirstOrDefault();
                 var member = connection.Query<Member>($"SELECT Email, FirstName, LastName FROM Members WHERE Id = {data.MemberId}").FirstOrDefault();
 
-                var template = reader.ReadToEnd();
-
+                var template = connection
+                    .Query<Template>($"SELECT TemplateContent FROM Templates Where Id = {data.EventId}")
+                    .FirstOrDefault();
 
                 var memberProfileBuilder = new StringBuilder(config["EventLink"]);
                 var memberName = $"{member.FirstName} {member.LastName}";
 
-                var builder = new StringBuilder(template);
+                var builder = new StringBuilder(template.TemplateContent);
 
                 if (data.SendMaterialToAttendee)
                 {
@@ -76,6 +79,7 @@ namespace NetBaires.Services.MakeEmail
         public class Event
         {
             public string Title { get; set; }
+            public int EmailTemplateThanksAttendedId { get; set; }
         }
         public class Member
         {
@@ -83,5 +87,10 @@ namespace NetBaires.Services.MakeEmail
             public string FirstName { get; set; }
             public string LastName { get; set; }
         }
+    }
+
+    public class Template
+    {
+        public string TemplateContent { get; set; }
     }
 }

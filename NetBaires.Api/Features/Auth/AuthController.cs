@@ -50,7 +50,7 @@ namespace NetBaires.Api.Features.Auth
             if (result.IsSuccessStatusCode)
             {
                 var response = await result.Content.ReadAsAsync<MeetupSelf>();
-                var user = await _userService.AuthenticateOrCreate(response.email);
+                var user = await _userService.AuthenticateOrCreate(response.email, response.id);
 
                 return Ok(user);
             }
@@ -67,7 +67,7 @@ namespace NetBaires.Api.Features.Auth
             {
                 Cluster = "us2"
             });
-            var auth = pusher.Authenticate(channel_name, socket_id,new PresenceChannelData()).ToJson();
+            var auth = pusher.Authenticate(channel_name, socket_id, new PresenceChannelData()).ToJson();
             return new ContentResult { Content = auth, ContentType = "application/json" };
         }
 
@@ -77,14 +77,15 @@ namespace NetBaires.Api.Features.Auth
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
         public IActionResult EventBrite([FromBody]AuthenticateModel model)
         {
-            var email = "german.kuber@outlook.com";
+            //var email = "german.kuber@outlook.com";
 
-            var user = _userService.AuthenticateOrCreate(email);
+            //var user = _userService.AuthenticateOrCreate(email);
 
-            if (user == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
+            //if (user == null)
+            //    return BadRequest(new { message = "Username or password is incorrect" });
 
-            return Ok(user);
+            //return Ok(user);
+            return default;
         }
     }
 }

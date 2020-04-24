@@ -7,6 +7,6 @@ namespace NetBaires.Services.MakeEmail
 {
     public interface IMakeEmail<in TData>
     {
-        List<EmailToSend> Make(TData data, StreamReader reader, IConfigurationRoot config);
+        List<EmailToSend> Make(TData data, IConfigurationRoot config);
     }
 }

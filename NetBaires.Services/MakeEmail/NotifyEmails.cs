@@ -1,6 +1,4 @@
 using System;
-using System.IO;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
@@ -12,21 +10,21 @@ namespace NetBaires.Services.MakeEmail
 {
     public class NotifyEmails
     {
-        public async Task Notify<TData>(IMakeEmail<TData> makeBody, string myQueueItem, Stream myBlob, ILogger log, IAsyncCollector<SendGridMessage> messageCollector,
+        public async Task Notify<TData>(IMakeEmail<TData> makeBody, string myQueueItem, ILogger log,
+            IAsyncCollector<SendGridMessage> messageCollector,
             ExecutionContext context, string notificationName)
         {
             try
             {
                 log.LogInformation($"{notificationName} - Started");
                 var config = new ConfigurationBuilder()
-                      .SetBasePath(context.FunctionAppDirectory)
-                      .AddJsonFile("local.settings.json", true, true)
-                      .AddEnvironmentVariables()
-                      .Build();
-                StreamReader reader = new StreamReader(myBlob);
+                    .SetBasePath(context.FunctionAppDirectory)
+                    .AddJsonFile("local.settings.json", true, true)
+                    .AddEnvironmentVariables()
+                    .Build();
                 var emailFrom = config["EmailFrom"];
                 var data = JsonSerializer.Deserialize<TData>(myQueueItem);
-                foreach (var email in makeBody.Make(data, reader, config))
+                foreach (var email in makeBody.Make(data, config))
                 {
                     var message = new SendGridMessage();
                     message.AddContent("text/html", email.Body);
@@ -44,6 +42,5 @@ namespace NetBaires.Services.MakeEmail
                 throw;
             }
         }
-
     }
 }

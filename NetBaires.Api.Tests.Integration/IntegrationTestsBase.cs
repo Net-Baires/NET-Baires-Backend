@@ -79,7 +79,7 @@ namespace NetBaires.Api.Tests.Integration
         }
         protected async Task AuthenticateAsync(string email)
         {
-            var token = await UserService.AuthenticateOrCreate(email);
+            var token = await UserService.AuthenticateOrCreate(email,999);
             CleanAuthorizationHeader();
             HttpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token.Token}");
         }
@@ -92,7 +92,7 @@ namespace NetBaires.Api.Tests.Integration
 
         protected async Task AuthenticateAdminAsync()
         {
-            var token = await UserService.AuthenticateOrCreate("admin@admin.com");
+            var token = await UserService.AuthenticateOrCreate("admin@admin.com",999);
 
             CleanAuthorizationHeader();
             HttpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token.Token}");

@@ -15,15 +15,20 @@ namespace NetBaires.Services.MakeEmail
         private Badge _badge;
         private Member _member;
 
-        public List<EmailToSend> Make(AssignedBadgeToMember data, StreamReader reader, IConfigurationRoot config)
+        public List<EmailToSend> Make(AssignedBadgeToMember data, IConfigurationRoot config)
         {
+            var emailToSend = new List<EmailToSend>();
             var currentEnvironment = config["CurrentEnvironment"];
             var connectionString = config["ConnectionString"];
             var badgeLinkBuilder = new StringBuilder(config["BadgeLink"]);
 
-            var builder = new StringBuilder(reader.ReadToEnd());
             using (var connection = new SqlConnection(connectionString))
             {
+                var template = connection
+                    .Query<Template>($"SELECT TemplateContent FROM Templates Where Type = 3")
+                    .FirstOrDefault();
+                var builder = new StringBuilder(template.TemplateContent);
+
                 _member = connection.Query<Member>($"SELECT Email,FirstName,LastName FROM Members WHERE ID = {data.MemberId}").FirstOrDefault();
                 if (_member == null || string.IsNullOrWhiteSpace(_member.Email))
                     throw new UserDoesNotHaveEmailException(data.MemberId);
@@ -34,15 +39,16 @@ namespace NetBaires.Services.MakeEmail
 
                 builder.Replace("{{BadgeName}}", _badge.Name);
                 builder.Replace("{{BadgeImageUrl}}", _badge.ImageUrl);
+                badgeLinkBuilder.Replace("{{MemberId}}", data.MemberId.ToString());
+                badgeLinkBuilder.Replace("{{BadgeId}}", data.BadgeId.ToString());
 
+
+                builder.Replace("{{BadgeLink}}", string.Concat(currentEnvironment, badgeLinkBuilder.ToString()));
+                emailToSend.Add(new EmailToSend(_member.Email, builder.ToString(), GetSubject(config)));
             }
 
-            badgeLinkBuilder.Replace("{{MemberId}}", data.MemberId.ToString());
-            badgeLinkBuilder.Replace("{{BadgeId}}", data.BadgeId.ToString());
-
-
-            builder.Replace("{{BadgeLink}}", string.Concat(currentEnvironment, badgeLinkBuilder.ToString()));
-            return new List<EmailToSend> { new EmailToSend(_member.Email, builder.ToString(), GetSubject(config)) };
+           
+            return emailToSend;
         }
 
 
