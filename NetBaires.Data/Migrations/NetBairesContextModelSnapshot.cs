@@ -154,6 +154,15 @@ namespace NetBaires.Data.Migrations
                     b.Property<bool>("Done")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("EmailTemplateThanksAttendedId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("EmailTemplateThanksSpeakersId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("EmailTemplateThanksSponsorsId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("EndLiveTime")
                         .HasColumnType("datetime2");
 
@@ -196,7 +205,39 @@ namespace NetBaires.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmailTemplateThanksAttendedId");
+
+                    b.HasIndex("EmailTemplateThanksSpeakersId");
+
+                    b.HasIndex("EmailTemplateThanksSponsorsId");
+
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("NetBaires.Data.Entities.EventInformation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Visible")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("EventInformation");
                 });
 
             modelBuilder.Entity("NetBaires.Data.Entities.FollowingMember", b =>
@@ -209,17 +250,20 @@ namespace NetBaires.Data.Migrations
                     b.Property<DateTime>("FollowingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FollowingId")
+                    b.Property<int?>("FollowingId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MemberId")
+                    b.Property<int?>("FollowingId1")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MemberId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FollowingId");
 
-                    b.HasIndex("MemberId");
+                    b.HasIndex("FollowingId1");
 
                     b.ToTable("FollowingMembers");
                 });
@@ -310,7 +354,7 @@ namespace NetBaires.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("EventId")
+                    b.Property<int>("EventId")
                         .HasColumnType("int");
 
                     b.Property<string>("Link")
@@ -343,6 +387,9 @@ namespace NetBaires.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EventbriteId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("FirstLogin")
@@ -424,6 +471,9 @@ namespace NetBaires.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LogoFileName")
                         .HasColumnType("nvarchar(max)");
 
@@ -460,6 +510,30 @@ namespace NetBaires.Data.Migrations
                     b.HasIndex("EventId");
 
                     b.ToTable("SponsorEvents");
+                });
+
+            modelBuilder.Entity("NetBaires.Data.Entities.Template", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TemplateContent")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Templates");
                 });
 
             modelBuilder.Entity("NetBaires.Data.Entities.Attendance", b =>
@@ -499,19 +573,40 @@ namespace NetBaires.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("NetBaires.Data.Entities.Event", b =>
+                {
+                    b.HasOne("NetBaires.Data.Entities.Template", "EmailTemplateThanksAttended")
+                        .WithMany("EventsThanksAttended")
+                        .HasForeignKey("EmailTemplateThanksAttendedId");
+
+                    b.HasOne("NetBaires.Data.Entities.Template", "EmailTemplateThanksSpeakers")
+                        .WithMany("EventsThanksSpeakers")
+                        .HasForeignKey("EmailTemplateThanksSpeakersId");
+
+                    b.HasOne("NetBaires.Data.Entities.Template", "EmailTemplateThanksSponsors")
+                        .WithMany("EventsThanksThanksSponsors")
+                        .HasForeignKey("EmailTemplateThanksSponsorsId");
+                });
+
+            modelBuilder.Entity("NetBaires.Data.Entities.EventInformation", b =>
+                {
+                    b.HasOne("NetBaires.Data.Entities.Event", "Event")
+                        .WithMany("Information")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("NetBaires.Data.Entities.FollowingMember", b =>
                 {
-                    b.HasOne("NetBaires.Data.Entities.Member", "Following")
-                        .WithMany()
-                        .HasForeignKey("FollowingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("NetBaires.Data.Entities.Member", "Member")
                         .WithMany("FollowingMembers")
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FollowingId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("NetBaires.Data.Entities.Member", "Following")
+                        .WithMany()
+                        .HasForeignKey("FollowingId1");
                 });
 
             modelBuilder.Entity("NetBaires.Data.Entities.GroupCode", b =>
@@ -551,9 +646,11 @@ namespace NetBaires.Data.Migrations
 
             modelBuilder.Entity("NetBaires.Data.Entities.Material", b =>
                 {
-                    b.HasOne("NetBaires.Data.Entities.Event", null)
+                    b.HasOne("NetBaires.Data.Entities.Event", "Event")
                         .WithMany("Materials")
-                        .HasForeignKey("EventId");
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("NetBaires.Data.Entities.PushNotificationInformation", b =>

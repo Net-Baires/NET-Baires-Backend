@@ -29,6 +29,8 @@ namespace NetBaires.Api.Features.Events.UpdateEvent
             if (eventToUpdate == null)
                 return new StatusCodeResult(402);
 
+
+
             _mapper.Map(request, eventToUpdate);
 
             if (request?.Live == true && !eventToUpdate.Live)

@@ -61,9 +61,32 @@ namespace NetBaires.Api.Tests.Integration.Features.Members
             var memberToFollow = new Member();
             Context.Members.Add(memberToFollow);
             Context.SaveChanges();
+            RefreshContext();
             var memberLogged = Context.Members.Include(x => x.FollowingMembers)
                 .ThenInclude(x => x.Following)
                 .First(x => x.Email == "admin@admin.com");
+            memberLogged.Follow(memberToFollow);
+            Context.SaveChanges();
+
+            var response = await HttpClient.GetAsync($"/members/{memberToFollow.Id}");
+
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            var memberResponse = await response.Content.ReadAsAsync<MemberDetailViewModel>();
+            memberResponse.Following.Should().BeTrue();
+            memberResponse.Followed.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task Return_True_Current_User_Followed_By_Member()
+        {
+            var memberToFollow = new Member();
+            Context.Members.Add(memberToFollow);
+            Context.SaveChanges();
+            RefreshContext();
+            var memberLogged = Context.Members.Include(x => x.FollowingMembers)
+                .ThenInclude(x => x.Following)
+                .First(x => x.Email == "admin@admin.com");
+            memberLogged.Follow(memberToFollow);
             memberToFollow.Follow(memberLogged);
             Context.SaveChanges();
 
@@ -72,6 +95,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Members
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var memberResponse = await response.Content.ReadAsAsync<MemberDetailViewModel>();
             memberResponse.Following.Should().BeTrue();
+            memberResponse.Followed.Should().BeTrue();
         }
 
         [Fact]

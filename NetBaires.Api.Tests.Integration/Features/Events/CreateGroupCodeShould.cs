@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NetBaires.Api.Features.Events.CreateGroupCode;
-using NetBaires.Api.Features.Events.PutReportAttendance;
-using NetBaires.Data;
 using NetBaires.Data.Entities;
 using NetBaires.Host;
 using Newtonsoft.Json;

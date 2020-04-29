@@ -21,7 +21,9 @@ namespace NetBaires.Api.ViewModels
         public bool Live { get; set; }
         public bool Online { get; set; }
         public string OnlineLink { get; set; }
-
+        public int EmailTemplateThanksSponsorsId { get; set; }
+        public int EmailTemplateThanksSpeakersId { get; set; }
+        public int EmailTemplateThanksAttendedId { get; set; }
         public DateTime Date { get; set; }
         public bool IsUserRegistered { get; set; }
         public bool GeneralAttended { get; set; }

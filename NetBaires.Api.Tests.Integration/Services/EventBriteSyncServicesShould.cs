@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using NetBaires.Api.Auth;
 using NetBaires.Data;
 using NetBaires.Data.Entities;
 using NetBaires.Host;
@@ -10,7 +11,6 @@ using Xunit;
 
 namespace NetBaires.Api.Tests.Integration.Services
 {
-
     public class EventBriteSyncServicesShould : IntegrationTestsBase
     {
         private Event _event;
@@ -32,7 +32,7 @@ namespace NetBaires.Api.Tests.Integration.Services
                         },
                         Attended = false
                     }
-                   
+
                 }
 
             };

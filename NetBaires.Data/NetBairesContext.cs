@@ -23,6 +23,7 @@ namespace NetBaires.Data
 
         }
         public DbSet<Sponsor> Sponsors { get; set; }
+        public DbSet<Template> Templates { get; set; }
         public DbSet<Member> Members { get; set; }
         public DbSet<FollowingMember> FollowingMembers { get; set; }
 
@@ -30,6 +31,7 @@ namespace NetBaires.Data
         public DbSet<BadgeGroup> BadgeGroups { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Material> Materials { get; set; }
+        public DbSet<EventInformation> EventInformation { get; set; }
         public DbSet<BadgeMember> BadgeMembers { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<SponsorEvent> SponsorEvents { get; set; }
@@ -40,7 +42,7 @@ namespace NetBaires.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 
-            //optionsBuilder.EnableSensitiveDataLogging();
+            optionsBuilder.EnableSensitiveDataLogging();
             //optionsBuilder.UseLoggerFactory(_myLoggerFactory);
             base.OnConfiguring(optionsBuilder);
 
@@ -82,6 +84,36 @@ namespace NetBaires.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            //var cascadeFKs = modelBuilder.Model.GetEntityTypes()
+            //    .SelectMany(t => t.GetForeignKeys())
+            //    .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
+
+            //foreach (var fk in cascadeFKs)
+            //    fk.DeleteBehavior = DeleteBehavior.Restrict;
+
+            modelBuilder
+                .Entity<Event>()
+                .HasOne(x => x.EmailTemplateThanksSpeakers)
+                .WithMany(x => x.EventsThanksSpeakers)
+                .HasForeignKey(x => x.EmailTemplateThanksSpeakersId)
+                .IsRequired(false);
+
+
+            modelBuilder
+                .Entity<Event>()
+                .HasOne(x => x.EmailTemplateThanksSponsors)
+                .WithMany(x => x.EventsThanksThanksSponsors)
+                .HasForeignKey(x => x.EmailTemplateThanksSponsorsId)
+                .IsRequired(false);
+
+            modelBuilder
+                .Entity<Event>()
+                .HasOne(x => x.EmailTemplateThanksAttended)
+                .WithMany(x => x.EventsThanksAttended)
+                .HasForeignKey(x => x.EmailTemplateThanksAttendedId)
+                .IsRequired(false);
+
             modelBuilder
                 .Entity<Member>()
                 .Property(e => e.Role)
@@ -92,16 +124,13 @@ namespace NetBaires.Data
                 .WithMany(s => s.Members)
                 .HasForeignKey(sc => sc.BadgeId);
 
+
+            //modelBuilder.Entity<FollowingMember>().HasKey(sc => new { sc.FollowingId, sc.MemberId });
             modelBuilder.Entity<FollowingMember>()
                 .HasOne(x => x.Member)
-                .WithMany(x=> x.FollowingMembers)
+                .WithMany(x => x.FollowingMembers)
                 .HasForeignKey(sc => sc.FollowingId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Member>()
-                .HasMany(sc => sc.FollowingMembers)
-                .WithOne(x => x.Member)
-                .HasForeignKey(sc => sc.MemberId)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
 
 

@@ -42,19 +42,19 @@ namespace NetBaires.Api.Tests.Integration.Features.GroupCodes
         [Fact]
         public async Task Add_Members_To_Badge_Add_Message_To_The_Queue()
         {
-            QueueServices.Clear<AssignedBadgeToAttendance>();
+            QueueServices.Clear<AssignedBadgeToMember>();
             FillData();
 
             var a = await HttpClient.PostAsync($"/groupcodes/{_newGroupCode.Id}/badges/{_newBadge.Id}", null);
 
             var bb = await a.Content.ReadAsStringAsync();
-            var message = QueueServices.GetMessage<AssignedBadgeToAttendance>();
+            var message = QueueServices.GetMessage<AssignedBadgeToMember>();
             message.MemberId.Should().NotBe(0);
             message.BadgeId.Should().Be(_newBadge.Id);
-            Action act = () => QueueServices.GetMessage<AssignedBadgeToAttendance>();
+            Action act = () => QueueServices.GetMessage<AssignedBadgeToMember>();
             act.Should().Throw<NullReferenceException>();
 
-            QueueServices.Clear<AssignedBadgeToAttendance>();
+            QueueServices.Clear<AssignedBadgeToMember>();
 
         }
         [Fact]

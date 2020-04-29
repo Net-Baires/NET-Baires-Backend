@@ -15,7 +15,7 @@ namespace NetBaires.Data.Entities
         [Required]
         public string LogoUrl { get; protected set; }
         public string LogoFileName { get; protected set; }
-
+        public string Email { get; set; }
         public List<SponsorEvent> Events { get; set; }
         public void SetFile(Uri uri, string fileName)
         {

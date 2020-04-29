@@ -31,6 +31,9 @@ namespace NetBaires.Api.Features.Events.GetEventLiveDetail
             public bool Online { get; set; }
             public string OnlineLink { get; set; }
             public string TokenToReportMyAttendance { get; set; }
+            public int EmailTemplateThanksSponsorsId { get; set; }
+            public int EmailTemplateThanksSpeakersId { get; set; }
+            public int EmailTemplateThanksAttendedId { get; set; }
             public bool HasGroupCodeOpen { get; set; }
             public List<GroupCodeResponseViewModel> GroupCodes { get; set; }
             public class ReportGeneralAttendance

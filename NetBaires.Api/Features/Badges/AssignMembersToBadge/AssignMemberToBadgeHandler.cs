@@ -36,11 +36,7 @@ namespace NetBaires.Api.Features.Badges.AssignMembersToBadge
             if (member == null)
                 return HttpResponseCodeHelper.NotFound("No se encontro el miembro");
 
-            _context.BadgeMembers.Add(new BadgeMember
-            {
-                BadgeId = badge.Id,
-                MemberId = member.Id
-            });
+            member.AssignBadge(badge);
 
             await _context.SaveChangesAsync();
             return new StatusCodeResult(204);

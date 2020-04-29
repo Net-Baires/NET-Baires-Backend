@@ -17,7 +17,7 @@ namespace NetBaires.Api.Features.Me.GetMe
 
     public class GetMeHandler : IRequestHandler<GetMeQuery, IActionResult>
     {
-        private readonly ICurrentUser currentUser;
+        private readonly ICurrentUser _currentUser;
         private readonly IMapper _mapper;
         private readonly NetBairesContext _context;
         private readonly ILogger<GetMeHandler> _logger;
@@ -27,7 +27,7 @@ namespace NetBaires.Api.Features.Me.GetMe
             NetBairesContext context,
             ILogger<GetMeHandler> logger)
         {
-            this.currentUser = currentUser;
+            this._currentUser = currentUser;
             _mapper = mapper;
             _context = context;
             _logger = logger;
@@ -36,18 +36,18 @@ namespace NetBaires.Api.Features.Me.GetMe
 
         public async Task<IActionResult> Handle(GetMeQuery request, CancellationToken cancellationToken)
         {
-            var currentMemberId = currentUser.User.Id;
+            var currentMemberId = _currentUser.User.Id;
             var member = await _context.Members.Include(s => s.Events).ProjectTo<MemberDetailViewModel>(_mapper.ConfigurationProvider)
                 .Cacheable()
 
-                                               .FirstOrDefaultAsync(x => x.Id == currentMemberId);
+                                               .FirstOrDefaultAsync(x => x.Id == currentMemberId, cancellationToken);
 
             var memberToResponse = _mapper.Map(member, new MemberDetailViewModel());
 
             memberToResponse.FollowedMembers = await _context.FollowingMembers.Cacheable()
-                                                        .Where(x => x.MemberId == currentMemberId)
-                                                        .Select(x => x.Following.Id)
-                                                        .ToListAsync(cancellationToken: cancellationToken);
+                                                        .Where(x => x.Following.Id == currentMemberId)
+                                                        .Select(x => x.Member.Id)
+                                                        .ToListAsync(cancellationToken);
 
             return HttpResponseCodeHelper.Ok(memberToResponse);
         }

@@ -11,6 +11,7 @@ namespace NetBaires.Api.Features.Sponsors.UpdateSponsor
         public int Id { get; set; }
         public string Name { get; set; }
         public string SiteUrl { get; set; }
+        public string Email { get; set; }
         public string Description { get; set; }
         public IFormFile ImageFile { get; set; }
     }

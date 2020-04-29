@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NetBaires.Data.DomainEvents;
@@ -8,47 +9,64 @@ using Newtonsoft.Json.Converters;
 
 namespace NetBaires.Data.Entities
 {
-    public class Material : Entity
-    {
-        public string Title { get; set; }
-        public string Link { get; set; }
-        public Event Event { get; set; }
-        public int EventId { get; set; }
-
-        public Material(string title, string link)
-        {
-            Title = title;
-            Link = link;
-        }
-        public Material()
-        {
-
-        }
-    }
-
     public class Event : Entity
     {
-        public string Title { get; set; }
-        public string Description { get; set; }
+        public string? Title { get; set; }
+        public int? EmailTemplateThanksSponsorsId { get; set; }
+        public Template? EmailTemplateThanksSponsors { get; set; }
+        public int? EmailTemplateThanksSpeakersId { get; set; }
+        public Template? EmailTemplateThanksSpeakers { get; set; }
+        public int? EmailTemplateThanksAttendedId { get; set; }
+        public Template? EmailTemplateThanksAttended { get; set; }
+        public string? Description { get; set; } = String.Empty;
         [JsonConverter(typeof(StringEnumConverter))]
         public EventPlatform Platform { get; set; }
-        public string ImageUrl { get; set; }
-        public string Url { get; set; }
+        public string? ImageUrl { get; set; } = String.Empty;
+        public string? Url { get; set; } = String.Empty;
         public List<Attendance> Attendees { get; set; } = new List<Attendance>();
-        public string EventId { get; set; }
+        public string? EventId { get; set; } = String.Empty;
         public decimal EstimatedAttendancePercentage { get; set; }
         public bool Done { get; protected set; } = false;
         public bool Live { get; set; } = false;
         public bool Online { get; set; } = false;
-        public string OnlineLink { get; set; }
+        public string? OnlineLink { get; set; } = String.Empty;
         public bool GeneralAttended { get; set; } = false;
-        public string GeneralAttendedCode { get; set; }
+        public string? GeneralAttendedCode { get; set; } = String.Empty;
         public DateTime? StartLiveTime { get; set; }
         public DateTime? EndLiveTime { get; set; }
         public DateTime Date { get; set; }
         public List<SponsorEvent> Sponsors { get; set; } = new List<SponsorEvent>();
         public List<GroupCode> GroupCodes { get; protected set; } = new List<GroupCode>();
         public List<Material> Materials { get; set; } = new List<Material>();
+        public List<EventInformation> Information { get; set; } = new List<EventInformation>();
+
+        public DomainResponse SetEmailTemplateThanksAttended(Template template)
+        {
+            if (template.Type != TemplateTypeEnum.EmailTemplateThanksAttended)
+                return DomainResponse.Error();
+
+            EmailTemplateThanksAttended = template;
+            return DomainResponse.Ok();
+        }
+
+        public DomainResponse SetEmailTemplateThanksSpeakers(Template template)
+        {
+            if (template.Type != TemplateTypeEnum.EmailTemplateThanksSpeakers)
+                return DomainResponse.Error();
+
+            EmailTemplateThanksSpeakers = template;
+            return DomainResponse.Ok();
+        }
+
+        public DomainResponse SetEmailTemplateThanksSponsors(Template template)
+        {
+            if (template.Type != TemplateTypeEnum.EmailTemplateThanksSponsors)
+                return DomainResponse.Error();
+
+            EmailTemplateThanksSponsors = template;
+            return DomainResponse.Ok();
+        }
+
         public DomainResponse AssignBadgeToAttended(Badge badge)
         {
             if (!Done)
@@ -62,7 +80,7 @@ namespace NetBaires.Data.Entities
                         BadgeId = badge.Id,
                         MemberId = item.MemberId
                     });
-                    AddDomainEvent(new AssignedBadgeToAttendance(item.MemberId, badge.Id));
+                    AddDomainEvent(new AssignedBadgeToMember(item.MemberId, badge.Id));
                 }
             return DomainResponse.Ok();
         }
@@ -74,6 +92,16 @@ namespace NetBaires.Data.Entities
         public void RemoveMaterial(Material material)
         {
             Materials.Remove(material);
+        }
+
+
+        public void AddInformation(string title, string description, bool visible)
+        {
+            Information.Add(new EventInformation(title, description,visible));
+        }
+        public void RemoveInformation(EventInformation information)
+        {
+            Information.Remove(information);
         }
 
         public DomainResponse AssignBadgeToAttended(Badge badge, Member member)
@@ -91,7 +119,7 @@ namespace NetBaires.Data.Entities
                 BadgeId = badge.Id,
                 MemberId = member.Id
             });
-            AddDomainEvent(new AssignedBadgeToAttendance(member.Id, badge.Id));
+            AddDomainEvent(new AssignedBadgeToMember(member.Id, badge.Id));
             return DomainResponse.Ok();
         }
 
@@ -165,29 +193,26 @@ namespace NetBaires.Data.Entities
             return newGroupCode;
         }
 
-        public void Complete()
+        public void Complete(CompleteEvent completeEvent = null)
         {
+            if (completeEvent == null)
+                completeEvent = new CompleteEvent();
+            SetUnLive();
             Done = true;
             Attendees.ToList()
                      .ForEach(x =>
                      {
-                         if (!x.Attended
-                         &&
-                         !x.NotifiedAbsence)
+                         if (!x.Attended && !x.NotifiedAbsence)
                              x.NoAttend();
+                         if (x.Attended && completeEvent.ThanksAttendees)
+                             AddDomainEvent(new NotifiedAttendedEventEnd(Id, x.MemberId, completeEvent.SendMaterialToAttendees));
                      });
+            if (completeEvent.ThanksSpeakers)
+                AddDomainEvent(new NotifiedSpeakersEventEnd(Id));
 
+            if (completeEvent.ThanksSponsors)
+                AddDomainEvent(new NotifiedSponsorsEventEnd(Id));
 
-        }
-    }
-    public static class RandomHelper
-    {
-        private static Random random = new Random();
-        public static string RandomString(int length)
-        {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            return new string(Enumerable.Repeat(chars, length)
-              .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }

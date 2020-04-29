@@ -10,17 +10,19 @@ using NetBaires.Data;
 using NetBaires.Api.Services;
 using NetBaires.Api.Services.Sync;
 using System.Linq;
+using AutoFixture;
 using NetBaires.Host;
 
 namespace NetBaires.Api.Tests.Integration
 {
-    public class IntegrationTestsBase :
+    public class IntegrationTestsBase : IDisposable,
       IClassFixture<CustomWebApplicationFactory<Startup>>
     {
         protected readonly HttpClient HttpClient;
         private readonly CustomWebApplicationFactory<Startup>
             _factory;
         protected IUserService UserService;
+        protected Fixture Fixture = new Fixture();
 
         protected IFilesServices FileServices;
         protected ISyncServices SyncServices;
@@ -77,7 +79,7 @@ namespace NetBaires.Api.Tests.Integration
         }
         protected async Task AuthenticateAsync(string email)
         {
-            var token = await UserService.AuthenticateOrCreate(email);
+            var token = await UserService.AuthenticateOrCreate(email, 999);
             CleanAuthorizationHeader();
             HttpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token.Token}");
         }
@@ -90,7 +92,7 @@ namespace NetBaires.Api.Tests.Integration
 
         protected async Task AuthenticateAdminAsync()
         {
-            var token = await UserService.AuthenticateOrCreate("admin@admin.com");
+            var token = await UserService.AuthenticateOrCreate("admin@admin.com", 999);
 
             CleanAuthorizationHeader();
             HttpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token.Token}");
@@ -104,5 +106,9 @@ namespace NetBaires.Api.Tests.Integration
             }
         }
 
+        public virtual void Dispose()
+        {
+
+        }
     }
 }

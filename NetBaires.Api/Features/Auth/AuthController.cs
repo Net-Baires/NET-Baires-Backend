@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using NetBaires.Api.Auth;
+using NetBaires.Api.Features.Auth.AuthEventBrite;
 using NetBaires.Api.Models.ServicesResponse;
 using NetBaires.Api.Options;
 using NetBaires.Data;
@@ -19,14 +21,18 @@ namespace NetBaires.Api.Features.Auth
     {
         private IUserService _userService;
         private readonly IOptions<MeetupEndPointOptions> _meetupEndPointOptions;
+        private readonly IMediator _mediator;
         private readonly HttpClient _client;
 
         public AuthController(IUserService userService,
             IOptions<MeetupEndPointOptions> meetupEndPointOptions,
+
+            IMediator mediator,
             IHttpClientFactory httpClientFactory)
         {
             _userService = userService;
             _meetupEndPointOptions = meetupEndPointOptions;
+            _mediator = mediator;
             _client = httpClientFactory.CreateClient();
         }
         [AllowAnonymous]
@@ -50,7 +56,7 @@ namespace NetBaires.Api.Features.Auth
             if (result.IsSuccessStatusCode)
             {
                 var response = await result.Content.ReadAsAsync<MeetupSelf>();
-                var user = await _userService.AuthenticateOrCreate(response.email);
+                var user = await _userService.AuthenticateOrCreate(response.email, response.id);
 
                 return Ok(user);
             }
@@ -67,7 +73,7 @@ namespace NetBaires.Api.Features.Auth
             {
                 Cluster = "us2"
             });
-            var auth = pusher.Authenticate(channel_name, socket_id,new PresenceChannelData()).ToJson();
+            var auth = pusher.Authenticate(channel_name, socket_id, new PresenceChannelData()).ToJson();
             return new ContentResult { Content = auth, ContentType = "application/json" };
         }
 
@@ -75,16 +81,9 @@ namespace NetBaires.Api.Features.Auth
         [AllowAnonymous]
         [HttpPost("Auth/EventBrite")]
         [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
-        public IActionResult EventBrite([FromBody]AuthenticateModel model)
-        {
-            var email = "german.kuber@outlook.com";
+        public async Task<IActionResult> EventBrite([FromBody]AuthEventBriteCommand command) =>
+            await _mediator.Send(command);
 
-            var user = _userService.AuthenticateOrCreate(email);
 
-            if (user == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
-
-            return Ok(user);
-        }
     }
 }

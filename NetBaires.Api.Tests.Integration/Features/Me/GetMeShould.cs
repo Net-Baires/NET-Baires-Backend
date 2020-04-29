@@ -46,9 +46,11 @@ namespace NetBaires.Api.Tests.Integration.Features.Me
             Context.Members.Add(member3);
             Context.SaveChanges();
 
-            loggedUser.Follow(member1);
-            loggedUser.Follow(member2);
-            loggedUser.Follow(member3);
+            member1.Follow(loggedUser);
+            Context.SaveChanges();
+            member2.Follow(loggedUser);
+            Context.SaveChanges();
+            member3.Follow(loggedUser);
             Context.SaveChanges();
 
             var response = await HttpClient.GetAsync("/me");

@@ -43,17 +43,18 @@ namespace NetBaires.Api.Features.Events.PutCheckAttendanceGeneralByToken
                                                        &&
                                                        x.GeneralAttended);
             if (!eventToCheck)
-                return  HttpResponseCodeHelper.NotFound();
+                return HttpResponseCodeHelper.NotFound();
 
             var memberId = _currentUser.User.Id;
 
-            var eventToAdd = _context.Attendances.FirstOrDefault(x => x.EventId == response.EventId 
-                                                                      && 
+            var eventToAdd = _context.Attendances.FirstOrDefault(x => x.EventId == response.EventId
+                                                                      &&
                                                                       x.MemberId == memberId);
-            if (eventToAdd == null) { 
+            if (eventToAdd == null)
+            {
                 eventToAdd = new Attendance(memberId, response.EventId, AttendanceRegisterType.CurrentEvent);
                 await _context.Attendances.AddAsync(eventToAdd);
-                }
+            }
             eventToAdd.Attend();
             await _context.SaveChangesAsync();
             return HttpResponseCodeHelper.Ok(new CheckAttendanceGeneralResponse(response.EventId));

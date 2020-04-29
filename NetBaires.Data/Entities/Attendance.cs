@@ -84,6 +84,7 @@ namespace NetBaires.Data.Entities
         {
             MemberId = memberId;
             EventId = eventId;
+            AttendanceRegisterType = attendanceRegisterType;
             DidNotAttend = true;
         }
 

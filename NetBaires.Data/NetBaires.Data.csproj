@@ -19,6 +19,38 @@
     <Compile Remove="Migrations\20200403185012_Add_Followed_Members.Designer.cs" />
     <Compile Remove="Migrations\20200403190806_Add_Followed_Members.cs" />
     <Compile Remove="Migrations\20200403190806_Add_Followed_Members.Designer.cs" />
+    <Compile Remove="Migrations\20200421192706_Add_Materials.cs" />
+    <Compile Remove="Migrations\20200421192706_Add_Materials.Designer.cs" />
+    <Compile Remove="Migrations\20200421230732_Add_Materials_2.cs" />
+    <Compile Remove="Migrations\20200421230732_Add_Materials_2.Designer.cs" />
+    <Compile Remove="Migrations\20200422013959_Update_Sponsor_Add_Email.cs" />
+    <Compile Remove="Migrations\20200422013959_Update_Sponsor_Add_Email.Designer.cs" />
+    <Compile Remove="Migrations\20200422233643_Update_Following_Member.cs" />
+    <Compile Remove="Migrations\20200422233643_Update_Following_Member.Designer.cs" />
+    <Compile Remove="Migrations\20200423003031_Update_Following_Member_2.cs" />
+    <Compile Remove="Migrations\20200423003031_Update_Following_Member_2.Designer.cs" />
+    <Compile Remove="Migrations\20200423004835_Update_Following_Member.cs" />
+    <Compile Remove="Migrations\20200423004835_Update_Following_Member.Designer.cs" />
+    <Compile Remove="Migrations\20200423153000_Add_Templates.cs" />
+    <Compile Remove="Migrations\20200423153000_Add_Templates.Designer.cs" />
+    <Compile Remove="Migrations\20200423154529_Add_Templates.cs" />
+    <Compile Remove="Migrations\20200423154529_Add_Templates.Designer.cs" />
+    <Compile Remove="Migrations\20200423154851_Add_Templates2.cs" />
+    <Compile Remove="Migrations\20200423154851_Add_Templates2.Designer.cs" />
+    <Compile Remove="Migrations\20200423154920_Add_Templates.cs" />
+    <Compile Remove="Migrations\20200423154920_Add_Templates.Designer.cs" />
+    <Compile Remove="Migrations\20200423163805_Add_Templates2.cs" />
+    <Compile Remove="Migrations\20200423163805_Add_Templates2.Designer.cs" />
+    <Compile Remove="Migrations\20200423163831_Add_Templates.cs" />
+    <Compile Remove="Migrations\20200423163831_Add_Templates.Designer.cs" />
+    <Compile Remove="Migrations\20200423164005_Add_Templates.cs" />
+    <Compile Remove="Migrations\20200423164005_Add_Templates.Designer.cs" />
+    <Compile Remove="Migrations\20200423164134_Add_Templates.cs" />
+    <Compile Remove="Migrations\20200423164134_Add_Templates.Designer.cs" />
+    <Compile Remove="Migrations\20200423164251_Add_Templates.cs" />
+    <Compile Remove="Migrations\20200423164251_Add_Templates.Designer.cs" />
+    <Compile Remove="Migrations\20200423164411_Add_Templates.cs" />
+    <Compile Remove="Migrations\20200423164411_Add_Templates.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
