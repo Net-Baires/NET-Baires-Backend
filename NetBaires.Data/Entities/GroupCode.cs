@@ -70,8 +70,7 @@ namespace NetBaires.Data.Entities
                 return DomainResponse.Error("El badge que esta intentando asignar, ya se encuentra asignado");
 
             foreach (var groupCodeMember in Members)
-                if (groupCodeMember.Member.AssignBadge(badge).SuccessResult)
-                    AddDomainEvent(new AssignedBadgeToMember(groupCodeMember.MemberId, badge.Id));
+                groupCodeMember.Member.AssignBadge(badge);
 
             GroupCodeBadges.Add(new GroupCodeBadge(this, badge));
             return DomainResponse.Ok();
