@@ -18,6 +18,7 @@ namespace NetBaires.Data.Migrations
                 name: "Description",
                 table: "Events",
                 nullable: false,
+                defaultValue:"",
                 oldClrType: typeof(string),
                 oldType: "nvarchar(max)",
                 oldNullable: true);

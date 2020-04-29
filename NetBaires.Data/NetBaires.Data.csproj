@@ -51,6 +51,8 @@
     <Compile Remove="Migrations\20200423164251_Add_Templates.Designer.cs" />
     <Compile Remove="Migrations\20200423164411_Add_Templates.cs" />
     <Compile Remove="Migrations\20200423164411_Add_Templates.Designer.cs" />
+    <Compile Remove="Migrations\20200429232910_Update_Template_Enum_As_String.cs" />
+    <Compile Remove="Migrations\20200429232910_Update_Template_Enum_As_String.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

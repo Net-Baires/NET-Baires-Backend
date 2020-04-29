@@ -49,7 +49,7 @@ namespace NetBaires.Data
                     Name = "Agradecimiento a Speakers del evento Mensual NET-Baires",
                     Description = "Template para el envio mensual",
                     TemplateContent = "",
-                    Type = TemplateTypeEnum.EmailTemplateAssignedBadgeToMember
+                    Type = TemplateTypeEnum.EmailTemplateThanksSpeakers
                 });
 
             if (!context.Templates.Any(x => x.Type == TemplateTypeEnum.EmailTemplateAssignedBadgeToMember))
