@@ -91,6 +91,13 @@ namespace NetBaires.Data
 
             //foreach (var fk in cascadeFKs)
             //    fk.DeleteBehavior = DeleteBehavior.Restrict;
+            modelBuilder
+               .Entity<Template>()
+               .Property(e => e.Type)
+               .HasConversion(
+                   v => v.ToString(),
+                   v => (TemplateTypeEnum)Enum.Parse(typeof(TemplateTypeEnum), v));
+
 
             modelBuilder
                 .Entity<Event>()
