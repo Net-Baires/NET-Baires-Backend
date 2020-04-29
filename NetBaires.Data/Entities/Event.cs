@@ -11,14 +11,14 @@ namespace NetBaires.Data.Entities
 {
     public class Event : Entity
     {
-        public string Title { get; set; }
+        public string? Title { get; set; }
         public int? EmailTemplateThanksSponsorsId { get; set; }
         public Template? EmailTemplateThanksSponsors { get; set; }
         public int? EmailTemplateThanksSpeakersId { get; set; }
         public Template? EmailTemplateThanksSpeakers { get; set; }
         public int? EmailTemplateThanksAttendedId { get; set; }
         public Template? EmailTemplateThanksAttended { get; set; }
-        public string Description { get; set; } = String.Empty;
+        public string? Description { get; set; } = String.Empty;
         [JsonConverter(typeof(StringEnumConverter))]
         public EventPlatform Platform { get; set; }
         public string? ImageUrl { get; set; } = String.Empty;
