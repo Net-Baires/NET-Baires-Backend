@@ -42,10 +42,11 @@ namespace NetBaires.Api.Features.Speakers.GetSpeaker
                                         .Select(x => new MemberEvents
                                         {
                                             Member = x,
-                                            Events = _context.Events.Where(e=> e.Attendees.Any(a=> a.MemberId == x.Id && a.Speaker)).ToList()
+                                            Events = _context.Events.Where(e => e.Attendees.Any(a => a.MemberId == x.Id && a.Speaker)).ToList()
                                         })
                                         .FirstOrDefaultAsync(cancellationToken: cancellationToken);
-            eventToReturn.CountEventsAsSpeaker = eventToReturn.Events.Count;
+            if (eventToReturn != null)
+                eventToReturn.CountEventsAsSpeaker = eventToReturn != null ? eventToReturn.Events.Count : 0;
             if (eventToReturn == null)
                 return HttpResponseCodeHelper.NotContent();
 
