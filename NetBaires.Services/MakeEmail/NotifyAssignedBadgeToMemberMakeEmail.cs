@@ -27,7 +27,7 @@ namespace NetBaires.Services.MakeEmail
                 var memberProfileBuilder = new StringBuilder(config["MemberProfileLink"]);
 
                 var template = connection
-                    .Query<Template>($"SELECT TemplateContent FROM Templates Where Type = 3")
+                    .Query<Template>($"SELECT TemplateContent FROM Templates Where [Type] = 'EmailTemplateAssignedBadgeToMember'")
                     .FirstOrDefault();
                 var builder = new StringBuilder(template.TemplateContent);
 

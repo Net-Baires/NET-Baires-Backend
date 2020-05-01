@@ -11,4 +11,23 @@ namespace NetBaires.Services
             UserId = userId;
         }
     }
+
+    public class EventDoesNotHaveSpeakers : Exception
+    {
+        public int EventId { get; set; }
+
+        public EventDoesNotHaveSpeakers(int eventId)
+        {
+
+        }
+    }
+    public class EventDoesNotHaveSponsors : Exception
+    {
+        public int EventId { get; set; }
+
+        public EventDoesNotHaveSponsors(int eventId)
+        {
+
+        }
+    }
 }

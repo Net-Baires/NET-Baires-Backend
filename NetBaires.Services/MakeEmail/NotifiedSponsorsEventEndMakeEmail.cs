@@ -25,6 +25,8 @@ namespace NetBaires.Services.MakeEmail
                                                                 on S.Id = SE.SponsorId
                                                                 INNER JOIN Events E ON E.Id = SE.EventId
                                                                 WHERE E.Id = {data.EventId}").ToList();
+                if (!sponsors.Any())
+                    throw new EventDoesNotHaveSponsors(data.EventId);
                 var @event = connection.Query<Event>($"SELECT Id,Title,Description,EmailTemplateThanksSponsorsId FROM Events where Id = {data.EventId}")
                     .FirstOrDefault();
                 eventLinkBuilder.Replace("{{EventId}}", @event.Id.ToString());

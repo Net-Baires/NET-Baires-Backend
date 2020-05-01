@@ -40,6 +40,7 @@ namespace NetBaires.Services
         {
             await (new NotifyEmails()).Notify(new NotifiedSpeakersEventEndMakeEmail(), myQueueItem, log, messageCollector, context, nameof(Events.DomainEvents.NotifiedSpeakersEventEnd));
         }
+
         [FunctionName("NotifiedAttendedEventEnd")]
         public static async Task NotifiedAttendedEventEnd([QueueTrigger(nameof(Events.DomainEvents.NotifiedAttendedEventEnd), Connection = "")]string myQueueItem,
             ILogger log,

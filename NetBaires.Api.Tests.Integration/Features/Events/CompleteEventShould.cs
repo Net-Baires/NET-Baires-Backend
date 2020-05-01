@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using NetBaires.Api.Features.Events.CompleteEvent;
 using NetBaires.Data;
@@ -126,7 +127,44 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
             list.ToList().Any(x => x.EventId == eventToAdd.Id).Should().BeTrue();
         }
 
+        [Fact]
+        public async Task Complete_Event_Assign_Badge_To_Attendees()
+        {
+            QueueServices.Clear<AssignedBadgeToMember>();
+            Event eventToAdd = FillData();
 
+            var badge = new Badge();
+            var memberWithBadge = new Member
+            {
+                Email = "Test@test.com",
+                FirstName = "Has Badge"
+            };
+            eventToAdd.AddAttendance(memberWithBadge, AttendanceRegisterType.CurrentEvent).Attend();
+            Context.Badges.Add(badge);
+            Context.SaveChanges();
+
+            var command = new CompleteEventCommand
+            {
+                GiveBadgeToAttendees = true,
+                BadgeId = badge.Id
+            };
+            var response = await HttpClient.PutAsync($"/events/{eventToAdd.Id}/done",
+                new StringContent(JsonConvert.SerializeObject(command), Encoding.UTF8, "application/json"));
+            RefreshContext();
+
+            memberWithBadge = await Context.Members.Include(x => x.Badges)
+                .ThenInclude(x => x.Badge)
+                .FirstOrDefaultAsync(x => x.FirstName == memberWithBadge.FirstName);
+            var list = QueueServices.GetMessages<AssignedBadgeToMember>();
+
+            list.Count.Should().Be(2);
+            list.ToList().Any(x => x.BadgeId == badge.Id
+                                                &&
+                                                x.MemberId == memberWithBadge.Id).Should().BeTrue();
+
+            memberWithBadge.Badges.Count.Should().Be(1);
+            memberWithBadge.Badges.Any(x => x.BadgeId == badge.Id).Should().BeTrue();
+        }
 
         private Event FillData()
         {
@@ -158,6 +196,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Events
         {
             QueueServices.Clear<NotifiedAttendedEventEnd>();
             QueueServices.Clear<NotifiedSpeakersEventEnd>();
+            QueueServices.Clear<AssignedBadgeToMember>();
             QueueServices.Clear<NotifiedSponsorsEventEnd>();
 
         }
