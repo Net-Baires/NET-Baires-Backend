@@ -40,7 +40,7 @@ namespace NetBaires.Services.MakeEmail
                     memberProfileBuilder.Replace("{{MemberId}}", member.Id.ToString());
                     builder.Replace("{{MemberProfileLink}}",
                         string.Concat(currentEnvironment, memberProfileBuilder.ToString()));
-                    returnList.Add(new EmailToSend(member.Email, builder.ToString(), GetSubject(config, speakerName)));
+                    returnList.Add(new EmailToSend(member.Email, builder.ToString(), GetSubject(config, speakerName, member.Title)));
                 }
 
             }
@@ -48,9 +48,10 @@ namespace NetBaires.Services.MakeEmail
             return returnList;
         }
 
-        public string GetSubject(IConfigurationRoot config, string speakerName) =>
+        public string GetSubject(IConfigurationRoot config, string speakerName,string eventTitle) =>
             new StringBuilder(config["NotifiedSpeakersSubject"])
                 .Replace("{{SpeakerName}}", speakerName)
+                .Replace("{{EventTitle}}", eventTitle)
                 .ToString();
 
 
