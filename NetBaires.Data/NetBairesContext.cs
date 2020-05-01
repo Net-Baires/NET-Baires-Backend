@@ -55,16 +55,15 @@ namespace NetBaires.Data
                            .Select(po => po.Entity)
                            .Where(po => po.DomainEvents.Any())
                            .ToArray();
+            var domainEvents = domainEventEntities.SelectMany(x => x.DomainEvents).Distinct();
 
-
-            this.ChangeTracker.AutoDetectChangesEnabled = false; // for performance reasons, to avoid calling DetectChanges() again.
-            var result = await base.SaveChangesAsync(cancellationToken); ;
-            this.ChangeTracker.AutoDetectChangesEnabled = true;
+            ChangeTracker.AutoDetectChangesEnabled = false; 
+            var result = await base.SaveChangesAsync(cancellationToken); 
+            ChangeTracker.AutoDetectChangesEnabled = true;
 
             this.GetService<IEFCacheServiceProvider>().InvalidateCacheDependencies(changedEntityNames);
             var queueServices = this.GetService<IQueueServices>();
-            foreach (var entity in domainEventEntities)
-                foreach (var domainEvent in entity.DomainEvents)
+            foreach (var domainEvent in domainEvents)
                     queueServices.AddMessage(domainEvent);
 
             return result;
@@ -74,9 +73,9 @@ namespace NetBaires.Data
         {
             var changedEntityNames = this.GetChangedEntityNames();
 
-            this.ChangeTracker.AutoDetectChangesEnabled = false; // for performance reasons, to avoid calling DetectChanges() again.
+            ChangeTracker.AutoDetectChangesEnabled = false; // for performance reasons, to avoid calling DetectChanges() again.
             var result = base.SaveChanges();
-            this.ChangeTracker.AutoDetectChangesEnabled = true;
+            ChangeTracker.AutoDetectChangesEnabled = true;
 
             this.GetService<IEFCacheServiceProvider>().InvalidateCacheDependencies(changedEntityNames);
 

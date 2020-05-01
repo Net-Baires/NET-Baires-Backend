@@ -97,7 +97,7 @@ namespace NetBaires.Data.Entities
 
         public void AddInformation(string title, string description, bool visible)
         {
-            Information.Add(new EventInformation(title, description,visible));
+            Information.Add(new EventInformation(title, description, visible));
         }
         public void RemoveInformation(EventInformation information)
         {
@@ -193,7 +193,7 @@ namespace NetBaires.Data.Entities
             return newGroupCode;
         }
 
-        public void Complete(CompleteEvent completeEvent = null)
+        public void Complete(CompleteEvent completeEvent = null, Badge badge = null)
         {
             if (completeEvent == null)
                 completeEvent = new CompleteEvent();
@@ -202,10 +202,20 @@ namespace NetBaires.Data.Entities
             Attendees.ToList()
                      .ForEach(x =>
                      {
+
                          if (!x.Attended && !x.NotifiedAbsence)
                              x.NoAttend();
-                         if (x.Attended && completeEvent.ThanksAttendees)
-                             AddDomainEvent(new NotifiedAttendedEventEnd(Id, x.MemberId, completeEvent.SendMaterialToAttendees));
+                         if (x.Attended)
+                         {
+                             if (completeEvent.ThanksAttendees)
+                                 AddDomainEvent(new NotifiedAttendedEventEnd(Id, x.MemberId, completeEvent.SendMaterialToAttendees));
+                             if (completeEvent.GiveBadgeToAttendees)
+                             {
+                                 x.Member.AssignBadge(badge);
+                                 AddDomainEvent(new AssignedBadgeToMember(x.MemberId, badge.Id));
+                             }
+                         }
+
                      });
             if (completeEvent.ThanksSpeakers)
                 AddDomainEvent(new NotifiedSpeakersEventEnd(Id));

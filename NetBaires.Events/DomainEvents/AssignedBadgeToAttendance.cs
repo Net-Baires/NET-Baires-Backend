@@ -1,6 +1,6 @@
 ﻿namespace NetBaires.Events.DomainEvents
 {
-    public class AssignedBadgeToMember : IDomainEvents
+    public class AssignedBadgeToMember : DomainEvents<AssignedBadgeToMember>
     {
         public int MemberId { get; set; }
         public int BadgeId { get; set; }
@@ -10,9 +10,13 @@
             BadgeId = badgeId;
         }
 
+
         public AssignedBadgeToMember()
         {
-            
+
         }
+
+        public override int GetHashCode() =>
+            BadgeId ^ MemberId;
     }
 }

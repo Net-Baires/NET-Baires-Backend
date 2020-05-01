@@ -27,6 +27,8 @@ namespace NetBaires.Services.MakeEmail
                                                             INNER JOIN Events E
                                                             ON E.Id = A.EventId
                                                             WHERE E.Id = {data.EventId} AND Speaker = 1").ToList();
+                if (!_members.Any())
+                    throw  new EventDoesNotHaveSpeakers(data.EventId);
                 var template = connection
                     .Query<Template>($"SELECT TemplateContent FROM Templates Where Id = {_members.First().EmailTemplateThanksSpeakersId}")
                     .FirstOrDefault();

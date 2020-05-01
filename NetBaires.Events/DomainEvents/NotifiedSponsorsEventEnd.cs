@@ -1,6 +1,6 @@
 ﻿namespace NetBaires.Events.DomainEvents
 {
-    public class NotifiedSponsorsEventEnd : IDomainEvents
+    public class NotifiedSponsorsEventEnd : DomainEvents<NotifiedSponsorsEventEnd>
     {
         public int EventId { get; set; }
 
@@ -13,5 +13,8 @@
         {
 
         }
+
+        public override int GetHashCode() =>
+            EventId;
     }
 }
