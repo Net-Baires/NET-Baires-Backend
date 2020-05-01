@@ -57,16 +57,17 @@ namespace NetBaires.Services.MakeEmail
                 memberProfileBuilder.Replace("{{MemberId}}", data.MemberId.ToString());
                 builder.Replace("{{MemberProfileLink}}",
                     string.Concat(currentEnvironment, memberProfileBuilder.ToString()));
-                returnList.Add(new EmailToSend(member.Email, builder.ToString(), GetSubject(config, memberName)));
+                returnList.Add(new EmailToSend(member.Email, builder.ToString(), GetSubject(config, memberName, @event.Title)));
 
             }
 
             return returnList;
         }
 
-        public string GetSubject(IConfigurationRoot config, string speakerName) =>
-            new StringBuilder(config["NotifiedSpeakersSubject"])
-                .Replace("{{SpeakerName}}", speakerName)
+        public string GetSubject(IConfigurationRoot config, string speakerName,string eventTitle) =>
+            new StringBuilder(config["NotifiedAttendedSubject"])
+                .Replace("{{MemberName}}", speakerName)
+                .Replace("{{EventTitle}}", eventTitle)
                 .ToString();
 
 
