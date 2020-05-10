@@ -17,6 +17,7 @@ namespace NetBaires.Api.ViewModels
         public DateTime Created { get; set; }
         public string ImageUrl { get; set; }
         public string SimpleImageUrl { get; set; }
+        public string LinkedinImageUrl { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public class BadgeDetailViewModelProfile : Profile
