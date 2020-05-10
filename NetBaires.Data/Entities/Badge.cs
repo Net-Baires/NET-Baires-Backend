@@ -7,6 +7,8 @@ namespace NetBaires.Data.Entities
     {
         public string ImageName { get; set; }
         public string ImageUrl { get; set; }
+        public string LinkedinImageUrl { get; set; }
+        public string LinkedinImageName { get; set; }
         public string SimpleImageName { get; set; }
         public string SimpleImageUrl { get; set; }
         public string Name { get; set; }
