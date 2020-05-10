@@ -30,7 +30,8 @@ namespace NetBaires.Api.Tests.Integration.Features.Badges
                 Created = dateTimeNow,
                 ImageName = "TestImage",
                 ImageUrl="http://imageurltest.com",
-                SimpleImageUrl="https://simpleimage.url.com"
+                SimpleImageUrl="https://simpleimage.url.com",
+                LinkedinImageUrl= "https://linkedin.url.com"
             };
             Context.Badges.Add(firstBadgeToAdd);
             Context.Badges.Add(new Badge
@@ -50,6 +51,7 @@ namespace NetBaires.Api.Tests.Integration.Features.Badges
             badges.First().Description.Should().Be(firstBadgeToAdd.Description);
             badges.First().ImageUrl.Should().Contain(firstBadgeToAdd.ImageUrl);
             badges.First().SimpleImageUrl.Should().Contain(firstBadgeToAdd.SimpleImageUrl);
+            badges.First().LinkedinImageUrl.Should().Contain(firstBadgeToAdd.LinkedinImageUrl);
             badges.First().Created.Should().Be(dateTimeNow);
         }
 
