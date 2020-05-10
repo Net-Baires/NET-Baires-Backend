@@ -28,10 +28,14 @@ namespace NetBaires.Api.Tests.Integration.Features.Badges
             var simpleBadgeFile = new StreamContent(file1);
             simpleBadgeFile.Headers.Add("BadgeType", BadgeImageName.SimpleBadge.ToString());
 
+            var linkedinBadgeFile = new StreamContent(file1);
+            linkedinBadgeFile.Headers.Add("BadgeType", BadgeImageName.LinkedinBadge.ToString());
+
             var formData = new MultipartFormDataContent();
 
             formData.Add(badgeFile, nameof(NewBadgeCommand.ImageFiles), $"{BadgeImageName.Badge}.jpg");
             formData.Add(simpleBadgeFile, nameof(NewBadgeCommand.ImageFiles), $"{BadgeImageName.SimpleBadge}.jpg");
+            formData.Add(linkedinBadgeFile, nameof(NewBadgeCommand.ImageFiles), $"{BadgeImageName.LinkedinBadge}.jpg");
             formData.Add(new StringContent(nameof(NewBadgeCommand.Name)), "Name");
             formData.Add(new StringContent(nameof(NewBadgeCommand.Description)), "Description");
 
@@ -46,9 +50,11 @@ namespace NetBaires.Api.Tests.Integration.Features.Badges
             badge.Description.Should().Be("Description");
             (await FileServices.GetAsync(badge.ImageName, Api.Services.Container.Badges)).Should().NotBeNull();
             (await FileServices.GetAsync(badge.SimpleImageName, Api.Services.Container.Badges)).Should().NotBeNull();
+            (await FileServices.GetAsync(badge.LinkedinImageName, Api.Services.Container.Badges)).Should().NotBeNull();
 
             await FileServices.DeleteAsync(badge.ImageName, Api.Services.Container.Badges);
             await FileServices.DeleteAsync(badge.SimpleImageName, Api.Services.Container.Badges);
+            await FileServices.DeleteAsync(badge.LinkedinImageName, Api.Services.Container.Badges);
         }
       
     }

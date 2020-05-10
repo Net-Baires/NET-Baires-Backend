@@ -28,7 +28,7 @@ namespace NetBaires.Api.Features.Badges.UpdateBadge
 
         public async Task<IActionResult> Handle(UpdateBadgeCommand request, CancellationToken cancellationToken)
         {
-            var badge = await _context.Badges.FirstOrDefaultAsync(x => x.Id == request.Id);
+            var badge = await _context.Badges.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
             if (badge == null)
                 return new StatusCodeResult(404);
             _mapper.Map(request, badge);
@@ -46,14 +46,21 @@ namespace NetBaires.Api.Features.Badges.UpdateBadge
                         badge.SimpleImageName = badgeCreateResponse.FileDetail.Name;
                         badge.SimpleImageUrl = badgeCreateResponse.FileDetail.FileUri.AbsoluteUri;
                     }
-                    else
-                    //(item.Headers["BadgeType"] == BadgeImageName.Badge.ToString())
+                    else if (item.Headers["BadgeType"] == BadgeImageName.Badge.ToString())
                     {
                         var badgeCreateResponse = await badgesServices.ReplaceAsync(item, badge.ImageName);
                         if (badgeCreateResponse == null)
                             return new StatusCodeResult(400);
                         badge.ImageName = badgeCreateResponse.FileDetail.Name;
                         badge.ImageUrl = badgeCreateResponse.FileDetail.FileUri.AbsoluteUri;
+                    }
+                    else if (item.Headers["BadgeType"] == BadgeImageName.LinkedinBadge.ToString())
+                    {
+                        var badgeCreateResponse = await badgesServices.CreateAsync(item);
+                        if (badgeCreateResponse == null)
+                            return new StatusCodeResult(400);
+                        badge.LinkedinImageName = badgeCreateResponse.FileDetail.Name;
+                        badge.LinkedinImageUrl = badgeCreateResponse.FileDetail.FileUri.AbsoluteUri;
                     }
                 }
             }

@@ -46,14 +46,21 @@ namespace NetBaires.Api.Features.Badges.NewBadge
                         newBadge.SimpleImageUrl = badgeCreateResponse.FileDetail.FileUri.AbsoluteUri;
 
                     }
-                    else
-                    //if (item.Headers["BadgeType"] == BadgeImageName.Badge.ToString())
+                    else if (item.Headers["BadgeType"] == BadgeImageName.Badge.ToString())
                     {
                         var badgeCreateResponse = await badgesServices.CreateAsync(item);
                         if (badgeCreateResponse == null)
                             return new StatusCodeResult(400);
                         newBadge.ImageName = badgeCreateResponse.FileDetail.Name;
                         newBadge.ImageUrl = badgeCreateResponse.FileDetail.FileUri.AbsoluteUri;
+                    }
+                    else if (item.Headers["BadgeType"] == BadgeImageName.LinkedinBadge.ToString())
+                    {
+                        var badgeCreateResponse = await badgesServices.CreateAsync(item);
+                        if (badgeCreateResponse == null)
+                            return new StatusCodeResult(400);
+                        newBadge.LinkedinImageName = badgeCreateResponse.FileDetail.Name;
+                        newBadge.LinkedinImageUrl = badgeCreateResponse.FileDetail.FileUri.AbsoluteUri;
                     }
                 }
             }

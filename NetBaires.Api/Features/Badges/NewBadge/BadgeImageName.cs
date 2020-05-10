@@ -3,6 +3,7 @@
     public enum BadgeImageName
     {
         Badge,
-        SimpleBadge
+        SimpleBadge,
+        LinkedinBadge
     }
 }
