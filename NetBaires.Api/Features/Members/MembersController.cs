@@ -32,6 +32,7 @@ namespace NetBaires.Api.Features.Members
     {
         private readonly ILogger<SlackController> _logger;
         private readonly NetBairesContext _context;
+        private readonly ICurrentUser _currentUser;
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
 
@@ -43,23 +44,11 @@ namespace NetBaires.Api.Features.Members
         {
             _logger = logger;
             _context = context;
+            _currentUser = currentUser;
             this._mediator = mediator;
             _mapper = mapper;
         }
-        [HttpGet]
-        [AllowAnonymous]
-        [ApiExplorerSettingsExtend(UserAnonymous.Anonymous)]
-        [SwaggerOperation(Summary = "Retorna todos los miembros activos de la Comunidad")]
-
-        public async Task<IActionResult> Get()
-        {
-            var member = _context.Members.AsNoTracking();
-
-            if (member != null)
-                return Ok(member);
-
-            return NotFound();
-        }
+       
 
         [HttpGet("{id:int}")]
         [AllowAnonymous]
