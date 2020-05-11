@@ -37,7 +37,8 @@ namespace NetBaires.Api.Features.Badges.NewBadge
                 foreach (var item in request.ImageFiles)
                 {
 
-                    if (item.Headers["BadgeType"] == BadgeImageName.SimpleBadge.ToString())
+                    if (item.Headers["BadgeType"] == BadgeImageName.SimpleBadge.ToString()
+                        || item.FileName == BadgeImageName.SimpleBadge.ToString())
                     {
                         var badgeCreateResponse = await badgesServices.CreateAsync(item);
                         if (badgeCreateResponse == null)
@@ -46,7 +47,8 @@ namespace NetBaires.Api.Features.Badges.NewBadge
                         newBadge.SimpleImageUrl = badgeCreateResponse.FileDetail.FileUri.AbsoluteUri;
 
                     }
-                    else if (item.Headers["BadgeType"] == BadgeImageName.Badge.ToString())
+                    else if (item.Headers["BadgeType"] == BadgeImageName.Badge.ToString()
+                    || item.FileName == BadgeImageName.Badge.ToString())
                     {
                         var badgeCreateResponse = await badgesServices.CreateAsync(item);
                         if (badgeCreateResponse == null)
@@ -54,7 +56,8 @@ namespace NetBaires.Api.Features.Badges.NewBadge
                         newBadge.ImageName = badgeCreateResponse.FileDetail.Name;
                         newBadge.ImageUrl = badgeCreateResponse.FileDetail.FileUri.AbsoluteUri;
                     }
-                    else if (item.Headers["BadgeType"] == BadgeImageName.LinkedinBadge.ToString())
+                    else if (item.Headers["BadgeType"] == BadgeImageName.LinkedinBadge.ToString()
+                             || item.FileName == BadgeImageName.LinkedinBadge.ToString())
                     {
                         var badgeCreateResponse = await badgesServices.CreateAsync(item);
                         if (badgeCreateResponse == null)
